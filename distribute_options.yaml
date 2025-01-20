@@ -1,0 +1,66 @@
+output: dist/
+releases:
+  - name: release1
+    jobs:
+      - name: android
+        package:
+          platform: android
+          target: apk
+        # Publish
+        publish:
+          - target: github
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+          - target: gitee
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+              release-sync-github: true
+      - name: windows
+        package:
+          platform: windows
+          target: exe
+            
+        # Publish
+        publish:
+          - target: github
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+          - target: gitee
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+              release-sync-github: false
+      - name: linux-deb
+        package:
+          platform: linux
+          target: deb
+        # Publish
+        publish:
+          - target: github
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+          - target: gitee
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+              release-sync-github: false
+      - name: linux-appimage
+        package:
+          platform: linux
+          target: appimage
+        # Publish
+        publish:
+          - target: github
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+          - target: gitee
+            args:
+              repo-owner: jenken827
+              repo-name: f2fa
+              release-sync-github: false
+             

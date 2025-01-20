@@ -1,0 +1,23 @@
+name: sync-to-gitee
+
+on: push
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.email "jenken827@gmail.com"
+          git config --global user.name "jenken827"
+
+      - name: Sync to Gitee
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          git remote add gitee "https://jenken827:${GITEE_TOKEN}@gitee.com/jenken827/f2fa.git"
+          git push -u gitee --all
+          git push -u gitee --tags

@@ -1,0 +1,23 @@
+name: release-drafter
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+      
+jobs:
+  release-draft:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.create_release_draft.outputs.tag_name }}
+      upload_url: ${{ steps.create_release_draft.outputs.upload_url }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: release-drafter/release-drafter@v6
+        id: create_release_draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
