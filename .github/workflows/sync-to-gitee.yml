@@ -13,6 +13,7 @@ jobs:
         run: |
           git config --global user.email "jenken827@gmail.com"
           git config --global user.name "jenken827"
+          git config pull.rebase true
 
       - name: Sync to Gitee
         env:
