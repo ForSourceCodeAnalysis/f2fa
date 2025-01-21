@@ -19,5 +19,6 @@ jobs:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
           git remote add gitee "https://jenken827:${GITEE_TOKEN}@gitee.com/jenken827/f2fa.git"
+          git pull gitee main
           git push -u gitee --all
           git push -u gitee --tags

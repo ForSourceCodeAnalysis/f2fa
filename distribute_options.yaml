@@ -32,7 +32,7 @@ releases:
             args:
               repo-owner: jenken827
               repo-name: f2fa
-              release-sync-github: false
+              release-sync-github: true
       - name: linux-deb
         package:
           platform: linux
@@ -47,7 +47,7 @@ releases:
             args:
               repo-owner: jenken827
               repo-name: f2fa
-              release-sync-github: false
+              release-sync-github: true
       - name: linux-appimage
         package:
           platform: linux
@@ -62,5 +62,5 @@ releases:
             args:
               repo-owner: jenken827
               repo-name: f2fa
-              release-sync-github: false
+              release-sync-github: true
              
