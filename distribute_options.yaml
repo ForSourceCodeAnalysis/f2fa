@@ -10,13 +10,13 @@ releases:
         publish:
           - target: github
             args:
-              repo-owner: jenken827
+              repo-owner: ForSourceCodeAnalysis
               repo-name: f2fa
-          - target: gitee
-            args:
-              repo-owner: jenken827
-              repo-name: f2fa
-              release-sync-github: true
+          # - target: gitee
+          #   args:
+          #     repo-owner: jenken827
+          #     repo-name: f2fa
+          #     release-sync-github: true
       - name: windows
         package:
           platform: windows
@@ -26,13 +26,13 @@ releases:
         publish:
           - target: github
             args:
-              repo-owner: jenken827
+              repo-owner: ForSourceCodeAnalysis
               repo-name: f2fa
-          - target: gitee
-            args:
-              repo-owner: jenken827
-              repo-name: f2fa
-              release-sync-github: false
+          # - target: gitee
+          #   args:
+          #     repo-owner: jenken827
+          #     repo-name: f2fa
+          #     release-sync-github: false
       - name: linux-deb
         package:
           platform: linux
@@ -41,13 +41,13 @@ releases:
         publish:
           - target: github
             args:
-              repo-owner: jenken827
+              repo-owner: ForSourceCodeAnalysis
               repo-name: f2fa
-          - target: gitee
-            args:
-              repo-owner: jenken827
-              repo-name: f2fa
-              release-sync-github: false
+          # - target: gitee
+          #   args:
+          #     repo-owner: jenken827
+          #     repo-name: f2fa
+          #     release-sync-github: false
       - name: linux-appimage
         package:
           platform: linux
@@ -56,11 +56,11 @@ releases:
         publish:
           - target: github
             args:
-              repo-owner: jenken827
+              repo-owner: ForSourceCodeAnalysis
               repo-name: f2fa
-          - target: gitee
-            args:
-              repo-owner: jenken827
-              repo-name: f2fa
-              release-sync-github: false
+          # - target: gitee
+          #   args:
+          #     repo-owner: jenken827
+          #     repo-name: f2fa
+          #     release-sync-github: false
              
