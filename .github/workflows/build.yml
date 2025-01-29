@@ -36,7 +36,7 @@ jobs:
           dart pub global activate -s git https://github.com/jenken827/flutter_distributor.git --git-path packages/flutter_distributor --git-ref broken_upgrade
           flutter_distributor release --name=release1 --jobs=windows
   build-linux:
-    if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'linux' }}
+    if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'linux' || github.event.inputs.platform == 'android' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -56,7 +56,16 @@ jobs:
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLATFORM: ${{ github.event.inputs.platform }}
         run: |
           bash generate.sh     
           dart pub global activate -s git https://github.com/jenken827/flutter_distributor.git --git-path packages/flutter_distributor --git-ref broken_upgrade
-          flutter_distributor release --name=release1 --skip-jobs=windows
+
+          if [ "$PLATFORM" == "all" ]; then
+            flutter_distributor release --name=release1 --skip-jobs=windows
+          elif [ "$PLATFORM" == "linux" ]; then
+            flutter_distributor release --name=release1 --jobs=linux-deb,linux-appimage
+          elif [ "$PLATFORM" == "android" ]; then
+            flutter_distributor release --name=release1 --jobs=android
+          fi
+  
