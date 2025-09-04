@@ -27,13 +27,13 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - name: Build
         env:
-          GITEE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |          
           Invoke-WebRequest -Uri "https://github.com/jrsoftware/issrc/raw/main/Files/Languages/Unofficial/ChineseSimplified.isl" -OutFile "ChineseSimplified.isl"
           mv ChineseSimplified.isl "C:\Program Files (x86)\Inno Setup 6\Languages\"
           ./generate.bat
-          dart pub global activate -s git --git-path=https://github.com/jenken827/flutter_distributor.git --git-ref=broken_upgrade
+          dart pub global activate -sgit https://github.com/jenken827/flutter_distributor.git --git-path=packages/flutter_distributor --git-ref=broken_upgrade
           flutter_distributor release --name=release1 --jobs=windows
   build-linux:
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'linux' }}
@@ -53,7 +53,10 @@ jobs:
           chmod +x appimagetool
           sudo mv appimagetool /usr/local/bin/
       - name: Build
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bash generate.sh     
-          dart pub global activate -s git --git-path=https://github.com/jenken827/flutter_distributor.git --git-ref=broken_upgrade
+          dart pub global activate -sgit https://github.com/jenken827/flutter_distributor.git --git-path=packages/flutter_distributor --git-ref=broken_upgrade
           flutter_distributor release --name=release1 --skip-jobs=windows
