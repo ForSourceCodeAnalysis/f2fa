@@ -1,15 +1,15 @@
 # flutter pub run flutter_launcher_icons
 flutter_launcher_icons:
-  image_path: "assets/icons/f2fa-bg-transparent.png"
+  image_path: "assets/icons/f2fa.png"
 
   android: "ic_launcher"
   # image_path_android: "assets/icon/icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/icons/f2fa-bg-transparent.png"
+  adaptive_icon_foreground: "assets/icons/f2fa.png"
   # adaptive_icon_monochrome: "assets/icon/monochrome.png"
 
   windows:
     generate: true
-    image_path: "assets/icons/f2fa-bg-transparent.png"
+    image_path: "assets/icons/f2fa.png"
     icon_size: 144 # min:48, max:256, default: 48
