@@ -52,3 +52,5 @@ android/app/src/main/res/mipmap-*/*
 # build files
 dist/
 
+web/splash/
+

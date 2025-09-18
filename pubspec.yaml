@@ -64,6 +64,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.2
   package_info_plus: ^8.1.2
   http: ^1.2.1
+  flutter_native_splash: ^2.4.6
 
 
 dev_dependencies:
@@ -123,3 +124,14 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   # generate: true
+
+flutter_native_splash:
+  color: "#ffffff"  # 背景颜色
+  image: "assets/icons/f2fa.png"  # 启动图片路径
+  android: true
+  android_gravity: center  # 图片居中显示
+  color_dark: "#042a49"
+  android_12:
+    image: "assets/icons/f2fa.png"
+    color: "#ffffff"
+    icon_background_color: "#ffffff"
