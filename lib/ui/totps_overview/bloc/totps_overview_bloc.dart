@@ -9,8 +9,8 @@ part 'totps_overview_state.dart';
 
 class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
   TotpsOverviewBloc({required TotpRepository totpRepository})
-      : _totpRepository = totpRepository,
-        super(const TotpsOverviewState()) {
+    : _totpRepository = totpRepository,
+      super(const TotpsOverviewState()) {
     on<TotpsOverviewSubscriptionRequested>(_onSubscriptionRequested);
     on<TotpsOverviewTotpUpdated>(_onTotpUpdated);
     on<TotpsOverviewTotpDeleted>(_onTotpDeleted);
@@ -33,6 +33,7 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
         return state.copyWith(
           totps: totps,
           status: TotpsOverviewStatus.success,
+          fakeStatus: state.fakeStatus + 1,
         );
       },
       onError: (_, __) => state.copyWith(status: TotpsOverviewStatus.failure),
@@ -47,8 +48,9 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
       if (_subscription != null) {
         return;
       }
-      _subscription = Stream.periodic(const Duration(seconds: 1))
-          .listen((_) => _totpRepository.tickerUpdateCode());
+      _subscription = Stream.periodic(
+        const Duration(seconds: 1),
+      ).listen((_) => _totpRepository.tickerUpdateCode());
     } else {
       if (_subscription == null) {
         return;
@@ -78,12 +80,11 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
   ) async {
     if (event.newIndex == event.oldIndex) return;
 
-    final totps = List<Totp>.from(state.totps);
-    final totp = totps.removeAt(event.oldIndex);
-    totps.insert(event.newIndex, totp);
+    final totp = state.totps.removeAt(event.oldIndex);
+    state.totps.insert(event.newIndex, totp);
 
     try {
-      await _totpRepository.reorderTotps(totps);
+      await _totpRepository.reorderTotps(state.totps);
     } catch (e) {
       emit(state.copyWith(status: TotpsOverviewStatus.failure));
       return;

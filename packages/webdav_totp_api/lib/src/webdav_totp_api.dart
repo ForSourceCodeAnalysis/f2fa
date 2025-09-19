@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:local_storage_totp_api/local_storage_totp_api.dart';
 import 'package:totp_api/totp_api.dart';
 import 'package:webdav_client/webdav_client.dart';
 import 'package:webdav_totp_api/webdav_totp_api.dart';
+import 'package:path/path.dart';
 
-class WebdavTotpApi extends TotpApi {
+class WebdavTotpApi {
   WebdavTotpApi._({
     required this.url,
     required this.username,
     required this.password,
     this.encryptKey,
-    this.overwrite,
+    // this.overwrite,
   });
 
   static Future<WebdavTotpApi> instance({
@@ -28,7 +29,7 @@ class WebdavTotpApi extends TotpApi {
       username: username,
       password: password,
       encryptKey: encryptKey,
-      overwrite: overwrite,
+      // overwrite: overwrite,
     );
     await api._init();
     return api;
@@ -38,18 +39,17 @@ class WebdavTotpApi extends TotpApi {
   late final String username;
   late final String password;
   late final String? encryptKey;
-  late final bool? overwrite;
+  // late final bool? overwrite;
 
   late final Client _client;
   late final Encrypter _encrypter;
   late final IV _iv;
-  late final String _path;
-  late final LocalStorageTotpApi _localTotpApi;
+  late final String _filepath;
 
   Future<void> _init() async {
     Uri uri = Uri.parse(url);
     final host = '${uri.scheme}://${uri.host}';
-    _path = uri.path;
+    _filepath = join(uri.path, 'f2fa.db');
     _client = newClient(
       host,
       user: username,
@@ -64,34 +64,35 @@ class WebdavTotpApi extends TotpApi {
       _iv = IV(Uint8List.fromList(keyBytes.sublist(0, 16)));
       _encrypter = Encrypter(AES(key, mode: AESMode.cbc));
     }
-
-    await _loadData();
   }
 
-  Future<void> _loadData() async {
-    _localTotpApi = await LocalStorageTotpApi.getInstance();
-    final localTotps = await _localTotpApi.getTotpList();
+  Future<String> getData(DateTime? lastModified) async {
     late final List<int> bytes;
     try {
-      bytes = await _client.read(_path);
+      if (lastModified != null) {
+        _client.setHeaders({
+          'If-Modified-Since': lastModified.toIso8601String(),
+        });
+      }
+      bytes = await _client.read(_filepath);
     } catch (e) {
-      throw const WebDAVException(WebDAVErrorType.connectError);
+      final ex = e as DioException;
+      if (ex.response?.statusCode == 404) {
+        final emptyData = _encrypt(jsonEncode([]));
+        await _client.write(_filepath, utf8.encode(emptyData));
+        return '[]';
+      } else {
+        throw const WebDAVException(WebDAVErrorType.connectError);
+      }
     }
     if (bytes.isEmpty) {
-      if (localTotps.isEmpty) {
-        return;
-      }
-      _syncToServer();
-      return;
+      return '[]';
     }
-    if (overwrite == null && localTotps.isNotEmpty) {
-      throw const WebDAVException(WebDAVErrorType.overwriteError);
-    }
+
     try {
       final encryptedData = utf8.decode(bytes);
       final decryptedData = _decrypt(encryptedData);
-
-      await _localTotpApi.updateData(decryptedData);
+      return decryptedData;
     } catch (e) {
       throw const WebDAVException(WebDAVErrorType.parseError);
     }
@@ -113,43 +114,13 @@ class WebdavTotpApi extends TotpApi {
     return _encrypter.decrypt(encrypted, iv: _iv);
   }
 
-  @override
-  Future<List<Totp>> getTotpList() async {
-    return _localTotpApi.getTotpList();
-  }
-
-  @override
-  Future<void> saveTotp(Totp totp) async {
-    await _localTotpApi.saveTotp(totp);
-    _syncToServer();
-  }
-
-  @override
-  Future<void> deleteTotp(String id) async {
-    await _localTotpApi.deleteTotp(id);
-    await _syncToServer();
-  }
-
-  @override
-  List<Totp> refreshCode() {
-    return _localTotpApi.refreshCode();
-  }
-
-  @override
-  Future<void> reorderTotps(List<Totp> totps) async {
-    await _localTotpApi.reorderTotps(totps);
-    await _syncToServer();
-  }
-
-  Future<void> _syncToServer() async {
-    final totps = await _localTotpApi.getTotpList();
-
+  Future<void> syncToServer(List<Totp> totps) async {
     final jsonData = jsonEncode(totps.map((t) => t.toJson()).toList());
 
     final encryptedData = _encrypt(jsonData);
 
     _client.write(
-      _path,
+      _filepath,
       utf8.encode(encryptedData),
     );
   }

@@ -31,50 +31,23 @@ void bootstrap() async {
 
   final localStorageRepository = await LocalStorageRepository.getInstance();
 
-  final repository =
-      TotpRepository(totpApi: await getTotpApi(localStorageRepository));
+  final repository = TotpRepository(
+    totpApi: await LocalStorageTotpApi.getInstance(),
+  );
 
-  runApp(EasyLocalization(
-    path: 'assets/translations',
-    supportedLocales: const <Locale>[
-      Locale('en'),
-      Locale('zh'),
-    ],
-    assetLoader: const CodegenLoader(),
-    fallbackLocale: const Locale('en'),
-    useFallbackTranslations: true,
-    saveLocale: true,
-    startLocale: const Locale("zh"),
-    child: App(
-      totpRepository: repository,
-      localStorageRepository: localStorageRepository,
+  runApp(
+    EasyLocalization(
+      path: 'assets/translations',
+      supportedLocales: const <Locale>[Locale('en'), Locale('zh')],
+      assetLoader: const CodegenLoader(),
+      fallbackLocale: const Locale('en'),
+      useFallbackTranslations: true,
+      saveLocale: true,
+      startLocale: const Locale("zh"),
+      child: App(
+        totpRepository: repository,
+        localStorageRepository: localStorageRepository,
+      ),
     ),
-  ));
-}
-
-Future<TotpApi> getTotpApi(LocalStorageRepository storage) async {
-  final webdav = storage.getWebdavConfig();
-
-  if (webdav != null) {
-    try {
-      final api = await WebdavTotpApi.instance(
-        url: webdav.url,
-        username: webdav.username,
-        password: webdav.password,
-        encryptKey: webdav.encryptKey,
-        overwrite: true,
-      );
-      await storage.box.delete(LocalStorageRepository.webdavErrKey);
-      return api;
-    } catch (e) {
-      final WebDAVErrorType errType;
-      if (e is WebDAVException) {
-        errType = e.type;
-      } else {
-        errType = WebDAVErrorType.unknownError;
-      }
-      await storage.box.put(LocalStorageRepository.webdavErrKey, errType.name);
-    }
-  }
-  return await LocalStorageTotpApi.getInstance();
+  );
 }

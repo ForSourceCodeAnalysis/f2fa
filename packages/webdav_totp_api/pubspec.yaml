@@ -12,11 +12,11 @@ dependencies:
     sdk: flutter
   totp_api:
     path: ../totp_api
-  local_storage_totp_api:
-    path: ../local_storage_totp_api
   webdav_client: ^1.2.2
   crypto: ^3.0.6
   encrypt: ^5.0.3
+  path: ^1.9.1
+  dio: ^5.9.0
 
 dev_dependencies:
   flutter_test:
