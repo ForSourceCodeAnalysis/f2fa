@@ -127,11 +127,11 @@ flutter:
 
 flutter_native_splash:
   color: "#ffffff"  # 背景颜色
-  image: "assets/icons/f2fa.png"  # 启动图片路径
+  image: "assets/icons/f2fa-1024x1024.png"  # 启动图片路径
   android: true
   android_gravity: center  # 图片居中显示
   color_dark: "#042a49"
   android_12:
-    image: "assets/icons/f2fa.png"
+    image: "assets/icons/android-12-splash.png"
     color: "#ffffff"
     icon_background_color: "#ffffff"
