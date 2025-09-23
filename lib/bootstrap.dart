@@ -9,9 +9,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:local_storage_totp_api/local_storage_totp_api.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:totp_api/totp_api.dart';
 import 'package:totp_repository/totp_repository.dart';
-import 'package:webdav_totp_api/webdav_totp_api.dart';
 
 void bootstrap() async {
   await EasyLocalization.ensureInitialized();
@@ -29,10 +27,10 @@ void bootstrap() async {
 
   // Bloc.observer = const AppBlocObserver();
 
-  final localStorageRepository = await LocalStorageRepository.getInstance();
+  final localStorageRepository = await LocalStorageRepository.instance();
 
   final repository = TotpRepository(
-    totpApi: await LocalStorageTotpApi.getInstance(),
+    totpApi: await LocalStorageTotpApi.instance(localStorageRepository),
   );
 
   runApp(

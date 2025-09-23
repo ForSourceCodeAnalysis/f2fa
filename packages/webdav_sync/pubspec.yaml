@@ -1,29 +1,31 @@
-name: webdav_totp_api
+name: webdav_sync
 description: "A new Flutter package project."
 version: 0.0.1
+publish_to: none
 homepage:
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.9.2
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  totp_api:
-    path: ../totp_api
-  webdav_client: ^1.2.2
   crypto: ^3.0.6
   encrypt: ^5.0.3
   path: ^1.9.1
-  dio: ^5.9.0
+  simple_webdav_client: ^0.2.0
+  totp_api:
+    path: ../totp_api
+  local_storage_repository:
+    path: ../local_storage_repository
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
-publish_to: "none"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

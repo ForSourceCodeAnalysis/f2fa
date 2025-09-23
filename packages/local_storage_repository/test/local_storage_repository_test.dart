@@ -50,13 +50,14 @@ void main() {
 
       final json = webdavConfig.toJson();
       expect(
-          json,
-          equals({
-            'url': 'https://example.com',
-            'username': 'user',
-            'password': 'pass',
-            'encryptKey': 'key123',
-          }));
+        json,
+        equals({
+          'url': 'https://example.com',
+          'username': 'user',
+          'password': 'pass',
+          'encryptKey': 'key123',
+        }),
+      );
     });
 
     test('fromJson method', () {
@@ -91,12 +92,12 @@ void main() {
 
   group('LocalStorageRepository Tests', () {
     test('getInstance returns the same instance', () async {
-      final instance1 = await LocalStorageRepository.getInstance();
-      final instance2 = await LocalStorageRepository.getInstance();
+      final instance1 = await LocalStorageRepository.instance();
+      final instance2 = await LocalStorageRepository.instance();
       expect(instance1, same(instance2));
     });
     test('getInstance initializes the box correctly', () async {
-      final instance = await LocalStorageRepository.getInstance();
+      final instance = await LocalStorageRepository.instance();
       final box = instance.box;
       expect(box, isA<Box>());
       expect(box.name, equals('f2faconfig'));
@@ -104,7 +105,7 @@ void main() {
     });
 
     test('getWebdavConfig returns null when no data exists', () async {
-      final instance = await LocalStorageRepository.getInstance();
+      final instance = await LocalStorageRepository.instance();
       final config = instance.getWebdavConfig();
       expect(config, isNull);
     });
@@ -116,7 +117,7 @@ void main() {
         password: 'pass',
         encryptKey: 'key123',
       );
-      final instance = await LocalStorageRepository.getInstance();
+      final instance = await LocalStorageRepository.instance();
       instance.saveWebdavConfig(webdavConfig);
       final savedConfigJson = testBox.get(LocalStorageRepository.webdavKey);
       expect(savedConfigJson, equals(webdavConfig.toJson()));
@@ -129,7 +130,7 @@ void main() {
         password: 'pass',
         encryptKey: 'key123',
       );
-      final instance = await LocalStorageRepository.getInstance();
+      final instance = await LocalStorageRepository.instance();
       final config = instance.getWebdavConfig();
       expect(config, isA<WebdavConfig>());
       expect(config?.toJson(), equals(webdavConfig.toJson()));

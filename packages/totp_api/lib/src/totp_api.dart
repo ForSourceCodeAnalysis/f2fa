@@ -24,7 +24,7 @@ abstract class TotpApi {
   Future<void> deleteTotp(String id);
 
   /// Refresh the code of all totp
-  List<Totp> refreshCode();
+  void refreshCode();
 
   /// Reorder the totp list
   ///

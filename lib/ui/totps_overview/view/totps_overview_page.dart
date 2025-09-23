@@ -68,15 +68,15 @@ class _TotpsOverviewViewState extends State<TotpsOverviewView>
         builder: (context, state) {
           if (state.totps.isEmpty) {
             if (state.status == TotpsOverviewStatus.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             } else if (state.status == TotpsOverviewStatus.failure) {
               return const SizedBox();
             } else {
               return Center(
-                child: Text(LocaleKeys.topTapAdd.tr(),
-                    style: Theme.of(context).textTheme.bodySmall),
+                child: Text(
+                  LocaleKeys.topTapAdd.tr(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               );
             }
           }
@@ -85,21 +85,18 @@ class _TotpsOverviewViewState extends State<TotpsOverviewView>
               itemCount: state.totps.length,
               itemBuilder: (context, index) {
                 final totp = state.totps[index];
-                return TotpListTile(
-                  key: ValueKey(totp.id),
-                  totp: totp,
-                );
+                return TotpListTile(key: ValueKey(totp.id), totp: totp);
               },
               onReorder: (oldIndex, newIndex) {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
                 context.read<TotpsOverviewBloc>().add(
-                      TotpsOverviewReordered(
-                        oldIndex: oldIndex,
-                        newIndex: newIndex,
-                      ),
-                    );
+                  TotpsOverviewReordered(
+                    oldIndex: oldIndex,
+                    newIndex: newIndex,
+                  ),
+                );
               },
             ),
           );

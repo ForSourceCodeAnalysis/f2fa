@@ -13,7 +13,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
-      appBarTheme: AppBarTheme(color: colorScheme.primaryContainer),
+      appBarTheme: AppBarTheme(backgroundColor: colorScheme.primaryContainer),
       colorScheme: colorScheme,
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,

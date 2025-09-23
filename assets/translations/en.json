@@ -72,6 +72,7 @@
     "wcpParseErrorTips": "Can't parse the data, please check the file content or the encryption key",
     "wcpUnknownErrorTips": "Unknown error, please try again.",
     "wcpLastSyncError": "Last sync error",
+    "wcpChangeCredentialSuccess": "Modification successful, please restart the application for it to take effect",
 
     "scannerErrorWidget": "This is a comment as divider, no signification",
     "sewCameraNotReady": "Camera not ready, please try again.",

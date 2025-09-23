@@ -28,8 +28,9 @@ class EditTotpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = context.select((EditTodoBloc bloc) => bloc.state.status);
-    final isNewTotp =
-        context.select((EditTodoBloc bloc) => bloc.state.isNewTotp);
+    final isNewTotp = context.select(
+      (EditTodoBloc bloc) => bloc.state.isNewTotp,
+    );
 
     return BlocListener<EditTodoBloc, EditTotpState>(
       listenWhen: (previous, current) => previous.status != current.status,
@@ -57,7 +58,7 @@ class EditTotpView extends StatelessWidget {
           onPressed: status.isLoadingOrSuccess
               ? null
               : () =>
-                  context.read<EditTodoBloc>().add(const EditTotpSubmitted()),
+                    context.read<EditTodoBloc>().add(const EditTotpSubmitted()),
           child: status.isLoadingOrSuccess
               ? const CircularProgressIndicator()
               : const Icon(Icons.check_rounded),
@@ -98,15 +99,10 @@ class _TypeField extends StatelessWidget {
 
     return DropdownButtonFormField<String>(
       key: const Key('editTotpView_type_dropdownField'),
-      value: state.type,
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpType.tr(),
-      ),
+      initialValue: state.type,
+      decoration: InputDecoration(labelText: LocaleKeys.etpType.tr()),
       items: ['totp', 'hotp'].map<DropdownMenuItem<String>>((type) {
-        return DropdownMenuItem(
-          value: type,
-          child: Text(type.toUpperCase()),
-        );
+        return DropdownMenuItem(value: type, child: Text(type.toUpperCase()));
       }).toList(),
       onChanged: (value) {
         if (value == null) {
@@ -128,9 +124,7 @@ class _IssuerField extends StatelessWidget {
     return TextFormField(
       key: const Key('editTotpView_issuer_textFormField'),
       initialValue: state.issuer,
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpIssuer.tr(),
-      ),
+      decoration: InputDecoration(labelText: LocaleKeys.etpIssuer.tr()),
       onChanged: (value) {
         context.read<EditTodoBloc>().add(EditTotpIssuerChanged(value));
       },
@@ -148,9 +142,7 @@ class _AccountField extends StatelessWidget {
     return TextFormField(
       key: const Key('editTotpView_account_textFormField'),
       initialValue: state.account,
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpAccount.tr(),
-      ),
+      decoration: InputDecoration(labelText: LocaleKeys.etpAccount.tr()),
       onChanged: (value) {
         context.read<EditTodoBloc>().add(EditTotpAccountChanged(value));
       },
@@ -185,9 +177,7 @@ class _SecretFieldState extends State<_SecretField> {
         labelText: LocaleKeys.etpSecret.tr(),
         suffixIcon: IconButton(
           // 添加一个按钮来切换密码显示
-          icon: Icon(
-            _isObscured ? Icons.visibility : Icons.visibility_off,
-          ),
+          icon: Icon(_isObscured ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
             setState(() {
               _isObscured = !_isObscured; // 切换状态
@@ -213,9 +203,7 @@ class _PeriodField extends StatelessWidget {
     return TextFormField(
       key: const Key('editTotpView_period_textFormField'),
       initialValue: state.period.toString(),
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpPeriod.tr(),
-      ),
+      decoration: InputDecoration(labelText: LocaleKeys.etpPeriod.tr()),
       keyboardType: TextInputType.number,
       onChanged: (value) {
         final period = int.tryParse(value);
@@ -236,10 +224,8 @@ class _DigitsField extends StatelessWidget {
 
     return DropdownButtonFormField<int>(
       key: const Key('editTotpView_digits_dropdownField'),
-      value: state.digits,
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpDigits.tr(),
-      ),
+      initialValue: state.digits,
+      decoration: InputDecoration(labelText: LocaleKeys.etpDigits.tr()),
       items: [6, 7, 8].map((int value) {
         return DropdownMenuItem<int>(
           value: value,
@@ -264,10 +250,8 @@ class _AlgorithmField extends StatelessWidget {
 
     return DropdownButtonFormField<String>(
       key: const Key('editTotpView_algorithm_dropdownField'),
-      value: state.algorithm,
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpAlgorithm.tr(),
-      ),
+      initialValue: state.algorithm,
+      decoration: InputDecoration(labelText: LocaleKeys.etpAlgorithm.tr()),
       items: ['sha1', 'sha256', 'sha512'].map((String value) {
         return DropdownMenuItem<String>(
           value: value,

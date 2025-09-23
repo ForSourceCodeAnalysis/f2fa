@@ -3,10 +3,8 @@ part of 'edit_webdav_bloc.dart';
 enum EditWebdavStatus { initial, loading, success, failure }
 
 extension EditWebdavStatusX on EditWebdavStatus {
-  bool get isLoadingOrSuccess => [
-        EditWebdavStatus.loading,
-        EditWebdavStatus.success,
-      ].contains(this);
+  bool get isLoadingOrSuccess =>
+      [EditWebdavStatus.loading, EditWebdavStatus.success].contains(this);
 }
 
 class EditWebdavState extends Equatable {
@@ -16,7 +14,7 @@ class EditWebdavState extends Equatable {
   final String username;
   final String password;
   final String encryptKey;
-  final WebDAVErrorType? error;
+  final String? error;
 
   const EditWebdavState({
     this.status = EditWebdavStatus.initial,
@@ -35,7 +33,7 @@ class EditWebdavState extends Equatable {
     String? username,
     String? password,
     String? encryptKey,
-    WebDAVErrorType? error,
+    String? error,
   }) {
     return EditWebdavState(
       status: status ?? this.status,
@@ -49,6 +47,13 @@ class EditWebdavState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [status, initialWebdav, url, username, password, encryptKey, error];
+  List<Object?> get props => [
+    status,
+    initialWebdav,
+    url,
+    username,
+    password,
+    encryptKey,
+    error,
+  ];
 }

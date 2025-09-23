@@ -1,192 +1,174 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:totp_api/totp_api.dart';
 import 'package:otp/otp.dart';
-import 'package:webdav_totp_api/webdav_totp_api.dart';
+import 'package:webdav_sync/webdav_sync.dart';
 
 class LocalStorageTotpApi extends TotpApi {
   LocalStorageTotpApi._();
 
-  static final LocalStorageTotpApi _instance = LocalStorageTotpApi._();
-  static bool isInitialized = false;
-  static const String _storageKey = 'totpliststr';
-  static late final LocalStorageRepository _localStorageRepository;
-  static late final WebdavTotpApi _webdavapi;
-  static DateTime? _lastModified = null;
+  late final LocalStorageRepository _lsr; //本地存储
+  late final WebdavSync? _webdavsync;
 
-  static List<Totp> _totps = [];
-  static List<Totp> _localTotps = [];
+  List<Totp> _localTotps = [];
 
-  static Future<LocalStorageTotpApi> getInstance() async {
-    if (!isInitialized) {
-      _localStorageRepository = await LocalStorageRepository.getInstance();
-      isInitialized = true;
-      final lm = _localStorageRepository.box.get('lastModified') ?? '';
-      _lastModified = lm.isEmpty ? null : DateTime.parse(lm);
-      _loadLocalData();
-      webdavInit();
-      mergeData();
-    }
-    return _instance;
+  static Future<LocalStorageTotpApi> instance(
+      LocalStorageRepository lsr) async {
+    final l = LocalStorageTotpApi._();
+    await l._init(lsr);
+
+    return l;
   }
 
-  static Future<void> webdavInit() async {
-    final webdav = _localStorageRepository.getWebdavConfig();
+  Future<void> _init(LocalStorageRepository lsr) async {
+    _lsr = lsr;
+    _loadLocalData();
+    webdavInit();
+  }
+
+  Future<void> webdavInit() async {
+    final webdav = _lsr.getWebdavConfig();
     if (webdav == null) {
+      _lsr.clearWebdavErrorInfo();
       return;
     }
-
     try {
-      _webdavapi = await WebdavTotpApi.instance(
+      _webdavsync = await WebdavSync.instance(
         url: webdav.url,
         username: webdav.username,
         password: webdav.password,
         encryptKey: webdav.encryptKey,
-        overwrite: true,
+        lsr: _lsr,
       );
-      await _localStorageRepository.box
-          .delete(LocalStorageRepository.webdavErrKey);
+
+      //同步远程数据
+      _sync(false);
     } catch (e) {
-      final WebDAVErrorType errType;
-      if (e is WebDAVException) {
-        errType = e.type;
-      } else {
-        errType = WebDAVErrorType.unknownError;
-      }
-      await _localStorageRepository.box
-          .put(LocalStorageRepository.webdavErrKey, errType.name);
+      _webdavsync = null;
+      await _lsr.saveWebdavErrorInfo(e.toString());
     }
   }
 
-  static Future<void> mergeData() async {
-    String tstr = '';
-    try {
-      //获取远程数据
-      tstr = await _webdavapi.getData(_lastModified ?? null);
-      await _localStorageRepository.box
-          .delete(LocalStorageRepository.webdavErrKey);
-    } catch (e) {
-      final WebDAVErrorType errType;
-      if (e is WebDAVException) {
-        errType = e.type;
-      } else {
-        errType = WebDAVErrorType.unknownError;
-      }
-      await _localStorageRepository.box
-          .put(LocalStorageRepository.webdavErrKey, errType.name);
-    }
-
-    final remotetotps = parseFromJson(tstr);
-
-    if (remotetotps.isEmpty) {
-      return;
-    }
+  Future<void> mergeData(List<Totp> rtotps) async {
     if (_localTotps.isEmpty) {
-      _localTotps = remotetotps;
-      filterDeleted();
+      _localTotps = rtotps;
       return;
     }
 
     final Map<String, Totp> mergedMap = {};
 
-    for (final remoteTotp in remotetotps) {
+    for (final remoteTotp in rtotps) {
       mergedMap[remoteTotp.id] = remoteTotp;
     }
-
+    bool diffFlag = false;
     // 遍历本地项目
     for (final localTotp in _localTotps) {
       // 如果远程数据中没有该项目，添加它
       if (!mergedMap.containsKey(localTotp.id)) {
         mergedMap[localTotp.id] = localTotp;
+        diffFlag = true;
       } else {
-        // 如果两边都有该项目，删除时间优先 比较更新时间，保留更新的版本
+        // 如果两边都有该项目, 比较更新时间，保留更新的版本
         final remoteTotp = mergedMap[localTotp.id]!;
 
         if (localTotp.updatedAt > remoteTotp.updatedAt) {
           mergedMap[localTotp.id] = localTotp;
+          diffFlag = true;
         }
       }
-      //删除超过7天的彻底删除
+      //删除超过30天的彻底删除
       final now = DateTime.now().millisecondsSinceEpoch;
       if (mergedMap[localTotp.id]!.deletedAt != 0 &&
-          now - mergedMap[localTotp.id]!.deletedAt >= 7 * 24 * 3600 * 1000) {
+          now - mergedMap[localTotp.id]!.deletedAt >= 30 * 24 * 3600 * 1000) {
         mergedMap.remove(localTotp.id);
+        diffFlag = true;
       }
     }
 
     // 将合并后的结果转换为列表
     _localTotps = mergedMap.values.toList();
-    filterDeleted();
-    if (!listEquals(_localTotps, remotetotps)) {
-      _webdavapi.syncToServer(_localTotps);
+
+    await _lsr.saveTotpList(_localTotps);
+    if (diffFlag) {
+      await _webdavsync?.syncToServer(_localTotps);
     }
   }
 
-  static void filterDeleted() {
-    _totps = _localTotps.where((totp) => totp.deletedAt == 0).toList();
+  List<Totp> filterDeleted() {
+    return _localTotps.where((totp) => totp.deletedAt == 0).toList();
   }
 
-  static void _loadLocalData() {
-    final totpsJson = _localStorageRepository.box.get(_storageKey);
-    if (totpsJson == null) {
+  void _loadLocalData() {
+    final totps = _lsr.getTotpList();
+    if (totps == null) {
       return;
     }
-    _localTotps = parseFromJson(totpsJson);
-    filterDeleted();
+
+    _localTotps = totps;
   }
 
-  static List<Totp> parseFromJson(String json) {
-    if (json.isEmpty) {
-      return [];
+  Future<void> _sync(bool forceUpload) async {
+    try {
+      final rdata = await _webdavsync?.getData();
+      if (rdata == null) {
+        return;
+      }
+      //数据为空，本地有数据，则上传
+      if (rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) {
+        await _webdavsync?.syncToServer(_localTotps);
+        await _lsr.clearWebdavErrorInfo();
+        return;
+      }
+      if (rdata.status == GetDataStatus.modified) {
+        await mergeData(rdata.data!);
+        await _lsr.clearWebdavErrorInfo();
+        return;
+      }
+      //远程数据没有变化，本地有变化
+      if (rdata.status == GetDataStatus.notModified && forceUpload) {
+        await _webdavsync?.syncToServer(_localTotps);
+        await _lsr.clearWebdavErrorInfo();
+      }
+    } catch (e) {
+      _lsr.saveWebdavErrorInfo(e.toString());
     }
-    return List<Map<String, dynamic>>.from(
-      jsonDecode(json),
-    ).map((el) => Totp.fromJson(el)).toList();
   }
 
   @override
-  Future<List<Totp>> getTotpList() => Future.value(_totps);
+  Future<List<Totp>> getTotpList() => Future.value(filterDeleted());
 
   @override
   Future<void> saveTotp(Totp totp) async {
-    // final totps = [..._totps];
-    final index = _totps.indexWhere((i) => i.id == totp.id);
+    final index = _localTotps.indexWhere((i) => i.id == totp.id);
     if (index >= 0) {
-      _totps[index] = totp;
+      _localTotps[index] = totp;
     } else {
-      _totps.add(totp);
       _localTotps.add(totp);
     }
 
-    _localStorageRepository.box.put(_storageKey, jsonEncode(_localTotps));
-    _webdavapi.syncToServer(_localTotps);
+    await _lsr.saveTotpList(_localTotps);
+    _sync(true);
   }
 
   @override
   Future<void> deleteTotp(String id) async {
-    // final totps = [..._totps];
-    final index = _totps.indexWhere((totp) => totp.id == id);
+    final index = _localTotps.indexWhere((totp) => totp.id == id);
     if (index < 0) {
       return;
     }
-
-    _totps.removeAt(index);
-    for (int i = 0; i < _localTotps.length; i++) {
-      if (_localTotps[i].id == id) {
-        final now = DateTime.now().millisecondsSinceEpoch;
-        _localTotps[i] =
-            _localTotps[index].copyWith(deletedAt: now, updatedAt: now);
-      }
-    }
-
-    _localStorageRepository.box.put(_storageKey, jsonEncode(_localTotps));
-    _webdavapi.syncToServer(_localTotps);
+    _localTotps[index] = _localTotps[index].copyWith(
+      deletedAt: DateTime.now().millisecondsSinceEpoch,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    await _lsr.saveTotpList(_localTotps);
+    _sync(true);
   }
 
   @override
-  List<Totp> refreshCode() {
-    return _totps.map((t) {
+  void refreshCode() {
+    _localTotps = _localTotps.map((t) {
+      if (t.deletedAt != 0) {
+        return t;
+      }
       final code = OTP.generateTOTPCodeString(
         t.secret,
         DateTime.now().millisecondsSinceEpoch,
@@ -206,11 +188,10 @@ class LocalStorageTotpApi extends TotpApi {
 
   @override
   Future<void> reorderTotps(List<Totp> totps) async {
-    _totps = totps;
     final deleted = _localTotps.where((totp) => totp.deletedAt != 0).toList();
     _localTotps = [...totps, ...deleted];
 
-    await _localStorageRepository.box.put(_storageKey, jsonEncode(_localTotps));
-    _webdavapi.syncToServer(_localTotps);
+    await _lsr.saveTotpList(_localTotps);
+    _sync(true);
   }
 }

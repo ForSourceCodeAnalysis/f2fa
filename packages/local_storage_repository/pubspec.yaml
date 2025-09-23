@@ -1,6 +1,7 @@
 name: local_storage_repository
 description: "A new Flutter package project."
 version: 0.0.1
+publish_to: none
 homepage:
 
 environment:
@@ -12,6 +13,9 @@ dependencies:
     sdk: flutter
   hive: ^2.2.3
   json_annotation: ^4.9.0
+  totp_api:
+    path: ../totp_api
+
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,11 @@
 name: totp_api
 description: "A new Flutter package project."
 version: 0.0.1
+publish_to: none
 homepage:
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.8.0
   flutter: ">=1.17.0"
 
 dependencies:

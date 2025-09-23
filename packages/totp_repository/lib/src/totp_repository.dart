@@ -33,7 +33,8 @@ class TotpRepository {
   }
 
   Future<void> tickerUpdateCode() async {
-    _todoStreamController.add(_totpApi.refreshCode());
+    _totpApi.refreshCode();
+    _todoStreamController.add(await _totpApi.getTotpList());
   }
 
   Future<void> reorderTotps(List<Totp> totps) async {

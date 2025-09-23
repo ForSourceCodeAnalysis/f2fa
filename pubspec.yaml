@@ -20,7 +20,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.9.0
-  flutter: 3.35.0
+  flutter: ^3.35.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,8 +39,8 @@ dependencies:
   flutter_bloc: ^8.1.6
   local_storage_totp_api:
     path: packages/local_storage_totp_api
-  webdav_totp_api:
-    path: packages/webdav_totp_api
+  webdav_sync:
+    path: packages/webdav_sync
   totp_repository:
     path: packages/totp_repository
   totp_api:
