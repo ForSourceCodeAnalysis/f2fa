@@ -1,11 +1,10 @@
 # f2fa
 
-一款使用 `flutter` 开发的两步身份验证 `App` ，界面干净简洁，支持多个平台， `Android`，`Linux`，`Windows`，`ios`（未验证），`macos`（未验证）。
+一款使用 `flutter` 开发的两步身份验证 `App` ，界面干净简洁，目前只支持了android平台。
 
 [English](README_en.md)
 
 ## 特性
-- 多平台支持
 - 支持 `TOTP`,`HOTP`
 - 兼容 `Google Authenticator`，`Microsoft Authenticator`
 - 支持 `WebDAV` 进行多设备同步

@@ -28,6 +28,7 @@ class LocalStorageTotpApi extends TotpApi {
   Future<void> webdavInit() async {
     final webdav = _lsr.getWebdavConfig();
     if (webdav == null) {
+      _webdavsync = null;
       _lsr.clearWebdavErrorInfo();
       return;
     }
@@ -51,6 +52,7 @@ class LocalStorageTotpApi extends TotpApi {
   Future<void> mergeData(List<Totp> rtotps) async {
     if (_localTotps.isEmpty) {
       _localTotps = rtotps;
+      _lsr.saveTotpList(_localTotps);
       return;
     }
 
@@ -104,6 +106,7 @@ class LocalStorageTotpApi extends TotpApi {
     }
 
     _localTotps = totps;
+    // print('local totps: ${jsonEncode(_localTotps)}');
   }
 
   Future<void> _sync(bool forceUpload) async {
@@ -112,6 +115,7 @@ class LocalStorageTotpApi extends TotpApi {
       if (rdata == null) {
         return;
       }
+      // print('remote totps: ${jsonEncode(rdata.data)} ,status: ${rdata.status}');
       //数据为空，本地有数据，则上传
       if (rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) {
         await _webdavsync?.syncToServer(_localTotps);
@@ -127,7 +131,9 @@ class LocalStorageTotpApi extends TotpApi {
       if (rdata.status == GetDataStatus.notModified && forceUpload) {
         await _webdavsync?.syncToServer(_localTotps);
         await _lsr.clearWebdavErrorInfo();
+        return;
       }
+      await _lsr.clearWebdavErrorInfo();
     } catch (e) {
       _lsr.saveWebdavErrorInfo(e.toString());
     }

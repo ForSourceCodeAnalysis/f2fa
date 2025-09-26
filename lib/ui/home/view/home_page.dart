@@ -1,7 +1,6 @@
 import 'package:f2fa/generated/generated.dart';
 import 'package:f2fa/ui/ui.dart';
 import 'package:f2fa/theme/theme.dart';
-import 'package:f2fa/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:totp_repository/totp_repository.dart';
@@ -13,10 +12,7 @@ class HomePage extends StatelessWidget {
   Future<void> _scanQR(BuildContext context) async {
     final res = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) =>
-            Utils.isMobile() ? const ScannerPage() : const ScannerPcPage(),
-      ),
+      MaterialPageRoute(builder: (context) => const ScannerPage()),
     );
 
     if (!context.mounted || res == null) {
@@ -52,7 +48,7 @@ class HomePage extends StatelessWidget {
         View.of(context).platformDispatcher.platformBrightness ==
             Brightness.light,
       ThemeMode.light => true,
-      ThemeMode.dark => false
+      ThemeMode.dark => false,
     };
 
     return Scaffold(
@@ -60,18 +56,20 @@ class HomePage extends StatelessWidget {
         title: const Text('F2FA'),
         actions: [
           IconButton(
-              onPressed: () => context.read<ThemeBloc>().add(ThemeModeChanged(
-                  isLightMode ? ThemeMode.dark : ThemeMode.light)),
-              icon: isLightMode
-                  ? const Icon(Icons.light_mode)
-                  : const Icon(Icons.dark_mode)),
+            onPressed: () => context.read<ThemeBloc>().add(
+              ThemeModeChanged(isLightMode ? ThemeMode.dark : ThemeMode.light),
+            ),
+            icon: isLightMode
+                ? const Icon(Icons.light_mode)
+                : const Icon(Icons.dark_mode),
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SettingsPage()));
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
             },
           ),
         ],
@@ -94,14 +92,15 @@ class HomePage extends StatelessWidget {
         },
         itemBuilder: (BuildContext context) => [
           PopupMenuItem<String>(
-              value: "scan",
-              child: Row(
-                children: [
-                  const Icon(Icons.qr_code_scanner),
-                  const SizedBox(width: 8),
-                  Text(LocaleKeys.hpScanAdd.tr()),
-                ],
-              )),
+            value: "scan",
+            child: Row(
+              children: [
+                const Icon(Icons.qr_code_scanner),
+                const SizedBox(width: 8),
+                Text(LocaleKeys.hpScanAdd.tr()),
+              ],
+            ),
+          ),
           PopupMenuItem<String>(
             value: 'manual',
             child: Row(
