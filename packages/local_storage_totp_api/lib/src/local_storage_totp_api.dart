@@ -26,7 +26,7 @@ class LocalStorageTotpApi extends TotpApi {
   }
 
   Future<void> webdavInit() async {
-    final webdav = _lsr.getWebdavConfig();
+    final webdav = await _lsr.getWebdavConfig();
     if (webdav == null) {
       _webdavsync = null;
       _lsr.clearWebdavErrorInfo();

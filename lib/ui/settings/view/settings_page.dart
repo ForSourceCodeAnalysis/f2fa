@@ -41,9 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.cSettings.tr()),
-      ),
+      appBar: AppBar(title: Text(LocaleKeys.cSettings.tr())),
       body: ListView(
         children: [
           // Appearance Section
@@ -60,18 +58,16 @@ class _SettingsPageState extends State<SettingsPage> {
                     return DropdownButton<ThemeMode>(
                       value: state.themeMode,
                       items: ThemeMode.values.map((mode) {
-                        final String m = {
-                              ThemeMode.system:
-                                  LocaleKeys.spThemeModeSystem.tr(),
+                        final String m =
+                            {
+                              ThemeMode.system: LocaleKeys.spThemeModeSystem
+                                  .tr(),
                               ThemeMode.light: LocaleKeys.spThemeModeLight.tr(),
                               ThemeMode.dark: LocaleKeys.spThemeModeDark.tr(),
                             }[mode] ??
                             '';
 
-                        return DropdownMenuItem(
-                          value: mode,
-                          child: Text(m),
-                        );
+                        return DropdownMenuItem(value: mode, child: Text(m));
                       }).toList(),
                       onChanged: (mode) {
                         if (mode != null) {
@@ -113,9 +109,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       }).toList(),
                       onChanged: (color) {
                         if (color != null) {
-                          context
-                              .read<ThemeBloc>()
-                              .add(ThemeColorChanged(color));
+                          context.read<ThemeBloc>().add(
+                            ThemeColorChanged(color),
+                          );
                         }
                       },
                     );
@@ -153,14 +149,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(LocaleKeys.spWebdav.tr()),
                 subtitle: Text(LocaleKeys.spWebdavSubtitle.tr()),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {
+                onTap: () async {
                   final localStorage = context.read<LocalStorageRepository>();
-                  final webdav = localStorage.getWebdavConfig();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => WebDavConfigForm(
-                      initialWebdav: webdav,
-                    ),
-                  ));
+                  final webdav = await localStorage.getWebdavConfig();
+                  if (context.mounted) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => WebDavConfigForm(initialWebdav: webdav),
+                      ),
+                    );
+                  }
                 },
               ),
             ],
@@ -172,22 +170,16 @@ class _SettingsPageState extends State<SettingsPage> {
               ListTile(
                 title: Text(LocaleKeys.spVersion.tr()),
                 trailing: Text(packinfo.version),
-                onTap: () {
-                  final localStorage = context.read<LocalStorageRepository>();
-                  final webdav = localStorage.getWebdavConfig();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => WebDavConfigForm(
-                      initialWebdav: webdav,
-                    ),
-                  ));
-                },
               ),
               ListTile(
                 title: const Text("Github"),
                 trailing: const Text("https://github.com/jenken827/f2fa"),
                 onTap: () {
-                  Clipboard.setData(const ClipboardData(
-                      text: "https://github.com/jenken827/f2fa"));
+                  Clipboard.setData(
+                    const ClipboardData(
+                      text: "https://github.com/jenken827/f2fa",
+                    ),
+                  );
                   SnackBarWrapper.showSnackBar(
                     context: context,
                     message: LocaleKeys.spProjectAddressCopied.tr(),
@@ -198,8 +190,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: const Text('Gitee'),
                 trailing: const Text("https://gitee.com/jenken827/f2fa"),
                 onTap: () {
-                  Clipboard.setData(const ClipboardData(
-                      text: "https://gitee.com/jenken827/f2fa"));
+                  Clipboard.setData(
+                    const ClipboardData(
+                      text: "https://gitee.com/jenken827/f2fa",
+                    ),
+                  );
                   SnackBarWrapper.showSnackBar(
                     context: context,
                     message: LocaleKeys.spProjectAddressCopied.tr(),
@@ -215,10 +210,7 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 class _SettingsSection extends StatelessWidget {
-  const _SettingsSection({
-    required this.title,
-    required this.children,
-  });
+  const _SettingsSection({required this.title, required this.children});
 
   final String title;
   final List<Widget> children;
@@ -233,9 +225,9 @@ class _SettingsSection extends StatelessWidget {
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         ...children,
