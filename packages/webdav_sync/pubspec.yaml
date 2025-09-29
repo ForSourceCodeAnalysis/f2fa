@@ -15,8 +15,6 @@ dependencies:
   encrypt: ^5.0.3
   path: ^1.9.1
   simple_webdav_client: ^0.2.0
-  totp_api:
-    path: ../totp_api
   local_storage_repository:
     path: ../local_storage_repository
 

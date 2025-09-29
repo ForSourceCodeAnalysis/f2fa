@@ -11,8 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   rxdart: ^0.28.0
-  totp_api:
-    path: ../totp_api
+  local_storage_repository:
+    path: ../local_storage_repository
+  webdav_sync:
+    path: ../webdav_sync
+  otp: ^3.2.0
 
 
 dev_dependencies:

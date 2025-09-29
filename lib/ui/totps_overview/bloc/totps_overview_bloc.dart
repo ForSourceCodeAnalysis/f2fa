@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:totp_repository/totp_repository.dart';
 
 part 'totps_overview_event.dart';
@@ -50,7 +51,7 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
       }
       _subscription = Stream.periodic(
         const Duration(seconds: 1),
-      ).listen((_) => _totpRepository.tickerUpdateCode());
+      ).listen((_) => _totpRepository.refreshCode());
     } else {
       if (_subscription == null) {
         return;

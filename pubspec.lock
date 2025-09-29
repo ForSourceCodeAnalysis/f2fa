@@ -732,13 +732,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  local_storage_totp_api:
-    dependency: "direct main"
-    description:
-      path: "packages/local_storage_totp_api"
-      relative: true
-    source: path
-    version: "0.0.1"
   logging:
     dependency: transitive
     description:
@@ -807,10 +800,10 @@ packages:
     dependency: transitive
     description:
       name: otp
-      sha256: fcb7f21e30c4cd80a0a982c27a9b75151cc1fe3d8f7ee680673c090171b1ad55
+      sha256: "998e73b5cd831a13fa654cf2cbb169d027f74b4928853ff26aa9311ead66ed7c"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.4"
+    version: "3.2.0"
   package_config:
     dependency: transitive
     description:
@@ -1140,10 +1133,10 @@ packages:
     dependency: transitive
     description:
       name: timezone
-      sha256: "2236ec079a174ce07434e89fcd3fcda430025eb7692244139a9cf54fdcf1fc7d"
+      sha256: dd14a3b83cfd7cb19e7888f1cbc20f258b8d71b54c06f79ac585f14093a287d1
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.9.4"
+    version: "0.10.1"
   timing:
     dependency: transitive
     description:
@@ -1160,13 +1153,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.0"
-  totp_api:
-    dependency: "direct main"
-    description:
-      path: "packages/totp_api"
-      relative: true
-    source: path
-    version: "0.0.1"
   totp_repository:
     dependency: "direct main"
     description:

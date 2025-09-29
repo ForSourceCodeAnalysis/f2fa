@@ -1,4 +1,4 @@
-import 'package:totp_api/totp_api.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 
 enum GetDataStatus { notModified, created, modified, empty }
 

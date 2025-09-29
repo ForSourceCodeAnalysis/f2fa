@@ -3,11 +3,26 @@ import 'package:f2fa/ui/ui.dart';
 import 'package:f2fa/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:totp_repository/totp_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) =>
+          TotpsOverviewBloc(totpRepository: context.read<TotpRepository>())
+            ..add(TotpsOverviewSubscriptionRequested())
+            ..add(TotpsOverviewTotpUpdated(true)),
+      child: const _HomeView(),
+    );
+  }
+}
+
+class _HomeView extends StatelessWidget {
+  const _HomeView();
 
   Future<void> _scanQR(BuildContext context) async {
     final res = await Navigator.push(

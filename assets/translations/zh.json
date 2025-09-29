@@ -24,13 +24,15 @@
     "editTotpPage": "这是一个分隔符的注释，没有意义",
     "etpAddItem": "添加项目",
     "etpEditItem": "编辑项目",
-    "etpIssuer": "发行者",
-    "etpAccount": "账户",
+    "etpIssuer": "发行商",
+    "etpAccount": "账号",
     "etpSecret": "密钥",
     "etpType": "类型",
     "etpPeriod": "周期",
     "etpDigits": "位数",
     "etpAlgorithm": "算法",
+    "etpDupTipsTitle": "重复覆盖确认",
+    "etpDupTipsContent": "已存在相同发行商和账号的条目，是否覆盖？",
 
     "settingsPage": "这是一个分隔符的注释，没有意义",
     "spAppearance": "外观",
@@ -57,6 +59,13 @@
     "spUpdate": "更新",
     "spAlreadyLatestVersion": "您已经是最新版本",
     "spUpdateCheckFailed": "检查更新失败",
+    "spRecycleBin": "回收站",
+    "spClearRecycleBin": "清空回收站",
+    "spFeedbackAndCommunity": "反馈与交流",
+    "spRecycleBinCleared": "回收站已清空",
+    "spRestoreRecycleBin": "从回收站恢复",
+    "spEmail": "邮箱",
+    
 
     "webdavConfigPage": "这是一个分隔符的注释，没有意义",
     "wcpWebdavConfig": "WebDAV 配置",
@@ -73,6 +82,15 @@
     "wcpUnknownErrorTips": "未知错误，请重试",
     "wcpLastSyncError": "上次同步错误",
     "wcpChangeCredentialSuccess": "修改成功，请重启应用生效",
+
+    "deletedRestorePage": "这是一个分隔符的注释，没有意义",
+    "drpDeletedItems": "已删除的项",
+    "drpRestore": "恢复",
+    "drpDeletePermanently": "永久删除",
+    "drpDeletePermanentlyTips": "确定要永久删除此项吗？删除后将无法恢复。",
+    "drpEmpty": "没有已删除的项",
+    "drpDeletedAt": "删除于",
+
 
     "scannerErrorWidget": "这是一个分隔符的注释，没有意义",
     "sewCameraNotReady": "相机未准备好，请重试。",

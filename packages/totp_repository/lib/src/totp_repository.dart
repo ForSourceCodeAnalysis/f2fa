@@ -1,53 +1,286 @@
+import 'package:local_storage_repository/local_storage_repository.dart';
+import 'package:otp/otp.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:totp_api/totp_api.dart';
+import 'package:webdav_sync/webdav_sync.dart';
 
 class TotpRepository {
-  TotpRepository({
-    required TotpApi totpApi,
-  }) : _totpApi = totpApi {
-    _init();
+  TotpRepository._();
+
+  late final _streamController = BehaviorSubject<List<Totp>>.seeded(const []);
+
+  Stream<List<Totp>> getTotps() => _streamController.asBroadcastStream();
+
+  late final LocalStorageRepository _lsr; //本地存储
+  WebdavSync? _webdavsync;
+
+  List<Totp> _localTotps = [];
+  Future<void>? _ongoingSync;
+  final List<String> _deletedIds = [];
+
+  static Future<TotpRepository> instance(LocalStorageRepository lsr) async {
+    final t = TotpRepository._();
+    await t._init(lsr);
+
+    return t;
   }
 
-  TotpApi _totpApi;
-
-  late final _todoStreamController =
-      BehaviorSubject<List<Totp>>.seeded(const []);
-
-  Future<void> _init() async {
-    final tps = await _totpApi.getTotpList();
-    _todoStreamController.add(tps);
+  Future<void> _init(LocalStorageRepository lsr) async {
+    _lsr = lsr;
+    _loadLocalData();
+    _streamController.add(_filterDeleted());
+    _webdavInit();
   }
 
-  Stream<List<Totp>> getTotps() => _todoStreamController.asBroadcastStream();
+  Future<void> _webdavInit() async {
+    final webdav = await _lsr.getWebdavConfig();
+    if (webdav == null) {
+      _webdavsync = null;
+      _lsr.clearWebdavErrorInfo();
+      return;
+    }
+    try {
+      _webdavsync = await WebdavSync.instance(
+        url: webdav.url,
+        username: webdav.username,
+        password: webdav.password,
+        encryptKey: webdav.encryptKey,
+        lsr: _lsr,
+      );
 
-  Future<void> saveTotp(Totp totp) async {
-    await _totpApi.saveTotp(totp);
+      await _sync(false);
+    } catch (e) {
+      _webdavsync = null;
+      await _lsr.saveWebdavErrorInfo(e.toString());
+    }
+  }
 
-    _todoStreamController.add(await _totpApi.getTotpList());
+  Future<void> _mergeData(List<Totp> rtotps) async {
+    if (_localTotps.isEmpty) {
+      _localTotps = rtotps;
+      _lsr.saveTotpList(_localTotps);
+      return;
+    }
+
+    final Map<String, Totp> mergedMap = {};
+
+    for (final remoteTotp in rtotps) {
+      mergedMap[remoteTotp.id] = remoteTotp;
+    }
+    bool diffFlag = false;
+    // 遍历本地项目
+    for (final localTotp in _localTotps) {
+      // 如果远程数据中没有该项目，添加它
+      if (!mergedMap.containsKey(localTotp.id)) {
+        mergedMap[localTotp.id] = localTotp;
+        diffFlag = true;
+      } else {
+        // 如果两边都有该项目, 比较更新时间，保留更新的版本
+        final remoteTotp = mergedMap[localTotp.id]!;
+
+        if (localTotp.updatedAt > remoteTotp.updatedAt) {
+          mergedMap[localTotp.id] = localTotp;
+          diffFlag = true;
+        }
+      }
+
+      //删除超过30天的彻底删除
+      final now = DateTime.now().millisecondsSinceEpoch;
+      if (mergedMap[localTotp.id]!.deletedAt != 0 &&
+          now - mergedMap[localTotp.id]!.deletedAt >= 30 * 24 * 3600 * 1000) {
+        mergedMap.remove(localTotp.id);
+        diffFlag = true;
+      }
+    }
+
+    // 将合并后的结果转换为列表
+    _localTotps =
+        mergedMap.values.where((e) => !_deletedIds.contains(e.id)).toList();
+    for (final totp in _localTotps) {
+      if (totp.uuid.isEmpty) {
+        _deletedIds.add(totp.id);
+      }
+    }
+
+    await _lsr.saveTotpList(_localTotps);
+    if (diffFlag) {
+      await _webdavsync?.syncToServer(_localTotps);
+    }
+  }
+
+  List<Totp> _filterDeleted() {
+    return _localTotps.where((totp) => totp.deletedAt == 0).toList();
+  }
+
+  void _loadLocalData() {
+    final totps = _lsr.getTotpList();
+    if (totps == null) {
+      return;
+    }
+    _localTotps = totps;
+  }
+
+  Future<void> _sync(bool forceUpload) async {
+    // serialize concurrent sync attempts: if one is ongoing, await it
+    if (_ongoingSync != null) {
+      await _ongoingSync!;
+      return;
+    }
+
+    _ongoingSync = _doSync(forceUpload);
+    try {
+      await _ongoingSync;
+    } finally {
+      _ongoingSync = null;
+    }
+  }
+
+  Future<void> _doSync(bool forceUpload) async {
+    try {
+      final rdata = await _webdavsync?.getData();
+      if (rdata == null) {
+        return;
+      }
+      //数据为空，本地有数据，则上传
+      if (rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) {
+        await _webdavsync?.syncToServer(_localTotps);
+        await _lsr.clearWebdavErrorInfo();
+        return;
+      }
+      if (rdata.status == GetDataStatus.modified) {
+        await _mergeData(rdata.data!);
+        await _lsr.clearWebdavErrorInfo();
+        return;
+      }
+      //远程数据没有变化，本地有变化
+      if (rdata.status == GetDataStatus.notModified && forceUpload) {
+        await _webdavsync?.syncToServer(_localTotps);
+        await _lsr.clearWebdavErrorInfo();
+        return;
+      }
+      await _lsr.clearWebdavErrorInfo();
+    } catch (e) {
+      _lsr.saveWebdavErrorInfo(e.toString());
+    }
+  }
+
+  int existIndex(String id) {
+    return _localTotps.indexWhere((totp) => totp.id == id);
+  }
+
+  Future<void> saveTotp(Totp totp, {Totp? oldTotp}) async {
+    int index = -1;
+    if (oldTotp != null) {
+      index = _localTotps.indexWhere((i) => i.id == oldTotp.id);
+    }
+    final eindex = existIndex(totp.id);
+
+    if (index >= 0) {
+      //更新
+      if (totp.id != oldTotp?.id && eindex >= 0) {
+        //id不同，且存在重复的，更新重复的，删除旧的
+        _localTotps[eindex] = totp;
+        _localTotps.removeAt(index);
+      } else {
+        //id相同，更新
+        _localTotps[index] = totp;
+      }
+    } else {
+      if (eindex >= 0) {
+        //需要覆盖已存在的
+        _localTotps[eindex] = totp;
+      } else {
+        //新增
+        _localTotps.add(totp);
+      }
+    }
+
+    await _lsr.saveTotpList(_localTotps);
+    _streamController.add(_filterDeleted());
+    _sync(true);
   }
 
   Future<void> deleteTotp(String id) async {
-    await _totpApi.deleteTotp(id);
-
-    _todoStreamController.add(await _totpApi.getTotpList());
+    final index = _localTotps.indexWhere((totp) => totp.id == id);
+    if (index < 0) {
+      return;
+    }
+    _localTotps[index] = _localTotps[index].copyWith(
+      deletedAt: DateTime.now().millisecondsSinceEpoch,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    await _lsr.saveTotpList(_localTotps);
+    _streamController.add(_filterDeleted());
+    _sync(true);
   }
 
-  Future<void> tickerUpdateCode() async {
-    _totpApi.refreshCode();
-    _todoStreamController.add(await _totpApi.getTotpList());
+  void refreshCode() {
+    for (var i = 0; i < _localTotps.length; i++) {
+      final t = _localTotps[i];
+      if (t.deletedAt != 0) continue;
+      final code = OTP.generateTOTPCodeString(
+        t.secret,
+        DateTime.now().millisecondsSinceEpoch,
+        interval: t.period,
+        length: t.digits,
+        algorithm: Algorithm.values.byName(t.algorithm.toUpperCase()),
+        isGoogle: true,
+      );
+      final remaining = OTP.remainingSeconds(interval: t.period);
+      _localTotps[i] = t.copyWith(remaining: remaining, code: code);
+    }
+    _streamController.add(_filterDeleted());
   }
 
   Future<void> reorderTotps(List<Totp> totps) async {
-    await _totpApi.reorderTotps(totps);
-    _todoStreamController.add(totps);
+    final deleted = _localTotps.where((totp) => totp.deletedAt != 0).toList();
+    _localTotps = [...totps, ...deleted];
+
+    await _lsr.saveTotpList(_localTotps);
+    _streamController.add(_filterDeleted());
+    _sync(true);
   }
 
-  Future<void> changeApi(TotpApi api) async {
-    _totpApi = api;
-    _todoStreamController.add(await _totpApi.getTotpList());
+  Future<void> clearRecycleBin() async {
+    _localTotps.removeWhere((totp) {
+      if (totp.deletedAt == 0) {
+        return false;
+      }
+      _deletedIds.add(totp.id);
+      return true;
+    });
+    await _lsr.saveTotpList(_localTotps);
+    _sync(true);
+  }
+
+  Future<List<Totp>> getDeletedTotps() async {
+    return _localTotps.where((totp) => totp.deletedAt != 0).toList();
+  }
+
+  Future<void> restoreTotp(String id) async {
+    final index = _localTotps.indexWhere((totp) => totp.id == id);
+    if (index < 0) {
+      return;
+    }
+    _localTotps[index] = _localTotps[index].copyWith(
+      deletedAt: 0,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    await _lsr.saveTotpList(_localTotps);
+    await _sync(true);
+  }
+
+  Future<void> deletePermanently(String id) async {
+    final index =
+        _localTotps.indexWhere((totp) => totp.id == id && totp.deletedAt != 0);
+    if (index < 0) return;
+    _deletedIds.add(id);
+    _localTotps.removeAt(index);
+
+    await _lsr.saveTotpList(_localTotps);
+    _sync(true);
   }
 
   void dispose() {
-    _todoStreamController.close();
+    _streamController.close();
   }
 }

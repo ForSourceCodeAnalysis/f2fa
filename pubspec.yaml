@@ -37,14 +37,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_bloc: ^8.1.6
-  local_storage_totp_api:
-    path: packages/local_storage_totp_api
   webdav_sync:
     path: packages/webdav_sync
   totp_repository:
     path: packages/totp_repository
-  totp_api:
-    path: packages/totp_api
   local_storage_repository:
     path: packages/local_storage_repository
   equatable: ^2.0.7
@@ -61,7 +57,7 @@ dependencies:
   form_builder_validators: ^11.0.0
   easy_localization_loader: ^2.0.2  
   package_info_plus: ^8.1.2
-  # http: ^1.2.1
+
 
 
 

@@ -8,6 +8,7 @@ part 'totp.g.dart';
 @JsonSerializable()
 class Totp extends Equatable {
   Totp({
+    this.uuid = '',
     required this.issuer,
     required this.account,
     required this.secret,
@@ -17,13 +18,13 @@ class Totp extends Equatable {
     this.period = 30,
     this.code = '',
     this.remaining = 0,
-    // this.order = 0,
     this.createdAt = 0,
     this.updatedAt = 0,
     this.deletedAt = 0,
-  })  : type = type.toLowerCase(),
-        algorithm = algorithm.toLowerCase();
+  }) : type = type.toLowerCase(),
+       algorithm = algorithm.toLowerCase();
 
+  final String uuid;
   final String type;
   final String issuer;
   final String account;
@@ -31,7 +32,6 @@ class Totp extends Equatable {
   final String algorithm;
   final int digits;
   final int period;
-  // final int order;
   final int createdAt;
   final int updatedAt;
   final int deletedAt;
@@ -52,16 +52,13 @@ class Totp extends Equatable {
     if (uri.scheme == 'otpauth' && uri.host == "totp") {
       final issuer = uri.queryParameters['issuer'] ?? "";
       var issueraccount = uri.pathSegments.last.split(":");
-      final account =
-          issueraccount.length > 1 ? issueraccount[1] : issueraccount[0];
+      final account = issueraccount.length > 1
+          ? issueraccount[1]
+          : issueraccount[0];
       final secret = uri.queryParameters['secret'] ?? "";
 
       if (secret.isNotEmpty) {
-        return Totp(
-          issuer: issuer,
-          account: account,
-          secret: secret,
-        );
+        return Totp(issuer: issuer, account: account, secret: secret);
       }
     }
     return null;
@@ -101,19 +98,19 @@ class Totp extends Equatable {
 
   @override
   List<Object?> get props => [
-        issuer,
-        account,
-        secret,
-        type,
-        algorithm,
-        digits,
-        period,
-        id,
-        code,
-        remaining,
-        // order,
-        createdAt,
-        updatedAt,
-        deletedAt,
-      ];
+    issuer,
+    account,
+    secret,
+    type,
+    algorithm,
+    digits,
+    period,
+    id,
+    code,
+    remaining,
+    // order,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
 }

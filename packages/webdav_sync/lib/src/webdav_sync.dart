@@ -5,7 +5,6 @@ import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:simple_webdav_client/client.dart';
-import 'package:totp_api/totp_api.dart';
 import 'package:webdav_sync/src/exception.dart';
 import 'package:webdav_sync/src/model/get_data_res.dart';
 

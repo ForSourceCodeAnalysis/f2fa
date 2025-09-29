@@ -6,7 +6,6 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
-import 'package:totp_api/totp_api.dart';
 
 class LocalStorageRepository {
   LocalStorageRepository._();

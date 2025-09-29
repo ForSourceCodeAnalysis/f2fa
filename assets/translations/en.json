@@ -31,6 +31,8 @@
     "etpPeriod": "Period",   
     "etpDigits": "Digits",
     "etpAlgorithm": "Algorithm",
+    "etpDupTipsTitle": "Duplicate Overwrite Confirmation",
+    "etpDupTipsContent": "An entry with the same issuer and account already exists. Do you want to overwrite it?",
 
 
     "settingsPage": "This is a comment as divider, no signification",
@@ -57,6 +59,12 @@
     "spUpdate": "Update",
     "spAlreadyLatestVersion": "You already have the latest version",
     "spUpdateCheckFailed": "Failed to check for updates",
+    "spRecycleBin": "Recycle Bin",
+    "spClearRecycleBin": "Clear Recycle Bin",
+    "spFeedbackAndCommunity": "Feedback and Community",
+    "spRecycleBinCleared": "Recycle Bin cleared",
+    "spRestoreRecycleBin": "Restore from Recycle Bin",
+    "spEmail": "Email",
 
     "webdavConfigPage":"This is a comment as divider, no signification",
     "wcpWebdavConfig": "WebDAV Configuration",
@@ -73,6 +81,14 @@
     "wcpUnknownErrorTips": "Unknown error, please try again.",
     "wcpLastSyncError": "Last sync error",
     "wcpChangeCredentialSuccess": "Modification successful, please restart the application for it to take effect",
+
+    "deletedRestorePage": "This is a comment as divider, no signification",
+    "drpDeletedItems": "Deleted Items",
+    "drpRestore": "Restore",
+    "drpDeletePermanently": "Delete Permanently",
+    "drpDeletePermanentlyTips": "Are you sure you want to delete this item permanently? This action cannot be undone.",
+    "drpEmpty": "No deleted items",
+    "drpDeletedAt": "Deleted at",
 
     "scannerErrorWidget": "This is a comment as divider, no signification",
     "sewCameraNotReady": "Camera not ready, please try again.",

@@ -2,8 +2,10 @@ import 'package:f2fa/generated/generated.dart';
 import 'package:f2fa/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:totp_repository/totp_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class EditTotpPage extends StatelessWidget {
   const EditTotpPage({super.key, this.initialTotp});
@@ -17,20 +19,39 @@ class EditTotpPage extends StatelessWidget {
         totpRepository: context.read<TotpRepository>(),
         initialTotp: initialTotp,
       ),
-      child: const EditTotpView(),
+      child: EditTotpView(initialTotp: initialTotp),
     );
   }
 }
 
-class EditTotpView extends StatelessWidget {
-  const EditTotpView({super.key});
+class EditTotpView extends StatefulWidget {
+  const EditTotpView({super.key, this.initialTotp});
+
+  final Totp? initialTotp;
+
+  @override
+  State<EditTotpView> createState() => _EditTotpViewState();
+}
+
+class _EditTotpViewState extends State<EditTotpView> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
     final status = context.select((EditTodoBloc bloc) => bloc.state.status);
-    final isNewTotp = context.select(
-      (EditTodoBloc bloc) => bloc.state.isNewTotp,
-    );
+    final isNewTotp = context.read<EditTodoBloc>().state.isNewTotp;
+
+    final initial = widget.initialTotp;
+    final initialValues = <String, dynamic>{
+      'type': initial?.type ?? 'totp',
+      'issuer': initial?.issuer ?? '',
+      'account': initial?.account ?? '',
+      'secret': initial?.secret ?? '',
+      'period': initial?.period ?? 30,
+      'digits': initial?.digits ?? 6,
+      'algorithm': initial?.algorithm ?? 'sha1',
+    };
 
     return BlocListener<EditTodoBloc, EditTotpState>(
       listenWhen: (previous, current) => previous.status != current.status,
@@ -54,34 +75,203 @@ class EditTotpView extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           tooltip: LocaleKeys.cSave.tr(),
-          shape: const CircleBorder(),
-          onPressed: status.isLoadingOrSuccess
-              ? null
-              : () =>
-                    context.read<EditTodoBloc>().add(const EditTotpSubmitted()),
-          child: status.isLoadingOrSuccess
-              ? const CircularProgressIndicator()
+          onPressed: () async {
+            final formState = _formKey.currentState;
+            if (formState == null) return;
+            print('formState is not null');
+            formState.save();
+            if (!formState.validate()) return;
+            print('formState is valid');
+            final v = formState.value;
+
+            final rawPeriod = v['period'];
+            final period = rawPeriod is int
+                ? rawPeriod
+                : int.tryParse((rawPeriod ?? '').toString()) ?? 30;
+
+            final rawDigits = v['digits'];
+            final digits = rawDigits is int
+                ? rawDigits
+                : int.tryParse((rawDigits ?? '').toString()) ?? 6;
+            final totp = Totp(
+              type: v['type'],
+              issuer: v['issuer'],
+              account: v['account'],
+              secret: v['secret'],
+              period: period,
+              digits: digits,
+              algorithm: v['algorithm'],
+              createdAt:
+                  initial?.createdAt ?? DateTime.now().millisecondsSinceEpoch,
+              updatedAt:
+                  initial?.updatedAt ?? DateTime.now().millisecondsSinceEpoch,
+              deletedAt: 0,
+            );
+            if (totp.id != initial?.id) {
+              print('id is different');
+              final eindex = context.read<TotpRepository>().existIndex(totp.id);
+              if (eindex != -1) {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(LocaleKeys.etpDupTipsTitle.tr()),
+                    content: Text(LocaleKeys.etpDupTipsContent.tr()),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: Text(LocaleKeys.cCancel.tr()),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: Text(LocaleKeys.cConfirm.tr()),
+                      ),
+                    ],
+                  ),
+                );
+                print('confirm: $confirm');
+                if (confirm == true && context.mounted) {
+                  context.read<EditTodoBloc>().add(EditTotpSubmitted(totp));
+                  return;
+                }
+              } else {
+                context.read<EditTodoBloc>().add(EditTotpSubmitted(totp));
+              }
+            } else {
+              context.read<EditTodoBloc>().add(EditTotpSubmitted(totp));
+            }
+          },
+
+          child: status == EditTotpStatus.loading
+              ? const CircularProgressIndicator(strokeWidth: 2)
               : const Icon(Icons.check_rounded),
         ),
-        body: const SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _TypeField(),
-                SizedBox(height: 16),
-                _IssuerField(),
-                SizedBox(height: 16),
-                _AccountField(),
-                SizedBox(height: 16),
-                _SecretField(),
-                SizedBox(height: 16),
-                _PeriodField(),
-                SizedBox(height: 16),
-                _DigitsField(),
-                SizedBox(height: 16),
-                _AlgorithmField(),
-              ],
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 720),
+                child: Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: FormBuilder(
+                      key: _formKey,
+                      // initialValue: initialValues,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          FormBuilderDropdown<String>(
+                            name: 'type',
+                            initialValue: initialValues['type'],
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpType.tr(),
+                            ),
+                            items: ['totp', 'hotp']
+                                .map(
+                                  (t) => DropdownMenuItem(
+                                    value: t,
+                                    child: Text(t.toUpperCase()),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          FormBuilderTextField(
+                            name: 'issuer',
+                            initialValue: initialValues['issuer'],
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpIssuer.tr(),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          FormBuilderTextField(
+                            name: 'account',
+                            initialValue: initialValues['account'],
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpAccount.tr(),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          FormBuilderTextField(
+                            name: 'secret',
+                            initialValue: initialValues['secret'],
+                            obscureText: _isObscured,
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpSecret.tr(),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isObscured
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () =>
+                                    setState(() => _isObscured = !_isObscured),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          FormBuilderTextField(
+                            name: 'period',
+                            initialValue: initialValues['period'].toString(),
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpPeriod.tr(),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          FormBuilderDropdown<int>(
+                            name: 'digits',
+                            initialValue: initialValues['digits'],
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpDigits.tr(),
+                            ),
+                            items: [6, 7, 8]
+                                .map(
+                                  (d) => DropdownMenuItem(
+                                    value: d,
+                                    child: Text(d.toString()),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          FormBuilderDropdown<String>(
+                            name: 'algorithm',
+                            initialValue: initialValues['algorithm'],
+                            decoration: InputDecoration(
+                              labelText: LocaleKeys.etpAlgorithm.tr(),
+                            ),
+                            items: ['sha1', 'sha256', 'sha512']
+                                .map(
+                                  (a) => DropdownMenuItem(
+                                    value: a,
+                                    child: Text(a.toUpperCase()),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -90,179 +280,4 @@ class EditTotpView extends StatelessWidget {
   }
 }
 
-class _TypeField extends StatelessWidget {
-  const _TypeField();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return DropdownButtonFormField<String>(
-      key: const Key('editTotpView_type_dropdownField'),
-      initialValue: state.type,
-      decoration: InputDecoration(labelText: LocaleKeys.etpType.tr()),
-      items: ['totp', 'hotp'].map<DropdownMenuItem<String>>((type) {
-        return DropdownMenuItem(value: type, child: Text(type.toUpperCase()));
-      }).toList(),
-      onChanged: (value) {
-        if (value == null) {
-          return;
-        }
-        context.read<EditTodoBloc>().add(EditTotpTypeChanged(value));
-      },
-    );
-  }
-}
-
-class _IssuerField extends StatelessWidget {
-  const _IssuerField();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return TextFormField(
-      key: const Key('editTotpView_issuer_textFormField'),
-      initialValue: state.issuer,
-      decoration: InputDecoration(labelText: LocaleKeys.etpIssuer.tr()),
-      onChanged: (value) {
-        context.read<EditTodoBloc>().add(EditTotpIssuerChanged(value));
-      },
-    );
-  }
-}
-
-class _AccountField extends StatelessWidget {
-  const _AccountField();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return TextFormField(
-      key: const Key('editTotpView_account_textFormField'),
-      initialValue: state.account,
-      decoration: InputDecoration(labelText: LocaleKeys.etpAccount.tr()),
-      onChanged: (value) {
-        context.read<EditTodoBloc>().add(EditTotpAccountChanged(value));
-      },
-    );
-  }
-}
-
-class _SecretField extends StatefulWidget {
-  const _SecretField();
-
-  @override
-  State<_SecretField> createState() => _SecretFieldState();
-}
-
-class _SecretFieldState extends State<_SecretField> {
-  bool _isObscured = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _isObscured = true;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return TextFormField(
-      key: const Key('editTotpView_secret_textFormField'),
-      initialValue: state.secret,
-      decoration: InputDecoration(
-        labelText: LocaleKeys.etpSecret.tr(),
-        suffixIcon: IconButton(
-          // 添加一个按钮来切换密码显示
-          icon: Icon(_isObscured ? Icons.visibility : Icons.visibility_off),
-          onPressed: () {
-            setState(() {
-              _isObscured = !_isObscured; // 切换状态
-            });
-          },
-        ),
-      ),
-      obscureText: _isObscured,
-      onChanged: (value) {
-        context.read<EditTodoBloc>().add(EditTotpSecretChanged(value));
-      },
-    );
-  }
-}
-
-class _PeriodField extends StatelessWidget {
-  const _PeriodField();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return TextFormField(
-      key: const Key('editTotpView_period_textFormField'),
-      initialValue: state.period.toString(),
-      decoration: InputDecoration(labelText: LocaleKeys.etpPeriod.tr()),
-      keyboardType: TextInputType.number,
-      onChanged: (value) {
-        final period = int.tryParse(value);
-        if (period != null) {
-          context.read<EditTodoBloc>().add(EditTotpPeriodChanged(period));
-        }
-      },
-    );
-  }
-}
-
-class _DigitsField extends StatelessWidget {
-  const _DigitsField();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return DropdownButtonFormField<int>(
-      key: const Key('editTotpView_digits_dropdownField'),
-      initialValue: state.digits,
-      decoration: InputDecoration(labelText: LocaleKeys.etpDigits.tr()),
-      items: [6, 7, 8].map((int value) {
-        return DropdownMenuItem<int>(
-          value: value,
-          child: Text(value.toString()),
-        );
-      }).toList(),
-      onChanged: (value) {
-        if (value != null) {
-          context.read<EditTodoBloc>().add(EditTotpDigitsChanged(value));
-        }
-      },
-    );
-  }
-}
-
-class _AlgorithmField extends StatelessWidget {
-  const _AlgorithmField();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<EditTodoBloc>().state;
-
-    return DropdownButtonFormField<String>(
-      key: const Key('editTotpView_algorithm_dropdownField'),
-      initialValue: state.algorithm,
-      decoration: InputDecoration(labelText: LocaleKeys.etpAlgorithm.tr()),
-      items: ['sha1', 'sha256', 'sha512'].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value.toUpperCase()),
-        );
-      }).toList(),
-      onChanged: (value) {
-        if (value != null) {
-          context.read<EditTodoBloc>().add(EditTotpAlgorithmChanged(value));
-        }
-      },
-    );
-  }
-}
+// Legacy per-field widgets removed: FormBuilder is used for local input state.
