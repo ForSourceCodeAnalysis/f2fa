@@ -14,10 +14,14 @@ class TotpMenuButton extends StatelessWidget {
 
   final Totp totp;
 
-  Future<void> _showMenuAt(BuildContext context, Offset globalPosition) async {
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+  Future<void> _showMenuAt(
+    BuildContext parentContext,
+    Offset globalPosition,
+  ) async {
+    final overlay =
+        Overlay.of(parentContext).context.findRenderObject() as RenderBox;
     final selected = await showMenu<String>(
-      context: context,
+      context: parentContext,
       position: RelativeRect.fromRect(
         globalPosition & const Size(1, 1),
         Offset.zero & overlay.size,
@@ -59,38 +63,39 @@ class TotpMenuButton extends StatelessWidget {
     switch (selected) {
       case 'copy':
         Clipboard.setData(ClipboardData(text: totp.code));
-        if (context.mounted) {
+        if (parentContext.mounted) {
           SnackBarWrapper.showSnackBar(
-            context: context,
+            context: parentContext,
             message: LocaleKeys.tltCodeCopied.tr(),
           );
         }
         break;
       case 'edit':
-        if (context.mounted) {
-          Navigator.of(context).push(
+        if (parentContext.mounted) {
+          Navigator.of(parentContext).push(
             MaterialPageRoute(builder: (c) => EditTotpPage(initialTotp: totp)),
           );
         }
         break;
       case 'delete':
-        if (context.mounted) {
+        if (parentContext.mounted) {
           showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
+            context: parentContext,
+            builder: (dialogContext) => AlertDialog(
               title: Text(LocaleKeys.tltDeleteItem.tr()),
               content: Text(LocaleKeys.tltDeleteConfirmAsk.tr()),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(dialogContext),
                   child: Text(LocaleKeys.cCancel.tr()),
                 ),
                 TextButton(
                   onPressed: () {
-                    context.read<TotpsOverviewBloc>().add(
+                    // use the parentContext (where the bloc is available)
+                    parentContext.read<TotpsOverviewBloc>().add(
                       TotpsOverviewTotpDeleted(totp),
                     );
-                    Navigator.pop(context);
+                    Navigator.pop(dialogContext);
                   },
                   child: Text(LocaleKeys.cConfirm.tr()),
                 ),

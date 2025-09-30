@@ -21,7 +21,6 @@ class EditTodoBloc extends Bloc<EditTotpEvent, EditTotpState> {
     emit(state.copyWith(status: EditTotpStatus.loading));
 
     final totp = event.totp;
-    print('object id: ${totp.id}, initial id: ${state.initialTotp?.id}');
 
     await _totpRepository.saveTotp(totp, oldTotp: state.initialTotp);
 

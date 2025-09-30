@@ -78,10 +78,8 @@ class _EditTotpViewState extends State<EditTotpView> {
           onPressed: () async {
             final formState = _formKey.currentState;
             if (formState == null) return;
-            print('formState is not null');
             formState.save();
             if (!formState.validate()) return;
-            print('formState is valid');
             final v = formState.value;
 
             final rawPeriod = v['period'];
@@ -105,11 +103,13 @@ class _EditTotpViewState extends State<EditTotpView> {
                   initial?.createdAt ?? DateTime.now().millisecondsSinceEpoch,
               updatedAt:
                   initial?.updatedAt ?? DateTime.now().millisecondsSinceEpoch,
-              deletedAt: 0,
+              deleteStatus: 0,
             );
             if (totp.id != initial?.id) {
-              print('id is different');
-              final eindex = context.read<TotpRepository>().existIndex(totp.id);
+              final eindex = context.read<TotpRepository>().existIndex(
+                totp.id,
+                oldId: initial?.id,
+              );
               if (eindex != -1) {
                 final confirm = await showDialog<bool>(
                   context: context,
@@ -128,7 +128,6 @@ class _EditTotpViewState extends State<EditTotpView> {
                     ],
                   ),
                 );
-                print('confirm: $confirm');
                 if (confirm == true && context.mounted) {
                   context.read<EditTodoBloc>().add(EditTotpSubmitted(totp));
                   return;

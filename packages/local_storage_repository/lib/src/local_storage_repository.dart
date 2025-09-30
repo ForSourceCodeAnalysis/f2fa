@@ -4,8 +4,9 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
+import 'package:rxdart/rxdart.dart';
 
 class LocalStorageRepository {
   LocalStorageRepository._();
@@ -16,13 +17,17 @@ class LocalStorageRepository {
     return inst;
   }
 
-  static const String _boxname = 'f2faconfig';
+  static const String _boxname = 'f2fadb';
   static const String _webdavConfigKey = "webdavconfig";
   static const String _webdavErrKey = "webdaverrorinfo";
   static const String _totpListKey = "totplist";
   static const String _webdavLastModifiedKey = "webdavlastmodified";
   static const String _webdavEtagKey = "webdavetag";
   static const String _localEncryptKeyKey = "localencryptkey";
+
+  final _syncStatusController = BehaviorSubject<String>.seeded('');
+
+  Stream<String> getSyncStatus() => _syncStatusController.asBroadcastStream();
 
   late final Box _box;
   late final String _localEncryptKey;
@@ -116,10 +121,12 @@ class LocalStorageRepository {
 
   Future<void> saveWebdavErrorInfo(String errorInfo) async {
     await _box.put(_webdavErrKey, errorInfo);
+    _syncStatusController.add(errorInfo);
   }
 
   Future<void> clearWebdavErrorInfo() async {
     await _box.delete(_webdavErrKey);
+    _syncStatusController.add('');
   }
 
   String? getWebdavEtag() {

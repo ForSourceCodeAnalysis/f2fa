@@ -15,12 +15,10 @@ class TotpRepository {
 
   List<Totp> _localTotps = [];
   Future<void>? _ongoingSync;
-  final List<String> _deletedIds = [];
 
   static Future<TotpRepository> instance(LocalStorageRepository lsr) async {
     final t = TotpRepository._();
     await t._init(lsr);
-
     return t;
   }
 
@@ -70,7 +68,7 @@ class TotpRepository {
     // 遍历本地项目
     for (final localTotp in _localTotps) {
       // 如果远程数据中没有该项目，添加它
-      if (!mergedMap.containsKey(localTotp.id)) {
+      if (!mergedMap.containsKey(localTotp.id) && localTotp.deleteStatus != 2) {
         mergedMap[localTotp.id] = localTotp;
         diffFlag = true;
       } else {
@@ -82,24 +80,13 @@ class TotpRepository {
           diffFlag = true;
         }
       }
-
-      //删除超过30天的彻底删除
-      final now = DateTime.now().millisecondsSinceEpoch;
-      if (mergedMap[localTotp.id]!.deletedAt != 0 &&
-          now - mergedMap[localTotp.id]!.deletedAt >= 30 * 24 * 3600 * 1000) {
-        mergedMap.remove(localTotp.id);
-        diffFlag = true;
-      }
     }
-
-    // 将合并后的结果转换为列表
-    _localTotps =
-        mergedMap.values.where((e) => !_deletedIds.contains(e.id)).toList();
-    for (final totp in _localTotps) {
-      if (totp.uuid.isEmpty) {
-        _deletedIds.add(totp.id);
-      }
-    }
+    //删除超过1年彻底删除
+    final now = DateTime.now().millisecondsSinceEpoch;
+    _localTotps = mergedMap.values
+        .where((totp) => !(now - totp.updatedAt >= 365 * 24 * 3600 * 1000 &&
+            totp.deleteStatus == 2))
+        .toList();
 
     await _lsr.saveTotpList(_localTotps);
     if (diffFlag) {
@@ -108,7 +95,7 @@ class TotpRepository {
   }
 
   List<Totp> _filterDeleted() {
-    return _localTotps.where((totp) => totp.deletedAt == 0).toList();
+    return _localTotps.where((totp) => totp.deleteStatus == 0).toList();
   }
 
   void _loadLocalData() {
@@ -116,6 +103,7 @@ class TotpRepository {
     if (totps == null) {
       return;
     }
+
     _localTotps = totps;
   }
 
@@ -163,8 +151,8 @@ class TotpRepository {
     }
   }
 
-  int existIndex(String id) {
-    return _localTotps.indexWhere((totp) => totp.id == id);
+  int existIndex(String id, {String? oldId}) {
+    return _localTotps.indexWhere((totp) => totp.id == id && totp.id != oldId);
   }
 
   Future<void> saveTotp(Totp totp, {Totp? oldTotp}) async {
@@ -172,16 +160,29 @@ class TotpRepository {
     if (oldTotp != null) {
       index = _localTotps.indexWhere((i) => i.id == oldTotp.id);
     }
-    final eindex = existIndex(totp.id);
+    final eindex = existIndex(totp.id, oldId: oldTotp?.id);
 
     if (index >= 0) {
       //更新
-      if (totp.id != oldTotp?.id && eindex >= 0) {
-        //id不同，且存在重复的，更新重复的，删除旧的
-        _localTotps[eindex] = totp;
-        _localTotps.removeAt(index);
+      if (totp.id != oldTotp?.id) {
+        if (eindex >= 0) {
+          //id不同，且存在重复的，更新重复的，删除旧的
+          _localTotps[eindex] = totp;
+          //不能直接删除，否则同步时会判断出错
+          _localTotps[index] = _localTotps[index].copyWith(
+            deleteStatus: 1,
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
+          );
+        } else {
+          //id不同，且不重复
+          _localTotps[index] = totp;
+          _localTotps.add(oldTotp!.copyWith(
+            deleteStatus: 1,
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
+          ));
+        }
       } else {
-        //id相同，更新
+        //id相同
         _localTotps[index] = totp;
       }
     } else {
@@ -195,8 +196,8 @@ class TotpRepository {
     }
 
     await _lsr.saveTotpList(_localTotps);
+    await _sync(true);
     _streamController.add(_filterDeleted());
-    _sync(true);
   }
 
   Future<void> deleteTotp(String id) async {
@@ -205,18 +206,18 @@ class TotpRepository {
       return;
     }
     _localTotps[index] = _localTotps[index].copyWith(
-      deletedAt: DateTime.now().millisecondsSinceEpoch,
+      deleteStatus: 1,
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
     await _lsr.saveTotpList(_localTotps);
-    _streamController.add(_filterDeleted());
     _sync(true);
+    _streamController.add(_filterDeleted());
   }
 
   void refreshCode() {
     for (var i = 0; i < _localTotps.length; i++) {
       final t = _localTotps[i];
-      if (t.deletedAt != 0) continue;
+      if (t.deleteStatus != 0) continue;
       final code = OTP.generateTOTPCodeString(
         t.secret,
         DateTime.now().millisecondsSinceEpoch,
@@ -232,28 +233,28 @@ class TotpRepository {
   }
 
   Future<void> reorderTotps(List<Totp> totps) async {
-    final deleted = _localTotps.where((totp) => totp.deletedAt != 0).toList();
+    final deleted =
+        _localTotps.where((totp) => totp.deleteStatus != 0).toList();
     _localTotps = [...totps, ...deleted];
 
     await _lsr.saveTotpList(_localTotps);
-    _streamController.add(_filterDeleted());
     _sync(true);
+    _streamController.add(_filterDeleted());
   }
 
   Future<void> clearRecycleBin() async {
-    _localTotps.removeWhere((totp) {
-      if (totp.deletedAt == 0) {
-        return false;
+    _localTotps = _localTotps.map((totp) {
+      if (totp.deleteStatus == 1) {
+        return totp.copyWith(deleteStatus: 2);
       }
-      _deletedIds.add(totp.id);
-      return true;
-    });
+      return totp;
+    }).toList();
     await _lsr.saveTotpList(_localTotps);
     _sync(true);
   }
 
   Future<List<Totp>> getDeletedTotps() async {
-    return _localTotps.where((totp) => totp.deletedAt != 0).toList();
+    return _localTotps.where((totp) => totp.deleteStatus == 1).toList();
   }
 
   Future<void> restoreTotp(String id) async {
@@ -262,20 +263,21 @@ class TotpRepository {
       return;
     }
     _localTotps[index] = _localTotps[index].copyWith(
-      deletedAt: 0,
+      deleteStatus: 0,
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
     await _lsr.saveTotpList(_localTotps);
-    await _sync(true);
+    _sync(true);
   }
 
   Future<void> deletePermanently(String id) async {
-    final index =
-        _localTotps.indexWhere((totp) => totp.id == id && totp.deletedAt != 0);
+    final index = _localTotps.indexWhere((totp) => totp.id == id);
     if (index < 0) return;
-    _deletedIds.add(id);
-    _localTotps.removeAt(index);
 
+    _localTotps[index] = _localTotps[index].copyWith(
+      deleteStatus: 2,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
     await _lsr.saveTotpList(_localTotps);
     _sync(true);
   }

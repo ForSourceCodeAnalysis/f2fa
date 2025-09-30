@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:f2fa/app/app.dart';
 import 'package:f2fa/generated/codegen_loader.g.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:path_provider/path_provider.dart';

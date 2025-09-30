@@ -4,11 +4,12 @@ part 'webdav_config.g.dart';
 
 @JsonSerializable()
 class WebdavConfig {
-  WebdavConfig(
-      {required this.url,
-      required this.username,
-      required this.password,
-      this.encryptKey});
+  WebdavConfig({
+    required this.url,
+    required this.username,
+    required this.password,
+    this.encryptKey,
+  });
 
   final String url;
   final String username;

@@ -8,7 +8,6 @@ part 'totp.g.dart';
 @JsonSerializable()
 class Totp extends Equatable {
   Totp({
-    this.uuid = '',
     required this.issuer,
     required this.account,
     required this.secret,
@@ -20,11 +19,10 @@ class Totp extends Equatable {
     this.remaining = 0,
     this.createdAt = 0,
     this.updatedAt = 0,
-    this.deletedAt = 0,
+    this.deleteStatus = 0,
   }) : type = type.toLowerCase(),
        algorithm = algorithm.toLowerCase();
 
-  final String uuid;
   final String type;
   final String issuer;
   final String account;
@@ -34,10 +32,11 @@ class Totp extends Equatable {
   final int period;
   final int createdAt;
   final int updatedAt;
-  final int deletedAt;
-  @JsonKey(includeFromJson: false)
+  final int deleteStatus; //0 未删除，1 删除，2 彻底删除
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String code;
-  @JsonKey(includeFromJson: false)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final int remaining;
 
   String get id => '$issuer:$account';
@@ -77,7 +76,8 @@ class Totp extends Equatable {
     // int? order,
     int? createdAt,
     int? updatedAt,
-    int? deletedAt,
+
+    int? deleteStatus,
   }) {
     return Totp(
       type: type ?? this.type,
@@ -92,7 +92,7 @@ class Totp extends Equatable {
       // order: order ?? this.order,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
+      deleteStatus: deleteStatus ?? this.deleteStatus,
     );
   }
 
@@ -108,9 +108,8 @@ class Totp extends Equatable {
     id,
     code,
     remaining,
-    // order,
     createdAt,
     updatedAt,
-    deletedAt,
+    deleteStatus,
   ];
 }

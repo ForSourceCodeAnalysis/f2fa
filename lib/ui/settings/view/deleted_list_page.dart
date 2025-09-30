@@ -59,7 +59,7 @@ class _DeletedListView extends StatelessWidget {
 
                 final issuer = totp.issuer;
                 final name = totp.account;
-                final deletedAt = formatDeletedAt(totp.deletedAt);
+                final deletedAt = formatDeletedAt(totp.updatedAt);
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
