@@ -66,7 +66,7 @@
     "spRecycleBinCleared": "Recycle Bin cleared",
     "spRestoreRecycleBin": "Restore from Recycle Bin",
     "spEmail": "Email",
-    "spExport": "Export",
+    "spExportImport": "Export/Import",
     "spExportPlainJson": "Export as plain JSON file",
     "spExportPath": "Export path",
     "spExportSuccess": "Export successful",

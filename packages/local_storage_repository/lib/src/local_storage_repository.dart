@@ -6,7 +6,6 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
-import 'package:local_storage_repository/src/models/webdav_status.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LocalStorageRepository {

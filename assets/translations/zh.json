@@ -66,7 +66,7 @@
     "spRecycleBinCleared": "回收站已清空",
     "spRestoreRecycleBin": "从回收站恢复",
     "spEmail": "邮箱",
-    "spExport": "导出",
+    "spExportImport": "导出/导入",
     "spExportPlainJson": "导出为明文JSON文件",
     "spExportPath": "导出路径",
     "spExportSuccess": "导出成功",    

@@ -255,7 +255,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ListTile(
                   leading: Icon(Icons.import_export, color: colorTheme.primary),
                   title: Text(
-                    LocaleKeys.spExport.tr(),
+                    LocaleKeys.spExportImport.tr(),
                     style: TextStyle(
                       color: colorTheme.primary,
                       fontWeight: FontWeight.w700,
