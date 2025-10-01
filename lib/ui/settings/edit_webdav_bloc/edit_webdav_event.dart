@@ -7,6 +7,10 @@ abstract class EditWebdavEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class EditWebdavStatusSubscribe extends EditWebdavEvent {
+  const EditWebdavStatusSubscribe();
+}
+
 class EditWebdavSubmit extends EditWebdavEvent {
   const EditWebdavSubmit({
     required this.url,
@@ -24,3 +28,7 @@ class EditWebdavSubmit extends EditWebdavEvent {
   @override
   List<Object?> get props => [url, username, password, encryptKey, overwrite];
 }
+
+class EditWebdavForceSync extends EditWebdavEvent {}
+
+class EditWebdavExitSync extends EditWebdavEvent {}

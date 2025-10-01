@@ -230,17 +230,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(LocaleKeys.spWebdav.tr()),
 
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () async {
+                  onTap: () {
                     final localStorage = context.read<LocalStorageRepository>();
-                    final webdav = await localStorage.getWebdavConfig();
-                    if (context.mounted) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              WebDavConfigForm(initialWebdav: webdav),
-                        ),
-                      );
-                    }
+                    final webdav = localStorage.webdavConfig;
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => WebDavConfigForm(initialWebdav: webdav),
+                      ),
+                    );
                   },
                 ),
               ],

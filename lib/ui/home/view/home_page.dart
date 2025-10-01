@@ -15,33 +15,20 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          TotpsOverviewBloc(totpRepository: context.read<TotpRepository>())
+          TotpsOverviewBloc(
+              totpRepository: context.read<TotpRepository>(),
+              localStorageRepository: context.read<LocalStorageRepository>(),
+            )
             ..add(TotpsOverviewSubscriptionRequested())
-            ..add(TotpsOverviewTotpUpdated(true)),
+            ..add(TotpsOverviewTotpUpdated(true))
+            ..add(TotpsOverviewWebdavStatusSubscribe()),
       child: const _HomeView(),
     );
   }
 }
 
-class _HomeView extends StatefulWidget {
+class _HomeView extends StatelessWidget {
   const _HomeView();
-
-  @override
-  State<_HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<_HomeView> {
-  _HomeViewState();
-
-  WebdavConfig? _webdavConfig;
-  StreamSubscription<String>? _syncSub;
-
-  Future<void> _loadConfig() async {
-    final repo = context.read<LocalStorageRepository>();
-    final cfg = await repo.getWebdavConfig();
-    if (!mounted) return;
-    setState(() => _webdavConfig = cfg);
-  }
 
   Future<void> _scanQR(BuildContext context) async {
     final res = await Navigator.push(
@@ -74,63 +61,22 @@ class _HomeViewState extends State<_HomeView> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // load initial config
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadConfig();
-      final repo = context.read<LocalStorageRepository>();
-      _syncSub = repo.getSyncStatus().listen((s) {
-        if (!mounted) return;
-        // we only need to refresh the UI when sync status changes so we reload config
-        setState(() {});
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _syncSub?.cancel();
-    super.dispose();
-  }
-
-  Widget _buildStatusIcon() {
-    final hasConfig = _webdavConfig != null;
-    final webdavErr = context
-        .read<LocalStorageRepository>()
-        .getWebdavErrorInfo();
+  Widget _buildStatusIcon(BuildContext context) {
+    final webdavStatus = context.select(
+      (TotpsOverviewBloc bloc) => bloc.state.syncStatus,
+    );
 
     Color color;
-    bool showExclamation = false;
-    if (!hasConfig) {
+
+    if (!webdavStatus.configured) {
       color = Colors.grey;
-    } else if (webdavErr != null && webdavErr.isNotEmpty) {
+    } else if (webdavStatus.errorInfo.isNotEmpty) {
       color = Colors.red;
-      showExclamation = true;
     } else {
       color = Colors.green;
     }
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Icon(Icons.cloud_sync, color: color),
-        if (showExclamation)
-          Positioned(
-            right: 0,
-            top: 0,
-            child: Container(
-              padding: const EdgeInsets.all(1),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.error_outline, color: Colors.red),
-            ),
-          ),
-      ],
-    );
+    return Icon(Icons.cloud_sync, color: color);
   }
 
   @override
@@ -153,18 +99,18 @@ class _HomeViewState extends State<_HomeView> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: GestureDetector(
               onTap: () async {
-                // Open WebDAV edit page and refresh config after return
-                final cfg = _webdavConfig;
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WebDavConfigForm(initialWebdav: cfg),
+                    builder: (context) => WebDavConfigForm(
+                      initialWebdav: context
+                          .read<LocalStorageRepository>()
+                          .webdavConfig,
+                    ),
                   ),
                 );
-                if (!mounted) return;
-                await _loadConfig();
               },
-              child: _buildStatusIcon(),
+              child: _buildStatusIcon(context),
             ),
           ),
 

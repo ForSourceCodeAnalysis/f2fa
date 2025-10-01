@@ -9,6 +9,7 @@
     "cUsername": "用户名",
     "cPassword": "密码",
     "cEmail": "邮箱",
+    "cOperationSuccess": "操作成功",
 
     "homePage": "这是一个分隔符的注释，没有意义",
     "hpInvalidQR": "无效的二维码",
@@ -93,7 +94,9 @@
     "wcpParseErrorTips": "无法正确解析数据，请检查文件内容或加密密钥是否正确",
     "wcpUnknownErrorTips": "未知错误，请重试",
     "wcpLastSyncError": "上次同步错误",
-    "wcpChangeCredentialSuccess": "修改成功，请重启应用生效",
+    "wcpSyncOperation": "同步操作",
+    "wcpForceSync": "强制同步",
+    "wcpExitSync": "退出同步",
 
     "deletedRestorePage": "这是一个分隔符的注释，没有意义",
     "drpDeletedItems": "已删除的项",

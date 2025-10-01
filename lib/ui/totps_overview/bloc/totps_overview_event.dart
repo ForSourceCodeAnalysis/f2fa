@@ -7,6 +7,8 @@ sealed class TotpsOverviewEvent extends Equatable {
 
 class TotpsOverviewSubscriptionRequested extends TotpsOverviewEvent {}
 
+class TotpsOverviewWebdavStatusSubscribe extends TotpsOverviewEvent {}
+
 class TotpsOverviewTotpUpdated extends TotpsOverviewEvent {
   final bool onOff;
   TotpsOverviewTotpUpdated(this.onOff);
@@ -35,10 +37,7 @@ class TotpsOverviewReordered extends TotpsOverviewEvent {
   final int oldIndex;
   final int newIndex;
 
-  TotpsOverviewReordered({
-    required this.oldIndex,
-    required this.newIndex,
-  });
+  TotpsOverviewReordered({required this.oldIndex, required this.newIndex});
 
   @override
   List<Object?> get props => [oldIndex, newIndex];

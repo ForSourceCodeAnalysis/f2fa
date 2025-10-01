@@ -9,10 +9,14 @@ part 'totps_overview_event.dart';
 part 'totps_overview_state.dart';
 
 class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
-  TotpsOverviewBloc({required TotpRepository totpRepository})
-    : _totpRepository = totpRepository,
-      super(const TotpsOverviewState()) {
+  TotpsOverviewBloc({
+    required TotpRepository totpRepository,
+    required LocalStorageRepository localStorageRepository,
+  }) : _totpRepository = totpRepository,
+       _localStorageRepository = localStorageRepository,
+       super(const TotpsOverviewState()) {
     on<TotpsOverviewSubscriptionRequested>(_onSubscriptionRequested);
+    on<TotpsOverviewWebdavStatusSubscribe>(_onWebdavStatusSubscribe);
     on<TotpsOverviewTotpUpdated>(_onTotpUpdated);
     on<TotpsOverviewTotpDeleted>(_onTotpDeleted);
     on<TotpsOverviewTotpAdded>(_onTotpAdded);
@@ -20,6 +24,7 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
   }
 
   final TotpRepository _totpRepository;
+  final LocalStorageRepository _localStorageRepository;
   StreamSubscription<dynamic>? _subscription;
 
   Future<void> _onSubscriptionRequested(
@@ -59,6 +64,19 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
       await _subscription?.cancel();
       _subscription = null;
     }
+  }
+
+  Future<void> _onWebdavStatusSubscribe(
+    TotpsOverviewWebdavStatusSubscribe event,
+    Emitter<TotpsOverviewState> emit,
+  ) async {
+    await emit.forEach<WebdavStatus>(
+      _localStorageRepository.getSyncStatus(),
+      onData: (syncStatus) {
+        return state.copyWith(syncStatus: syncStatus);
+      },
+      onError: null,
+    );
   }
 
   Future<void> _onTotpDeleted(

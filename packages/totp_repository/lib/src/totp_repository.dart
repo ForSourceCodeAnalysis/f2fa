@@ -32,7 +32,7 @@ class TotpRepository {
   }
 
   Future<void> _webdavInit() async {
-    final webdav = await _lsr.getWebdavConfig();
+    final webdav = _lsr.webdavConfig;
     if (webdav == null) {
       _webdavsync = null;
       _lsr.clearWebdavErrorInfo();
@@ -112,45 +112,57 @@ class TotpRepository {
   Future<void> _sync(bool forceUpload) async {
     // serialize concurrent sync attempts: if one is ongoing, await it
     if (_ongoingSync != null) {
-      await _ongoingSync!;
+      try {
+        await _ongoingSync;
+      } catch (e) {
+        _lsr.saveWebdavErrorInfo(e.toString());
+      }
       return;
     }
-
-    _ongoingSync = _doSync(forceUpload);
     try {
+      _ongoingSync = _doSync(forceUpload);
       await _ongoingSync;
+    } catch (e) {
+      _lsr.saveWebdavErrorInfo(e.toString());
     } finally {
       _ongoingSync = null;
     }
   }
 
   Future<void> _doSync(bool forceUpload) async {
-    try {
-      final rdata = await _webdavsync?.getData();
-      if (rdata == null) {
-        return;
-      }
-      //数据为空，本地有数据，则上传
-      if (rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) {
-        await _webdavsync?.syncToServer(_localTotps);
-        await _lsr.clearWebdavErrorInfo();
-        return;
-      }
-      if (rdata.status == GetDataStatus.modified) {
-        await _mergeData(rdata.data!);
-        await _lsr.clearWebdavErrorInfo();
-        return;
-      }
-      //远程数据没有变化，本地有变化
-      if (rdata.status == GetDataStatus.notModified && forceUpload) {
-        await _webdavsync?.syncToServer(_localTotps);
-        await _lsr.clearWebdavErrorInfo();
-        return;
-      }
-      await _lsr.clearWebdavErrorInfo();
-    } catch (e) {
-      _lsr.saveWebdavErrorInfo(e.toString());
+    final rdata = await _webdavsync?.getData();
+    if (rdata == null) {
+      return;
     }
+    //数据为空，本地有数据，则上传
+    if (rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) {
+      await _webdavsync?.syncToServer(_localTotps);
+      await _lsr.clearWebdavErrorInfo();
+      return;
+    }
+    if (rdata.status == GetDataStatus.modified) {
+      await _mergeData(rdata.data!);
+      await _lsr.clearWebdavErrorInfo();
+      return;
+    }
+    //远程数据没有变化，本地有变化
+    if (rdata.status == GetDataStatus.notModified && forceUpload) {
+      await _webdavsync?.syncToServer(_localTotps);
+      await _lsr.clearWebdavErrorInfo();
+      return;
+    }
+    await _lsr.clearWebdavErrorInfo();
+    // } catch (e) {
+    //   _lsr.saveWebdavErrorInfo(e.toString());
+    // }
+  }
+
+  Future<void> forceSync() async {
+    await _doSync(true);
+  }
+
+  void changeWebdav(WebdavSync? webdav) {
+    _webdavsync = webdav;
   }
 
   int existIndex(String id, {String? oldId}) {
