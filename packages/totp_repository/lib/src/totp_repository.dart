@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:otp/otp.dart';
 import 'package:rxdart/rxdart.dart';
@@ -280,6 +282,27 @@ class TotpRepository {
     );
     await _lsr.saveTotpList(_localTotps);
     _sync(true);
+  }
+
+  /// Return all totps (including deleted ones) for export purposes.
+  Future<List<Totp>> getAllTotps() async {
+    return _localTotps;
+  }
+
+  /// Export totps as plaintext JSON into a file under [dir].
+  /// Creates a file named totps_export_<timestamp>.json
+  Future<String> exportTotpsPlain(String dir) async {
+    final all = await getAllTotps();
+    final jsonStr = jsonEncode(all.map((e) => e.toJson()).toList());
+    final fname =
+        'totps_export_${DateTime.now().toIso8601String().replaceAll(':', '-')}.json';
+    final path = Directory(dir);
+    if (!await path.exists()) {
+      await path.create(recursive: true);
+    }
+    final file = File('${path.path}/$fname');
+    await file.writeAsString(jsonStr, flush: true);
+    return file.path;
   }
 
   void dispose() {

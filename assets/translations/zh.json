@@ -65,6 +65,14 @@
     "spRecycleBinCleared": "回收站已清空",
     "spRestoreRecycleBin": "从回收站恢复",
     "spEmail": "邮箱",
+    "spExport": "导出",
+    "spExportPlainJson": "导出为明文JSON文件",
+    "spExportPath": "导出路径",
+    "spExportSuccess": "导出成功",    
+    "spExportFailed": "导出失败",
+    "spCopyPath": "复制路径",
+    "spPathCopied": "路径已复制到剪贴板",
+
     
 
     "webdavConfigPage": "这是一个分隔符的注释，没有意义",

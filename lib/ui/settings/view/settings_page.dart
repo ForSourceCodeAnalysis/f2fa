@@ -5,11 +5,16 @@ import 'package:f2fa/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:f2fa/theme/theme.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:totp_repository/totp_repository.dart';
+import 'dart:convert';
 import 'webdav_config_form.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -242,6 +247,40 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
 
           const SizedBox(height: 12),
+          // Export card
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: FaIcon(
+                    FontAwesomeIcons.fileExport,
+                    color: colorTheme.primary,
+                  ),
+                  title: Text(
+                    LocaleKeys.spExport.tr(),
+                    style: TextStyle(
+                      color: colorTheme.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  title: Text(LocaleKeys.spExportPlainJson.tr()),
+
+                  trailing: const FaIcon(FontAwesomeIcons.folderOpen),
+                  onTap: () async {
+                    await _exportPlainToDir();
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
 
           // Recycle
           Card(
@@ -266,6 +305,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Divider(height: 1),
                 ListTile(
                   title: Text(LocaleKeys.spClearRecycleBin.tr()),
+                  trailing: const Icon(Icons.delete_forever),
                   onTap: () async {
                     context.read<TotpRepository>().clearRecycleBin();
                     SnackBarWrapper.showSnackBar(
@@ -352,5 +392,84 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _exportPlainToDir() async {
+    try {
+      final suggested =
+          'totps_export_${DateTime.now().toIso8601String().replaceAll(':', '-')}.json';
+
+      final docs = await getApplicationDocumentsDirectory();
+      final filePath = '${docs.path}/$suggested';
+
+      if (!mounted) {
+        return;
+      }
+      final totpRepo = context.read<TotpRepository>();
+      final all = await totpRepo.getAllTotps();
+      final jsonStr = jsonEncode(all.map((e) => e.toJson()).toList());
+
+      final file = File(filePath);
+      if (!await file.exists()) {
+        await file.create(recursive: true);
+      }
+      await file.writeAsString(jsonStr, flush: true);
+
+      if (!mounted) return;
+      final dirToOpen = docs.path;
+      await Clipboard.setData(ClipboardData(text: dirToOpen));
+
+      if (!mounted) return;
+      await showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogCtx) {
+          return AlertDialog(
+            title: Text(LocaleKeys.spExportSuccess.tr()),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(LocaleKeys.spExportPath.tr()),
+                const SizedBox(height: 6),
+                SelectableText(filePath),
+                const SizedBox(height: 8),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  try {
+                    await Clipboard.setData(ClipboardData(text: dirToOpen));
+                    if (!dialogCtx.mounted) return;
+                    Navigator.of(dialogCtx).pop();
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(LocaleKeys.spPathCopied.tr()),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  } catch (_) {}
+                },
+                child: Text(LocaleKeys.spCopyPath.tr()),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogCtx).pop(),
+                child: Text(LocaleKeys.cConfirm.tr()),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    } catch (e) {
+      if (!mounted) return;
+      SnackBarWrapper.showSnackBar(
+        context: context,
+        message: '${LocaleKeys.spExportFailed.tr()}: $e',
+        duration: const Duration(seconds: 5),
+      );
+    }
   }
 }

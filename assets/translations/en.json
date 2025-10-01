@@ -65,7 +65,15 @@
     "spRecycleBinCleared": "Recycle Bin cleared",
     "spRestoreRecycleBin": "Restore from Recycle Bin",
     "spEmail": "Email",
+    "spExport": "Export",
+    "spExportPlainJson": "Export as plain JSON file",
+    "spExportPath": "Export path",
+    "spExportSuccess": "Export successful",
+    "spExportFailed": "Export failed",
+    "spCopyPath": "Copy path",
+    "spPathCopied": "Path copied to clipboard",
 
+ 
     "webdavConfigPage":"This is a comment as divider, no signification",
     "wcpWebdavConfig": "WebDAV Configuration",
     "wcpUrl": "URL",
