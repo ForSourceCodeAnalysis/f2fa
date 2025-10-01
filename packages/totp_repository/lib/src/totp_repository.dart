@@ -305,6 +305,25 @@ class TotpRepository {
     return file.path;
   }
 
+  /// Import totps from a plaintext JSON file at [filePath].
+  /// The file should contain a JSON array of totp objects.
+  Future<void> importTotpsFromFile(String filePath) async {
+    final f = File(filePath);
+    if (!await f.exists()) {
+      throw Exception('file not found');
+    }
+    final contents = await f.readAsString();
+    final dynamic decoded = jsonDecode(contents);
+    if (decoded is! List) {
+      throw Exception('invalid format');
+    }
+    final List<Totp> imported = decoded
+        .map((e) => Totp.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+
+    await _mergeData(imported);
+  }
+
   void dispose() {
     _streamController.close();
   }

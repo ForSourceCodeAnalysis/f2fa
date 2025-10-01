@@ -72,6 +72,9 @@
     "spExportFailed": "Export failed",
     "spCopyPath": "Copy path",
     "spPathCopied": "Path copied to clipboard",
+    "spImportFromFile": "Import from file",
+    "spImportSuccess": "Import successful",
+    "spImportFailed": "Import failed",
 
  
     "webdavConfigPage":"This is a comment as divider, no signification",

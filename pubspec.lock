@@ -269,10 +269,10 @@ packages:
     dependency: transitive
     description:
       name: dbus
-      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
+      sha256: "79e0c23480ff85dc68de79e2cd6334add97e48f7f4865d17686dd6ea81a47e8c"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.7.10"
+    version: "0.7.11"
   easy_localization:
     dependency: "direct main"
     description:
@@ -337,6 +337,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.0.1"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: f2d9f173c2c14635cc0e9b14c143c49ef30b4934e8d1d274d6206fcb0086a06f
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "10.3.3"
   file_selector_linux:
     dependency: transitive
     description:

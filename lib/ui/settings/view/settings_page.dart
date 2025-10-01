@@ -15,6 +15,7 @@ import 'webdav_config_form.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:file_picker/file_picker.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -255,10 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Column(
               children: [
                 ListTile(
-                  leading: FaIcon(
-                    FontAwesomeIcons.fileExport,
-                    color: colorTheme.primary,
-                  ),
+                  leading: Icon(Icons.import_export, color: colorTheme.primary),
                   title: Text(
                     LocaleKeys.spExport.tr(),
                     style: TextStyle(
@@ -271,9 +269,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 ListTile(
                   title: Text(LocaleKeys.spExportPlainJson.tr()),
 
-                  trailing: const FaIcon(FontAwesomeIcons.folderOpen),
+                  trailing: const FaIcon(FontAwesomeIcons.fileExport),
                   onTap: () async {
                     await _exportPlainToDir();
+                  },
+                ),
+
+                ListTile(
+                  title: Text(LocaleKeys.spImportFromFile.tr()),
+                  trailing: const FaIcon(FontAwesomeIcons.fileImport),
+                  onTap: () async {
+                    await _importFromFile();
                   },
                 ),
               ],
@@ -399,7 +405,12 @@ class _SettingsPageState extends State<SettingsPage> {
       final suggested =
           'totps_export_${DateTime.now().toIso8601String().replaceAll(':', '-')}.json';
 
-      final docs = await getApplicationDocumentsDirectory();
+      Directory? docs = await getDownloadsDirectory();
+      if (docs == null) {
+        final sdir = await getApplicationSupportDirectory();
+        docs = Directory('${sdir.path}/downloads');
+        await docs.create(recursive: true);
+      }
       final filePath = '${docs.path}/$suggested';
 
       if (!mounted) {
@@ -468,6 +479,41 @@ class _SettingsPageState extends State<SettingsPage> {
       SnackBarWrapper.showSnackBar(
         context: context,
         message: '${LocaleKeys.spExportFailed.tr()}: $e',
+        duration: const Duration(seconds: 5),
+      );
+    }
+  }
+
+  Future<void> _importFromFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+        allowMultiple: false,
+      );
+
+      if (result == null || result.files.isEmpty) {
+        // 用户取消选择
+        return;
+      }
+
+      final filePath = result.files.first.path;
+      if (filePath == null || filePath.isEmpty || !mounted) {
+        return;
+      }
+      await context.read<TotpRepository>().importTotpsFromFile(filePath);
+
+      if (!mounted) return;
+
+      SnackBarWrapper.showSnackBar(
+        context: context,
+        message: LocaleKeys.spImportSuccess.tr(),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      SnackBarWrapper.showSnackBar(
+        context: context,
+        message: '${LocaleKeys.spImportFailed.tr()}: $e',
         duration: const Duration(seconds: 5),
       );
     }

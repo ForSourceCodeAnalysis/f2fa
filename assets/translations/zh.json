@@ -72,6 +72,10 @@
     "spExportFailed": "导出失败",
     "spCopyPath": "复制路径",
     "spPathCopied": "路径已复制到剪贴板",
+    "spImportFromFile": "从文件导入",
+    "spImportSuccess": "导入成功",
+    "spImportFailed": "导入失败",
+
 
     
 
