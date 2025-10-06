@@ -92,7 +92,26 @@ class _HomeView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('F2FA'),
+        title: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextField(
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: LocaleKeys.hpSearch.tr(),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+            ),
+            onChanged: (query) {
+              context.read<TotpsOverviewBloc>().add(
+                TotpsOverviewSearchQueryChanged(query),
+              );
+            },
+          ),
+        ),
         actions: [
           // WebDAV sync status icon
           Padding(

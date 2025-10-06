@@ -16,11 +16,13 @@
     "hpScanAdd": "通过扫描添加",
     "hpManAdd": "手动添加",
     "hpAddFail": "添加失败，请重试。",
+    "hpSearch": "搜索",
 
 
     "totpsOverviewPage": "这是一个分隔符的注释，没有意义",
     "topErrorOccur": "加载数据时发生错误。",
     "topTapAdd": "点击下面的 '+' 添加新项目",
+    "topNoMatch": "未找到匹配的条目",
 
     "editTotpPage": "这是一个分隔符的注释，没有意义",
     "etpAddItem": "添加项目",

@@ -42,3 +42,11 @@ class TotpsOverviewReordered extends TotpsOverviewEvent {
   @override
   List<Object?> get props => [oldIndex, newIndex];
 }
+
+class TotpsOverviewSearchQueryChanged extends TotpsOverviewEvent {
+  final String query;
+  TotpsOverviewSearchQueryChanged(this.query);
+
+  @override
+  List<Object?> get props => [query];
+}

@@ -69,6 +69,31 @@ class _TotpsOverviewPageState extends State<TotpsOverviewPage>
       },
       child: BlocBuilder<TotpsOverviewBloc, TotpsOverviewState>(
         builder: (context, state) {
+          // 添加搜索过滤
+          final filteredTotps = state.searchQuery.isEmpty
+              ? state.totps
+              : state.totps.where((totp) {
+                  final query = state.searchQuery.toLowerCase();
+                  return totp.issuer.toLowerCase().contains(query) ||
+                      totp.account.toLowerCase().contains(query);
+                }).toList();
+
+          if (filteredTotps.isEmpty) {
+            if (state.status == TotpsOverviewStatus.loading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state.status == TotpsOverviewStatus.failure) {
+              return const SizedBox();
+            }
+            return Center(
+              child: Text(
+                state.searchQuery.isEmpty
+                    ? LocaleKeys.topTapAdd.tr()
+                    : LocaleKeys.topNoMatch.tr(),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            );
+          }
+
           if (state.totps.isEmpty) {
             if (state.status == TotpsOverviewStatus.loading) {
               return const Center(child: CircularProgressIndicator());
@@ -93,9 +118,9 @@ class _TotpsOverviewPageState extends State<TotpsOverviewPage>
           return CupertinoScrollbar(
             child: ReorderableListView.builder(
               padding: const EdgeInsets.only(bottom: bottomPadding, top: 8),
-              itemCount: state.totps.length,
+              itemCount: filteredTotps.length,
               itemBuilder: (context, index) {
-                final totp = state.totps[index];
+                final totp = filteredTotps[index];
                 // print('totp: ${totp.issuer}, ${totp.account},index: $index');
                 if (isNarrow) {
                   // compact two-line layout for small screens

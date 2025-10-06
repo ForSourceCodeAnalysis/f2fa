@@ -17,10 +17,13 @@
     "hpScanAdd": "Add by scanning",
     "hpManAdd": "Add manually",
     "hpAddFail": "Failed to add item, please try again",
+    "hpSearch": "Search",   
+
 
     "totpsOverviewPage":"This is a comment as divider, no signification",
     "topErrorOccur": "An error occurred while loading data.",
     "topTapAdd": "Tap '+' below to add a new item", 
+    "topNoMatch": "No matching items found",
 
     "editTotpPage":"This is a comment as divider, no signification",
     "etpAddItem": "Add item",   

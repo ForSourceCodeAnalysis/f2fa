@@ -21,6 +21,9 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
     on<TotpsOverviewTotpDeleted>(_onTotpDeleted);
     on<TotpsOverviewTotpAdded>(_onTotpAdded);
     on<TotpsOverviewReordered>(_onReordered);
+    on<TotpsOverviewSearchQueryChanged>(
+      _mapTotpsOverviewSearchQueryChangedToState,
+    );
   }
 
   final TotpRepository _totpRepository;
@@ -108,5 +111,12 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
       emit(state.copyWith(status: TotpsOverviewStatus.failure));
       return;
     }
+  }
+
+  Future<void> _mapTotpsOverviewSearchQueryChangedToState(
+    TotpsOverviewSearchQueryChanged event,
+    Emitter<TotpsOverviewState> emit,
+  ) async {
+    emit(state.copyWith(searchQuery: event.query));
   }
 }
