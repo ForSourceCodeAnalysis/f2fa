@@ -14,7 +14,7 @@ void bootstrap() async {
   await EasyLocalization.ensureInitialized();
 
   // storage directory
-  final Directory documentsDirectory = await getApplicationDocumentsDirectory();
+  final Directory documentsDirectory = await getApplicationSupportDirectory();
   final dataDir = Directory('${documentsDirectory.path}/f2fa');
   if (!await dataDir.exists()) {
     await dataDir.create(recursive: true);
