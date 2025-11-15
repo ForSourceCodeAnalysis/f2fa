@@ -1,53 +1,18 @@
-import 'dart:io';
+import 'package:f2fa/l10n/l10n.dart';
+import 'package:f2fa/services/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
-import 'package:flutter/foundation.dart';
+Talker getLogger() {
+  return GetIt.I.get<Talker>();
+}
 
-class Utils {
-  static bool isAndroid() {
-    return !kIsWeb && Platform.isAndroid;
-  }
-
-  static bool isIOS() {
-    return !kIsWeb && Platform.isIOS;
-  }
-
-  static bool isMobile() {
-    return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-  }
-
-  static bool isDesktop() {
-    if (kIsWeb) {
-      return false;
-    }
-    return Platform.isWindows || Platform.isLinux || Platform.isMacOS;
-  }
-
-  static bool isWindows() {
-    return !kIsWeb && Platform.isWindows;
-  }
-
-  static bool isMacos() {
-    return !kIsWeb && Platform.isMacOS;
-  }
-
-  static bool isLinux() {
-    return !kIsWeb && Platform.isLinux;
-  }
-
-  static bool isWeb() {
-    return kIsWeb;
-  }
-
-  static bool isNewVersion(String lastestVersion, String currentVersion) {
-    final lll = lastestVersion.split('.');
-    final ccc = currentVersion.split('.');
-    lll[0] = lll[0].replaceFirst('v', '');
-    for (var i = 0; i < 3; i++) {
-      if (int.parse(lll[i]) > int.parse(ccc[i])) {
-        return true;
-      }
-    }
-
-    return false;
+AppLocalizations getLocaleInstance() {
+  final locale = GetIt.I.get<LocalStorage>().themeLanguage.locale;
+  switch (locale) {
+    case 'zh':
+      return AppLocalizationsZh();
+    default:
+      return AppLocalizationsEn();
   }
 }

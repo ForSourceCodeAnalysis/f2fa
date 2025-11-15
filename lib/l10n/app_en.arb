@@ -1,0 +1,405 @@
+{
+    "@@locale": "en",
+
+    "readme": "File structure description",
+    "@readme": { 
+        "description": "This is explanatory text, not actually used. Translations are organized by file, for example, those starting with 'homepage' are used in home_page.dart"
+    },
+
+    "homePage": "Home Page",
+    "@homePage": {
+        "description": "This is a separator, below are translations for home_page.dart"
+    },
+    "hpInvalidQRCodeErrMsg": "Invalid QR code",
+    "@hpInvalidQRCodeErrMsg": {
+        "description": "Invalid QR code error message"
+    },
+    "hpSearchHintTxt": "Search TOTP entries",
+    "@hpSearchHintTxt": {
+        "description": "Search box hint text"
+    },
+    "hpPopMenuScanAdd": "Scan to add",
+    "@hpPopMenuScanAdd": {
+        "description": "Scan QR code to add entry"
+    },
+    "hpPopMenuManAdd": "Manual add",
+    "@hpPopMenuManAdd": {
+        "description": "Manually add entry"
+    },
+    "hpEmptyListTips": "Click the '+' below to add a new entry",
+    "@hpEmptyListTips": {
+        "description": "Empty list prompt text"
+    },
+    "hpNoMatchItemsTips": "No matching entries",
+    "@hpNoMatchItemsTips": {
+        "description": "No matching entries prompt text"
+    },
+
+    "totpMenu": "TOTP Menu Component",
+    "@totpMenu": {
+        "description": "This is a separator, below are translations for totp_menu.dart"
+    },
+    "tmCopy": "Copy",
+    "@tmCopy": {
+        "description": "Copy menu"
+    },
+    "tmEdit": "Edit",
+    "@tmEdit": {
+        "description": "Edit menu"
+    },
+    "tmDelete": "Delete",
+    "@tmDelete": {
+        "description": "Delete menu"
+    },
+    "tmCopiedTips": "Copied to clipboard",
+    "@tmCopiedTips": {
+        "description": "Copy operation success prompt text"
+    },
+    "tmDeleteDialogTitle": "Delete entry",
+    "@tmDeleteDialogTitle": {
+        "description": "Delete entry confirmation dialog title"
+    },
+    "tmDeleteDialogContent": "Are you sure you want to delete the selected entry?",
+    "@tmDeleteDialogContent": {
+        "description": "Delete entry confirmation dialog content"
+    },
+    "tmDeleteDialogCancelBtn": "Cancel",
+    "@tmDeleteDialogCancelBtn": {
+        "description": "Delete entry confirmation dialog cancel button text"
+    },
+    "tmDeleteDialogConfirmBtn": "Confirm",
+    "@tmDeleteDialogConfirmBtn": {
+        "description": "Delete entry confirmation dialog confirm button text"
+    },
+
+    "webdavPage": "WebDAV Configuration Page",
+    "@webdavPage": {
+        "description": "This is a separator, below are translations for webdav_page.dart"
+    },
+    "wpOperationSuccess": "Operation successful",
+    "@wpOperationSuccess": {
+        "description": "Operation success prompt text"
+    },
+    "wpAppbarTitle": "WebDAV Configuration",
+    "@wpAppbarTitle": {
+        "description": "WebDAV configuration page title"
+    },
+    "wpFormUrlLabel": "URL",
+    "@wpFormUrlLabel": {
+        "description": "WebDAV URL input field label"
+    },
+    "wpFormUsernameLabel": "Username",
+    "@wpFormUsernameLabel": {
+        "description": "WebDAV username input field label"
+    },
+    "wpFormPasswordLabel": "Password",
+    "@wpFormPasswordLabel": {
+        "description": "WebDAV password input field label"
+    },
+    "wpFormEncryptLabel": "Encryption key",
+    "@wpFormEncryptLabel": {
+        "description": "WebDAV encryption key input field label"
+    },
+    "wpSyncOperationCardTitle": "Sync Operations",
+    "@wpSyncOperationCardTitle": {
+        "description": "WebDAV sync operations card title"
+    },
+    "wpForceSyncBtnText": "Force Sync",
+    "@wpForceSyncBtnText": {
+        "description": "Force sync button text"
+    },
+    "wpExitSyncBtnText": "Exit Sync",
+    "@wpExitSyncBtnText": {
+        "description": "Exit sync button text"
+    },
+    "wpLastSyncError": "Last sync error:",
+    "@wpLastSyncError": {
+        "description": "Last sync error prompt"
+    },
+
+    "addeditTotpPage": "Add/Edit TOTP Entry Page",
+    "@addeditTotpPage": {
+        "description": "This is a separator, below are translations for addedit_totp_page.dart"
+    },
+    "atpOperationFailedErrMsg": "Operation failed",
+    "@atpOperationFailedErrMsg": {
+        "description": "Operation failed prompt text"
+    },
+    "atpAddAppbarTitle": "Add TOTP Entry",
+    "@atpAddAppbarTitle": {
+        "description": "Add TOTP entry page title"
+    },
+    "atpEditAppbarTitle": "Edit TOTP Entry",
+    "@atpEditAppbarTitle": {
+        "description": "Edit TOTP entry page title"
+    },
+    "atpDupDialogTitle": "Entry with same name exists",
+    "@atpDupDialogTitle": {
+        "description": "Duplicate entry confirmation dialog title"
+    },
+    "atpDupDialogContent": "An entry with the same name already exists. Overwrite?",
+    "@atpDupDialogContent": {
+        "description": "Duplicate entry confirmation dialog content"
+    },
+    "atpDupDialogCancelBtn": "Cancel",
+    "@atpDupDialogCancelBtn": {
+        "description": "Duplicate entry confirmation dialog cancel button text"
+    },
+    "atpDupDialogConfirmBtn": "Confirm",
+    "@atpDupDialogConfirmBtn": {
+        "description": "Duplicate entry confirmation dialog confirm button text"
+    },
+    "atpFormOtpTypeLabel": "OTP Type",
+    "@atpFormOtpTypeLabel": {
+        "description": "OTP type selection field label"
+    },
+    "atpFormOtpIssuerLabel": "Issuer",
+    "@atpFormOtpIssuerLabel": {
+        "description": "Issuer input field label"
+    },
+    "atpFormOtpAccountLabel": "Account",
+    "@atpFormOtpAccountLabel": {
+        "description": "Account input field label"
+    },
+    "atpFormOtpSecretLabel": "Secret",
+    "@atpFormOtpSecretLabel": {
+        "description": "Secret input field label"
+    },
+    "atpFormOtpPeriodLabel": "Period",
+    "@atpFormOtpPeriodLabel": {
+        "description": "TOTP period input field label"
+    },
+    "atpFormOtpDigitsLabel": "Digits",
+    "@atpFormOtpDigitsLabel": {
+        "description": "TOTP digits selection field label"
+    },
+    "atpFormOtpAlgorithmLabel": "Algorithm",
+    "@atpFormOtpAlgorithmLabel": {
+        "description": "TOTP algorithm selection field label"
+    },
+    "atpFormOtpRemarkLabel": "Remark",
+    "@atpFormOtpRemarkLabel": {
+        "description": "TOTP remark input field label"
+    },
+    "atpFormOtpIconLabel": "Icon",
+    "@atpFormOtpIconLabel": {
+        "description": "TOTP icon selection field label"
+    },
+
+    "settingsPage": "Settings Page",
+    "@settingsPage": {
+        "description": "This is a separator, below are translations for settings_page.dart"
+    },
+    "spAppbarTitle": "Settings",
+    "@spAppbarTitle": {
+        "description": "Settings page title"
+    },
+    "spAppearanceLabel": "Appearance",
+    "@spAppearanceLabel": {
+        "description": "Settings page appearance tab title"
+    },
+    "spAboutLabel": "About",
+    "@spAboutLabel": {
+        "description": "Settings page about tab title"
+    },
+    "spFeedbackLabel": "Feedback & Communication",
+    "@spFeedbackLabel": {
+        "description": "Settings page feedback & communication tab title"
+    },
+    "spImportExportLabel": "Import/Export",
+    "@spImportExportLabel": {
+        "description": "Settings page import/export tab title"
+    },
+    "spLanguageLabel": "Language",
+    "@spLanguageLabel": {
+        "description": "Settings page language tab title"
+    },
+    "spRecycleBinLabel": "Recycle Bin",
+    "@spRecycleBinLabel": {
+        "description": "Settings page recycle bin tab title"
+    },
+    "spSyncLabel": "Sync",
+    "@spSyncLabel": {
+        "description": "Settings page sync tab title"
+    },
+
+    "settingsThemePage": "Theme Settings Page",
+    "@settingsThemePage": {
+        "description": "This is a separator, below are translations for theme_page.dart"
+    },
+    "stpAppbarTitle": "Theme Settings",
+    "@stpAppbarTitle": {
+        "description": "Theme settings page title"
+    },
+    "stpThemeModeLabel": "Theme Mode",
+    "@stpThemeModeLabel": {
+        "description": "Theme settings page theme mode selection field label"
+    },
+    "stpThemeModeLight": "Light",
+    "@stpThemeModeLight": {
+        "description": "Theme settings page light theme option text"
+    },
+    "stpThemeModeDark": "Dark",
+    "@stpThemeModeDark": {
+        "description": "Theme settings page dark theme option text"
+    },
+    "stpThemeModeSystem": "Follow System",
+    "@stpThemeModeSystem": {
+        "description": "Theme settings page follow system theme option text"
+    },
+    "stpThemeColorLabel": "Theme Color",
+    "@stpThemeColorLabel": {
+        "description": "Theme settings page theme color selection field label"
+    },
+    "stpThemeRandomLabel": "Random Color",
+    "@stpThemeRandomLabel": {
+        "description": "Theme settings page random color option text"
+    },
+    "stpThemeRandomDesc": "Randomly select a theme color each time the app starts",
+    "@stpThemeRandomDesc": {
+        "description": "Theme settings page random color option description"
+    },
+
+    "settingsLanguagePage": "Language Settings",
+    "@settingsLanguagePage": {
+        "description": "This is a separator, below are translations for language_page.dart"
+    },
+    "slpAppBarTitle": "Language Settings",
+    "@slpAppBarTitle": {
+        "description": "Language settings page title"
+    },
+    "slpCurrentLanguage": "Current Language:",
+    "@slpCurrentLanguage": {
+        "description": "Language settings page current language"
+    },
+
+    "importExportPage": "Import/Export Page",
+    "@importExportPage": {
+        "description": "This is a separator, below are translations for import_export_page.dart"
+    },
+    "iepAppbarTitle": "Import/Export",
+    "@iepAppbarTitle": {
+        "description": "Import/Export settings page title"
+    },
+    "iepImportTitle": "Import",
+    "@iepImportTitle": {
+        "description": "Import/Export settings page import title"
+    },
+    "iepExportTitle": "Export",
+    "@iepExportTitle": {
+        "description": "Import/Export settings page export title"
+    },
+    "iepExportSuccessDialogTitle": "Export Successful",
+    "@iepExportSuccessDialogTitle": {
+        "description": "Import/Export settings page export success dialog title"
+    },
+    "iepExportSuccessDialogPath": "Export Path",
+    "@iepExportSuccessDialogPath": {
+        "description": "Import/Export settings page export success dialog export path text"
+    },
+    "iepExportPathCopiedTips": "Export path copied",
+    "@iepExportPathCopiedTips": {
+        "description": "Import/Export settings page export success dialog export path copied text"
+    },
+    "iepExportSuccessDialogCopyPathBtn": "Copy Path",
+    "@iepExportSuccessDialogCopyPathBtn": {
+        "description": "Import/Export settings page export success dialog copy path button text"
+    },
+    "iepExportSuccessDialogConfirmBtn": "Confirm",
+    "@iepExportSuccessDialogConfirmBtn": {
+        "description": "Import/Export settings page export success dialog confirm button text"
+    },
+    "iepExportFailedTips": "Export failed",
+    "@iepExportFailedTips": {
+        "description": "Import/Export settings page export failed dialog text"
+    },
+    "iepImportSuccessTips": "Import successful",
+    "@iepImportSuccessTips": {
+        "description": "Import/Export settings page import success dialog text"
+    },
+    "iepImportFailedTips": "Import failed",
+    "@iepImportFailedTips": {
+        "description": "Import/Export settings page import failed dialog text"
+    },
+
+    "recycleBinPage": "Recycle Bin",
+    "@recycleBinPage": { 
+        "description": "This is a separator, below are translations for recycle_bin_page.dart"
+    },
+    "rbpAppbarTitle": "Recycle Bin",
+    "@rbpAppbarTitle": {
+        "description": "Recycle bin page title"
+    },
+    "rbpClearAllDialogTitle": "Clear All Deleted Items",
+    "@rbpClearAllDialogTitle": {
+        "description": "Recycle bin page clear all deleted items dialog title"
+    },
+    "rbpClearAllDialogContent": "Are you sure you want to clear all deleted items? This action cannot be undone.",
+    "@rbpClearAllDialogContent": {
+        "description": "Recycle bin page clear all deleted items dialog confirmation text"
+    },
+    "rbpClearAllDialogCancelBtn": "Cancel",
+    "@rbpClearAllDialogCancelBtn": {
+        "description": "Recycle bin page clear all deleted items dialog cancel button"
+    },
+    "rbpClearAllDialogConfirmBtn": "Confirm",
+    "@rbpClearAllDialogConfirmBtn": {
+        "description": "Recycle bin page clear all deleted items dialog confirm button"
+    },
+    "rbpEmptyItemsTips": "No deleted items",
+    "@rbpEmptyItemsTips": {
+        "description": "Recycle bin page no deleted items prompt"
+    },
+    "rbpRestoreBtn": "Restore",
+    "@rbpRestoreBtn": {
+        "description": "Recycle bin page restore button"
+    },
+    "rbpDelPermanentlyBtn": "Delete Permanently",
+    "@rbpDelPermanentlyBtn": {
+        "description": "Recycle bin page delete permanently button"
+    },
+
+    "feedbackPage": "Feedback",
+    "@feedbackPage": {
+        "description": "This is a separator, below are translations for feedback_page.dart"
+    },
+    "fpAppbarTitle": "Feedback & Communication",
+    "@fpAppbarTitle": {
+        "description": "Feedback page appbar title"
+    },
+
+    "webdavUnsupportedAuthMethod": "Unsupported WebDAV authentication method",
+    "@webdavUnsupportedAuthMethod": {
+        "description": "Unsupported WebDAV authentication method, error prompt"
+    },
+    "webdavAuthFailed": "WebDAV authentication failed, please check your username and password",
+    "@webdavAuthFailed": {
+        "description": "WebDAV authentication failed, error prompt"
+    },
+    "webdavResourceNotFound": "WebDAV resource not found, please check your URL",
+    "@webdavResourceNotFound": {
+        "description": "WebDAV resource not found, error prompt"
+    },
+    "webdavRequestFailed": "WebDAV client request failed, please check the returned HTTP status code",
+    "@webdavRequestFailed": {
+        "description": "WebDAV client request failed, error prompt"
+    },
+    "webdavConnectErr": "Connection error, please check your network or URL",
+    "@webdavConnectErr": {
+        "description": "Connection error, error prompt"
+    },
+    "webdavNotDir": "The WebDAV path is not a directory, please set it to the directory level, the program will automatically manage files within it",
+    "@webdavNotDir": {
+        "description": "WebDAV path is not a directory, please set to directory level, error prompt"
+    },
+    "webdavCreateFileFailed": "Failed to create WebDAV file, please check permissions or path",
+    "@webdavCreateFileFailed": { 
+        "description": "Failed to create WebDAV file, please check permissions or path, error prompt"
+    },
+    "webdavUnknownErr": "Unknown error, please check permissions or path",
+    "@webdavUnknownErr": {
+        "description": "Unknown error, please check permissions or path, error prompt"
+    }
+
+
+}

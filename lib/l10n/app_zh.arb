@@ -1,0 +1,441 @@
+{
+    "@@locale": "zh",
+
+    "readme": "文件结构说明",
+    "@readme": { 
+        "description": "这条是说明文本，没有实际使用。翻译以文件为单位，比如以homepage开头的，表示在home_page.dart中使用"
+    },
+
+
+    "homePage": "首页",
+    "@homePage": {
+        "description": "这条是分割符，以下是home_page.dart中的翻译"
+    },
+    "hpInvalidQRCodeErrMsg": "二维码无效",
+    "@hpInvalidQRCodeErrMsg": {
+        "description": "二维码无效错误信息"
+    },
+    "hpSearchHintTxt": "搜索TOTP条目",
+    "@hpSearchHintTxt": {
+        "description": "搜索框提示文本"
+    },
+    "hpPopMenuScanAdd":"扫码添加",
+    "@hpPopMenuScanAdd": {
+        "description": "二维码无效错误信息"
+    },
+    "hpPopMenuManAdd":"手动添加",
+    "@hpPopMenuManAdd": {
+        "description": "手动添加条目"
+    },
+    "hpEmptyListTips":"点击下面的“+”添加新条目",
+    "@hpEmptyListTips": {
+        "description": "没有匹配的条目提示文本"
+    },
+    "hpNoMatchItemsTips":"没有匹配的条目",
+    "@hpNoMatchItemsTips": {
+        "description": "没有匹配的条目提示文本"
+    },
+
+
+
+    "totpMenu":"组件totp菜单",
+    "@totpMenu": {
+        "description": "这条是分隔符，以下是totp_menu.dart中的翻译"
+    },
+    "tmCopy":"复制",
+    "@tmCopy": {
+        "description": "复制菜单"
+    },
+    "tmEdit":"编辑",
+    "@tmEdit": {
+        "description": "编辑菜单"
+    },
+    "tmDelete":"删除",
+    "@tmDelete": {
+        "description": "删除菜单"
+    },
+    "tmCopiedTips": "已复制到剪贴板",
+    "@tmCopiedTips": {
+        "description": "复制操作成功提示文本"
+    },
+    "tmDeleteDialogTitle": "删除条目",
+    "@tmDeleteDialogTitle": {
+        "description": "删除条目确认对话框标题"
+    },
+    "tmDeleteDialogContent": "确定要删除选中的条目吗？",
+    "@tmDeleteDialogContent": {
+        "description": "删除条目确认对话框内容"
+    },
+    "tmDeleteDialogCancelBtn":"取消",
+    "@tmDeleteDialogCancelBtn": {
+        "description": "删除条目确认对话框取消按钮文本"
+    },
+    "tmDeleteDialogConfirmBtn":"确定",
+    "@tmDeleteDialogConfirmBtn": {
+        "description": "删除条目确认对话框确认按钮文本"
+    },
+
+
+    "webdavPage": "WebDAV 配置页",
+    "@webdavPage": {
+        "description": "这条是分隔符，以下是Webdav_page.dart中的翻译"
+    },
+    "wpOperationSuccess":"操作成功",
+    "@wpOperationSuccess": {
+        "description": "操作成功提示文本"
+    },
+    "wpAppbarTitle": "WebDAV 配置",
+    "@wpAppbarTitle": {
+        "description": "WebDAV 配置页标题"
+    },
+    "wpFormUrlLabel": "地址",
+    "@wpFormUrlLabel": {
+        "description": "WebDAV 地址输入框标签"
+    },
+    "wpFormUsernameLabel": "用户名",
+    "@wpFormUsernameLabel": {
+        "description": "WebDAV 用户名输入框标签"
+    },
+    "wpFormPasswordLabel": "密码",
+    "@wpFormPasswordLabel": {
+        "description": "WebDAV 密码输入框标签"
+    },
+    "wpFormEncryptLabel": "加密密钥",
+    "@wpFormEncryptLabel": {
+        "description": "WebDAV 加密密钥输入框标签"
+    },
+    "wpSyncOperationCardTitle": "同步操作",
+    "@wpSyncOperationCardTitle": {
+        "description": "WebDAV 同步操作卡片标题"
+    },
+    "wpForceSyncBtnText": "强制同步",
+    "@wpForceSyncBtnText": {
+        "description": "强制同步按钮文本"
+    },
+    "wpExitSyncBtnText": "退出同步",
+    "@wpExitSyncBtnText": {
+        "description": "退出同步按钮文本"
+    },
+    "wpLastSyncError": "上次同步错误：",
+    "@wpLastSyncError": {
+        "description": "上次同步错误提示"
+    },
+
+    "addeditTotpPage": "添加/编辑TOTP条目页",
+    "@addeditTotpPage": {
+        "description": "这条是分隔符，以下是addedit_totp_page.dart中的翻译"
+    },
+    "atpOperationFailedErrMsg":"操作失败",
+    "@atpOperationFailedErrMsg": {
+        "description": "操作失败提示文本"
+    },
+    "atpAddAppbarTitle": "添加TOTP条目",
+    "@atpAddAppbarTitle": {
+        "description": "添加TOTP条目页标题"
+    },
+    "atpEditAppbarTitle": "编辑TOTP条目",
+    "@atpEditAppbarTitle": {
+        "description": "编辑TOTP条目页标题"
+    },
+    "atpDupDialogTitle": "已存在同名条目",
+    "@atpDupDialogTitle": {
+        "description": "已存在同名条目确认对话框标题"
+    },
+    "atpDupDialogContent": "已存在同名条目，是否覆盖？",
+    "@atpDupDialogContent": {
+        "description": "已存在同名条目确认对话框内容"
+    },
+    "atpDupDialogCancelBtn":"取消",
+    "@atpDupDialogCancelBtn": {
+        "description": "已存在同名条目确认对话框取消按钮文本"
+    },
+    "atpDupDialogConfirmBtn":"确定",
+    "@atpDupDialogConfirmBtn": {
+        "description": "已存在同名条目确认对话框确认按钮文本"
+    },
+    "atpFormOtpTypeLabel":"OTP类型",
+    "@atpFormOtpTypeLabel": {
+        "description": "OTP类型选择框标签"
+    },
+    "atpFormOtpIssuerLabel":"Issuer",
+    "@atpFormOtpIssuerLabel": {
+        "description": "Issuer输入框标签"
+    },
+    "atpFormOtpAccountLabel":"账号",
+    "@atpFormOtpAccountLabel": {
+        "description": "账号输入框标签"
+    },
+    "atpFormOtpSecretLabel":"密钥",
+    "@atpFormOtpSecretLabel": {
+        "description": "密钥输入框标签"
+    },
+    "atpFormOtpPeriodLabel":"周期",
+    "@atpFormOtpPeriodLabel": {
+        "description": "TOTP周期输入框标签"
+    },
+    "atpFormOtpDigitsLabel":"位数",
+    "@atpFormOtpDigitsLabel": {
+        "description": "TOTP位数选择框标签"
+    },
+    "atpFormOtpAlgorithmLabel":"算法",
+    "@atpFormOtpAlgorithmLabel": {
+        "description": "TOTP算法选择框标签"
+    },
+    "atpFormOtpRemarkLabel":"备注",
+    "@atpFormOtpRemarkLabel": {
+        "description": "TOTP备注输入框标签"
+    },
+    "atpFormOtpIconLabel":"图标",
+    "@atpFormOtpIconLabel": {
+        "description": "TOTP图标选择框标签"
+    },
+
+
+    
+    "settingsPage": "设置页",
+    "@settingsPage": {
+        "description": "这条是分隔符，以下是settings_page.dart中的翻译"
+    },
+    "spAppbarTitle": "设置",
+    "@spAppbarTitle": {
+        "description": "设置页标题"
+    },
+    "spAppearanceLabel": "外观",
+    "@spAppearanceLabel": {
+        "description": "设置页外观选项卡标题"
+    },
+    "spAboutLabel": "关于",
+    "@spAboutLabel": {
+        "description": "设置页关于选项卡标题"
+    },
+    "spFeedbackLabel": "反馈与交流",
+    "@spFeedbackLabel": {
+        "description": "设置页反馈与交流选项卡标题"
+    },
+    "spImportExportLabel": "导入/导出",
+    "@spImportExportLabel": {
+        "description": "设置页导入/导出选项卡标题"
+    },
+    "spLanguageLabel": "语言",
+    "@spLanguageLabel": {
+        "description": "设置页语言选项卡标题"
+    },
+    "spRecycleBinLabel": "回收站",
+    "@spRecycleBinLabel": {
+        "description": "设置页回收站选项卡标题"
+    },
+    "spSyncLabel": "同步",
+    "@spSyncLabel": {
+        "description": "设置页同步选项卡标题"
+    },
+
+
+    "settingsThemePage": "主题设置页",
+    "@settingsThemePage": {
+        "description": "这是分隔符，以下是theme_page.dart中的翻译"
+    },
+    "stpAppbarTitle": "主题设置",
+    "@stpAppbarTitle": {
+        "description": "主题设置页标题"
+    },
+    "stpThemeModeLabel": "主题模式",
+    "@stpThemeModeLabel": {
+        "description": "主题设置页主题模式选择框标签"
+    },
+    "stpThemeModeLight": "浅色",
+    "@stpThemeModeLight": {
+        "description": "主题设置页主题模式浅色选项文本"
+    },
+    "stpThemeModeDark": "深色",
+    "@stpThemeModeDark": {
+        "description": "主题设置页主题模式深色选项文本"
+    },
+    "stpThemeModeSystem": "跟随系统",
+    "@stpThemeModeSystem": {
+        "description": "主题设置页主题模式跟随系统选项文本"
+    },
+    "stpThemeColorLabel": "主题颜色",
+    "@stpThemeColorLabel": {
+        "description": "主题设置页主题颜色选择框标签"
+    },
+    "stpThemeRandomLabel": "随机颜色",
+    "@stpThemeRandomLabel": {
+        "description": "主题设置页主题颜色随机选项文本"
+    },
+    "stpThemeRandomDesc": "每次启动应用时，随机选择一个主题颜色",
+    "@stpThemeRandomDesc": {
+        "description": "主题设置页主题颜色随机选项描述"
+    },
+
+    "settingsLanguagePage": "语言设置",
+    "@settingsLanguagePage": {
+        "description": "这是分隔符，以下是language_page.dart中的翻译"
+    },
+    "slpAppBarTitle": "语言设置",
+    "@slpAppBarTitle": {
+        "description": "语言设置页标题"
+    },
+    "slpCurrentLanguage": "当前语言:",
+    "@slpCurrentLanguage": {
+        "description": "语言设置页当前语言"
+    },
+
+    "importExportPage": "导入/导出页",
+    "@importExportPage": {
+        "description": "这是分隔符，以下是import_export_page.dart中的翻译"
+    },
+    "iepAppbarTitle": "导入/导出",
+    "@iepAppbarTitle": {
+        "description": "导入/导出设置页标题"
+    },
+    "iepImportTitle": "导入",
+    "@iepImportTitle": {
+        "description": "导入/导出设置页导入标题"
+    },
+    "iepExportTitle": "导出",
+    "@iepExportTitle": {
+        "description": "导入/导出设置页导出标题"
+    },
+    "iepExportSuccessDialogTitle": "导出成功",
+    "@iepExportSuccessDialogTitle": {
+        "description": "导入/导出设置页导出成功弹窗标题"
+    },
+    "iepExportSuccessDialogPath": "导出路径",
+    "@iepExportSuccessDialogPath": {
+        "description": "导入/导出设置页导出成功弹窗导出路径文本"
+    },
+    "iepExportPathCopiedTips": "导出路径已复制",
+    "@iepExportPathCopiedTips": {
+        "description": "导入/导出设置页导出成功弹窗导出路径已复制文本"
+    },
+    "iepExportSuccessDialogCopyPathBtn": "复制路径",
+    "@iepExportSuccessDialogCopyPathBtn": {
+        "description": "导入/导出设置页导出成功弹窗复制路径按钮文本"
+    },
+    "iepExportSuccessDialogConfirmBtn": "确认",
+    "@iepExportSuccessDialogConfirmBtn": {
+        "description": "导入/导出设置页导出成功弹窗确认按钮文本"
+    },
+    "iepExportFailedTips": "导出失败",
+    "@iepExportFailedTips": {
+        "description": "导入/导出设置页导出失败弹窗文本"
+    },
+    "iepImportSuccessTips": "导入成功",
+    "@iepImportSuccessTips": {
+        "description": "导入/导出设置页导入成功弹窗文本"
+    },
+    "iepImportFailedTips": "导入失败",
+    "@iepImportFailedTips": {
+        "description": "导入/导出设置页导入失败弹窗文本"
+    },
+
+    "recycleBinPage": "回收站",
+    "@recycleBinPage": { 
+        "description": "这个是分隔符，以下是recycle_bin_page.dart中的翻译"
+    },
+    "rbpAppbarTitle": "回收站",
+    "@rbpAppbarTitle": {
+        "description": "回收站页标题"
+    },
+    "rbpClearAllDialogTitle": "清空所有已删除项",
+    "@rbpClearAllDialogTitle": {
+        "description": "回收站页清空所有已删除项弹窗标题"
+    },
+    "rbpClearAllDialogContent": "确定要清空所有已删除项吗，清空后将无法恢复",
+    "@rbpClearAllDialogContent": {
+        "description": "回收站页清空所有已删除项弹窗确认文本"
+    },
+    "rbpClearAllDialogCancelBtn": "取消",
+    "@rbpClearAllDialogCancelBtn": {
+        "description": "回收站页清空所有已删除项弹窗取消按钮"
+    },
+    "rbpClearAllDialogConfirmBtn": "确定",
+    "@rbpClearAllDialogConfirmBtn": {
+        "description": "回收站页清空所有已删除项弹窗确定按钮"
+    },
+    "rbpEmptyItemsTips": "没有已删除的项",
+    "@rbpEmptyItemsTips": {
+        "description": "回收站页没有已删除的项提示"
+    },
+    "rbpRestoreBtn": "恢复",
+    "@rbpRestoreBtn": {
+        "description": "回收站页恢复按钮"
+    },
+    "rbpDelPermanentlyBtn": "彻底删除",
+    "@rbpDelPermanentlyBtn": {
+        "description": "回收站页彻底删除按钮"
+    },
+
+    "feedbackPage": "反馈",
+    "@feedbackPage": {
+        "description": "这是分隔符，以下是feedback_page.dart中的翻译"
+    },
+    "fpAppbarTitle": "反馈交流",
+    "@fpAppbarTitle": {
+        "description": "feedback_page.dart中的appbar标题"
+    },
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    "webdavUnsupportedAuthMethod": "不支持的 WebDAV 认证方式",
+    "@webdavUnsupportedAuthMethod": {
+        "description": "不支持的 WebDAV 认证方式，错误提示"
+    },
+    "webdavAuthFailed": "WebDAV 认证失败，请检查您的用户名和密码",
+    "@webdavAuthFailed": {
+        "description": "WebDAV 认证失败，错误提示"
+    },
+    "webdavResourceNotFound": "WebDAV 资源未找到，请检查您的 URL",
+    "@webdavResourceNotFound": {
+        "description": "WebDAV 资源未找到，错误提示"
+    },
+    "webdavRequestFailed": "WebDAV 客户端请求失败，请根据返回的http状态码进行排查",
+    "@webdavRequestFailed": {
+        "description": "WebDAV 客户端请求失败，错误提示"
+    },
+    "webdavConnectErr":"连接异常，请检查您的网络或URL是否正确",
+    "@webdavConnectErr":{
+        "description": "连接异常，错误提示"
+    },
+    "webdavNotDir":"设置的webdav路径不是目录，请设置到目录一级，程序会自动管理其中的文件",
+    "@webdavNotDir":{
+        "description": "设置的webdav路径不是目录，请设置到目录一级，错误提示"
+    },
+    "webdavCreateFileFailed":"创建WebDAV文件失败，请检查权限或路径是否正确",
+    "@webdavCreateFileFailed":{ 
+        "description": "创建WebDAV文件失败，请检查权限或路径是否正确，错误提示"
+    },
+    "webdavUnknownErr":"未知错误，请检查权限或路径是否正确",
+    "@webdavUnknownErr":{
+        "description": "未知错误，请检查权限或路径是否正确，错误提示"
+    }
+    
+   
+
+
+
+
+
+
+
+}

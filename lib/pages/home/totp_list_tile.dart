@@ -1,0 +1,178 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:f2fa/models/models.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'totp_menu.dart';
+
+class TotpListTile extends StatelessWidget {
+  const TotpListTile({required this.totp, super.key});
+
+  final Totp totp;
+
+  Color _getProgressColor(int remaining, int period, ThemeData theme) {
+    final ratio = remaining / period;
+    if (ratio > 0.5) {
+      return theme.colorScheme.primary;
+    } else if (ratio > 0.2) {
+      return theme.colorScheme.secondary;
+    } else {
+      return theme.colorScheme.error;
+    }
+  }
+
+  Widget _defaultIcon(BuildContext context) {
+    final theme = Theme.of(context);
+    final issuerInitial = totp.issuer[0].toUpperCase();
+    return Center(
+      child: Text(
+        issuerInitial,
+        style: theme.textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onPrimaryContainer,
+        ),
+      ),
+    );
+  }
+
+  Future<Widget> _buildIcon(BuildContext context) async {
+    if (totp.icon.isEmpty) {
+      return _defaultIcon(context);
+    }
+
+    if (totp.icon.endsWith('.svg')) {
+      final file = await CacheManager(
+        Config(
+          'svg_cached_key',
+          stalePeriod: const Duration(days: 365),
+          maxNrOfCacheObjects: 100,
+        ),
+      ).getSingleFile(totp.icon);
+      return SvgPicture.file(file);
+    } else {
+      return CachedNetworkImage(
+        imageUrl: totp.icon,
+        placeholder: (context, url) => _defaultIcon(context),
+        errorWidget: (context, url, error) => _defaultIcon(context),
+        cacheManager: CacheManager(
+          Config(
+            'images_cached_key',
+            stalePeriod: const Duration(days: 365),
+            maxNrOfCacheObjects: 100,
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // 图标
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: totp.icon.isNotEmpty
+                        ? null
+                        : theme.colorScheme.primaryContainer,
+                    shape: BoxShape.circle,
+                  ),
+                  child: FutureBuilder(
+                    future: _buildIcon(context),
+                    builder: (context, snapshot) =>
+                        snapshot.data ?? _defaultIcon(context),
+                  ),
+                ),
+
+                Expanded(
+                  child: Text(
+                    totp.account,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: totp.remaining / totp.period,
+                          backgroundColor: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            _getProgressColor(
+                              totp.remaining,
+                              totp.period,
+                              theme,
+                            ),
+                          ),
+                          strokeWidth: 3,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          totp.remaining.toString(),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                // Issuer
+                Text(
+                  totp.issuer,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Expanded(
+                  child: Text(
+                    totp.code,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                      fontSize: 30,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                TotpMenuButton(totp: totp),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
