@@ -716,6 +716,78 @@ abstract class AppLocalizations {
   /// **'已复制到剪贴板'**
   String get fpCopiedTips;
 
+  /// 这个是分隔符，以下是在 about_page.dart 中使用的翻译
+  ///
+  /// In zh, this message translates to:
+  /// **'关于页'**
+  String get aboutPage;
+
+  /// appbar标题
+  ///
+  /// In zh, this message translates to:
+  /// **'关于'**
+  String get apAppbarTitle;
+
+  /// 版本标签
+  ///
+  /// In zh, this message translates to:
+  /// **'版本:'**
+  String get apVersionLabel;
+
+  /// 描述标题
+  ///
+  /// In zh, this message translates to:
+  /// **'描述'**
+  String get apDescTitle;
+
+  /// 描述内容
+  ///
+  /// In zh, this message translates to:
+  /// **'一款使用 Flutter 开发的2步认证应用。'**
+  String get apDescContent;
+
+  /// 特性标题
+  ///
+  /// In zh, this message translates to:
+  /// **'特性'**
+  String get apFeatureTitle;
+
+  /// 特性1
+  ///
+  /// In zh, this message translates to:
+  /// **'支持 TOTP, HOTP'**
+  String get apFeature1;
+
+  /// 特性2
+  ///
+  /// In zh, this message translates to:
+  /// **'兼容 Google Authenticator, Microsoft Authenticator'**
+  String get apFeature2;
+
+  /// 特性3
+  ///
+  /// In zh, this message translates to:
+  /// **'支持通过 webDAV 在多设备间数据同步，支持端到端加密'**
+  String get apFeature3;
+
+  /// 开源标题
+  ///
+  /// In zh, this message translates to:
+  /// **'开源'**
+  String get apOpenSourceTitle;
+
+  /// 开源内容
+  ///
+  /// In zh, this message translates to:
+  /// **'本应用是开源软件，使用 MIT 开源许可协议。'**
+  String get apOpenSourceContent;
+
+  /// 开源提示
+  ///
+  /// In zh, this message translates to:
+  /// **'源码可以在 GitHub 上找到：'**
+  String get apOpenSourceTips;
+
   /// 不支持的 WebDAV 认证方式，错误提示
   ///
   /// In zh, this message translates to:

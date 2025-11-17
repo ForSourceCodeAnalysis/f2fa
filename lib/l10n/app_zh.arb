@@ -426,6 +426,58 @@
         "description": "feedback_page.dart 中的已复制到剪贴板提示"
     },
 
+
+    "aboutPage": "关于页",
+    "@aboutPage": {
+        "description": "这个是分隔符，以下是在 about_page.dart 中使用的翻译"
+    },
+    "apAppbarTitle": "关于",
+    "@apAppbarTitle": {
+        "description": "appbar标题"
+    },
+    "apVersionLabel": "版本:",
+    "@apVersionLabel": {
+        "description": "版本标签"
+    },
+    "apDescTitle": "描述",
+    "@apDescTitle": {
+        "description": "描述标题"
+    },
+    "apDescContent":"一款使用 Flutter 开发的2步认证应用。",
+    "@apDescContent": {
+        "description": "描述内容"
+    },
+    "apFeatureTitle": "特性",
+    "@apFeatureTitle": {
+        "description": "特性标题"
+    },
+    "apFeature1":"支持 TOTP, HOTP",
+    "@apFeature1": {
+        "description": "特性1"
+    },
+    "apFeature2":"兼容 Google Authenticator, Microsoft Authenticator",
+    "@apFeature2": {
+        "description": "特性2"
+    },
+    "apFeature3":"支持通过 webDAV 在多设备间数据同步，支持端到端加密",
+    "@apFeature3": {
+        "description": "特性3"
+    },
+    "apOpenSourceTitle": "开源",
+    "@apOpenSourceTitle": {
+        "description": "开源标题"
+    },
+    "apOpenSourceContent": "本应用是开源软件，使用 MIT 开源许可协议。",
+    "@apOpenSourceContent": {
+        "description": "开源内容"
+    },
+    "apOpenSourceTips": "源码可以在 GitHub 上找到：",
+    "@apOpenSourceTips": {
+        "description": "开源提示"
+    },
+
+
+
     "webdavUnsupportedAuthMethod": "不支持的 WebDAV 认证方式",
     "@webdavUnsupportedAuthMethod": {
         "description": "不支持的 WebDAV 认证方式，错误提示"

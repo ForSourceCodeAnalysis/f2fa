@@ -424,6 +424,57 @@
         "description": "Copied to clipboard prompt in feedback_page.dart"
     },
 
+
+    "aboutPage": "About Page",
+    "@aboutPage": {
+        "description": "This is a separator, below are translations for about_page.dart"
+    },
+    "apAppbarTitle": "About",
+    "@apAppbarTitle": {
+        "description": "appbar title"
+    },
+    "apVersionLabel": "Version:",
+    "@apVersionLabel": {
+        "description": "version label"
+    },
+    "apDescTitle": "Description",
+    "@apDescTitle": {
+        "description": "description title"
+    },
+    "apDescContent":"A two-step authentication App developed using Flutter.",
+    "@apDescContent": {
+        "description": "description content"
+    },
+    "apFeatureTitle": "Features",
+    "@apFeatureTitle": {
+        "description": "features title"
+    },
+    "apFeature1":"Support TOTP, HOTP",
+    "@apFeature1": {
+        "description": "feature 1"
+    },
+    "apFeature2":"Compatible with Google Authenticator, Microsoft Authenticator",
+    "@apFeature2": {
+        "description": "feature 2"
+    },
+    "apFeature3":"Support WebDAV for multi-device synchronization; Support end-to-end encryption",
+    "@apFeature3": {
+        "description": "feature 3"
+    },
+    "apOpenSourceTitle": "Open Source",
+    "@apOpenSourceTitle": {
+        "description": "open source title"
+    },
+    "apOpenSourceContent": "This project is open source under the MIT License.",
+    "@apOpenSourceContent": {
+        "description": "open source content"
+    },
+    "apOpenSourceTips": "Source code is available on GitHub:",
+    "@apOpenSourceTips": {
+        "description": "open source tips"
+    },
+
+
     "webdavUnsupportedAuthMethod": "Unsupported WebDAV authentication method",
     "@webdavUnsupportedAuthMethod": {
         "description": "Unsupported WebDAV authentication method, error prompt"

@@ -326,6 +326,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fpCopiedTips => 'Copied to clipboard';
 
   @override
+  String get aboutPage => 'About Page';
+
+  @override
+  String get apAppbarTitle => 'About';
+
+  @override
+  String get apVersionLabel => 'Version:';
+
+  @override
+  String get apDescTitle => 'Description';
+
+  @override
+  String get apDescContent =>
+      'A two-step authentication App developed using Flutter.';
+
+  @override
+  String get apFeatureTitle => 'Features';
+
+  @override
+  String get apFeature1 => 'Support TOTP, HOTP';
+
+  @override
+  String get apFeature2 =>
+      'Compatible with Google Authenticator, Microsoft Authenticator';
+
+  @override
+  String get apFeature3 =>
+      'Support WebDAV for multi-device synchronization; Support end-to-end encryption';
+
+  @override
+  String get apOpenSourceTitle => 'Open Source';
+
+  @override
+  String get apOpenSourceContent =>
+      'This project is open source under the MIT License.';
+
+  @override
+  String get apOpenSourceTips => 'Source code is available on GitHub:';
+
+  @override
   String get webdavUnsupportedAuthMethod =>
       'Unsupported WebDAV authentication method';
 

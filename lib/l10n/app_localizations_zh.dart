@@ -318,6 +318,42 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fpCopiedTips => '已复制到剪贴板';
 
   @override
+  String get aboutPage => '关于页';
+
+  @override
+  String get apAppbarTitle => '关于';
+
+  @override
+  String get apVersionLabel => '版本:';
+
+  @override
+  String get apDescTitle => '描述';
+
+  @override
+  String get apDescContent => '一款使用 Flutter 开发的2步认证应用。';
+
+  @override
+  String get apFeatureTitle => '特性';
+
+  @override
+  String get apFeature1 => '支持 TOTP, HOTP';
+
+  @override
+  String get apFeature2 => '兼容 Google Authenticator, Microsoft Authenticator';
+
+  @override
+  String get apFeature3 => '支持通过 webDAV 在多设备间数据同步，支持端到端加密';
+
+  @override
+  String get apOpenSourceTitle => '开源';
+
+  @override
+  String get apOpenSourceContent => '本应用是开源软件，使用 MIT 开源许可协议。';
+
+  @override
+  String get apOpenSourceTips => '源码可以在 GitHub 上找到：';
+
+  @override
   String get webdavUnsupportedAuthMethod => '不支持的 WebDAV 认证方式';
 
   @override
