@@ -23,12 +23,13 @@ class TotpsOverviewState extends Equatable {
     WebdavException? webdavErr,
     int? fakeStatus,
     String? searchQuery,
+    bool clearWebdavErr = false,
   }) {
     return TotpsOverviewState(
       status: status ?? this.status,
       totps: totps ?? this.totps,
       fakeStatus: fakeStatus ?? this.fakeStatus,
-      webdavErr: webdavErr,
+      webdavErr: webdavErr ?? (clearWebdavErr ? null : this.webdavErr),
       searchQuery: searchQuery ?? this.searchQuery,
     );
   }

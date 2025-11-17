@@ -46,7 +46,8 @@ class WebdavBloc extends Bloc<WebdavEvent, WebdavState> {
         null,
       );
       final isDir = await inst.checkResType();
-      if (isDir) {
+
+      if (!isDir) {
         emit(
           state.copyWith(
             status: WebdavStatus.failure,
@@ -71,6 +72,7 @@ class WebdavBloc extends Bloc<WebdavEvent, WebdavState> {
       await _tr.forceSync();
       emit(state.copyWith(status: WebdavStatus.success));
     } catch (e) {
+      getLogger().error(e);
       emit(state.copyWith(status: WebdavStatus.failure, error: e.toString()));
     }
   }

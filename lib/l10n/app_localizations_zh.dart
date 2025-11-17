@@ -12,13 +12,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get readme => '文件结构说明';
 
   @override
-  String get homePage => '首页';
+  String get homePage => '主页';
 
   @override
   String get hpInvalidQRCodeErrMsg => '二维码无效';
 
   @override
-  String get hpSearchHintTxt => '搜索TOTP条目';
+  String get hpSearchHintTxt => '搜索 TOTP 条目';
 
   @override
   String get hpPopMenuScanAdd => '扫码添加';
@@ -27,13 +27,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hpPopMenuManAdd => '手动添加';
 
   @override
-  String get hpEmptyListTips => '点击下面的“+”添加新条目';
+  String get hpEmptyListTips => '点击下方的\'+\'添加新条目';
 
   @override
-  String get hpNoMatchItemsTips => '没有匹配的条目';
+  String get hpNoMatchItemsTips => '无匹配条目';
 
   @override
-  String get totpMenu => '组件totp菜单';
+  String get hpScanCompleteInfoDialogTitle => '补全信息';
+
+  @override
+  String get hpScanCompleteInfoDialogContent => '扫码解析出的账号或发行商缺失，是否手动补全';
+
+  @override
+  String get hpScanCompleteInfoDialogCancelBtn => '取消';
+
+  @override
+  String get hpScanCompleteInfoDialogConfirmBtn => '确定';
+
+  @override
+  String get totpMenu => '组件 totp 菜单';
 
   @override
   String get tmCopy => '复制';
@@ -93,16 +105,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get wpLastSyncError => '上次同步错误：';
 
   @override
-  String get addeditTotpPage => '添加/编辑TOTP条目页';
+  String get addeditTotpPage => '添加/编辑 TOTP 条目页';
 
   @override
   String get atpOperationFailedErrMsg => '操作失败';
 
   @override
-  String get atpAddAppbarTitle => '添加TOTP条目';
+  String get atpAddAppbarTitle => '添加 TOTP 条目';
 
   @override
-  String get atpEditAppbarTitle => '编辑TOTP条目';
+  String get atpEditAppbarTitle => '编辑 TOTP 条目';
 
   @override
   String get atpDupDialogTitle => '已存在同名条目';
@@ -117,7 +129,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get atpDupDialogConfirmBtn => '确定';
 
   @override
-  String get atpFormOtpTypeLabel => 'OTP类型';
+  String get atpFormOtpTypeLabel => 'OTP 类型';
 
   @override
   String get atpFormOtpIssuerLabel => 'Issuer';
@@ -171,6 +183,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get spSyncLabel => '同步';
 
   @override
+  String get spLogLabel => '日志';
+
+  @override
   String get settingsThemePage => '主题设置页';
 
   @override
@@ -211,6 +226,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get iepAppbarTitle => '导入/导出';
+
+  @override
+  String get iepDesc => '通过导入导出功能，您可以备份和恢复您的 TOTP 数据。支持 JSON 格式的文件操作。';
 
   @override
   String get iepImportTitle => '导入';
@@ -270,10 +288,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get rbpDelPermanentlyBtn => '彻底删除';
 
   @override
+  String get rbpDelDialogTitle => '彻底删除确认';
+
+  @override
+  String get rbpDelDialogContent => '确定要彻底删除所选项吗？';
+
+  @override
+  String get rbpDelDialogConfirmBtn => '确定';
+
+  @override
+  String get rbpDelDialogCancelBtn => '取消';
+
+  @override
   String get feedbackPage => '反馈';
 
   @override
   String get fpAppbarTitle => '反馈交流';
+
+  @override
+  String get fpDesc => '如果您有什么问题或建议，可以通过下面的方式反馈给我们，我们会尽快回复您。';
+
+  @override
+  String get fpEmail => '邮箱';
+
+  @override
+  String get fpQQ => 'QQ';
+
+  @override
+  String get fpCopiedTips => '已复制到剪贴板';
 
   @override
   String get webdavUnsupportedAuthMethod => '不支持的 WebDAV 认证方式';
@@ -285,17 +327,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get webdavResourceNotFound => 'WebDAV 资源未找到，请检查您的 URL';
 
   @override
-  String get webdavRequestFailed => 'WebDAV 客户端请求失败，请根据返回的http状态码进行排查';
+  String get webdavRequestFailed => 'WebDAV 客户端请求失败，请根据返回的 http 状态码进行排查';
 
   @override
-  String get webdavConnectErr => '连接异常，请检查您的网络或URL是否正确';
+  String get webdavConnectErr => '连接异常，请检查您的网络或 URL 是否正确';
 
   @override
-  String get webdavNotDir => '设置的webdav路径不是目录，请设置到目录一级，程序会自动管理其中的文件';
+  String get webdavNotDir => '设置的 webdav 路径不是目录，请设置到目录一级，程序会自动管理其中的文件';
 
   @override
-  String get webdavCreateFileFailed => '创建WebDAV文件失败，请检查权限或路径是否正确';
+  String get webdavCreateFileFailed => '创建 WebDAV 文件失败，请检查权限或路径是否正确';
 
   @override
-  String get webdavUnknownErr => '未知错误，请检查权限或路径是否正确';
+  String get webdavUnknownErr => '未知错误';
 }

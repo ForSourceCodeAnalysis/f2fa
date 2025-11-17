@@ -66,6 +66,13 @@ class SettingsPage extends StatelessWidget {
           const RecycleBinRoute().push(context);
         },
       ),
+      _SettingsItem(
+        icon: Icons.history_outlined,
+        title: al.spLogLabel,
+        onTap: () {
+          const LogRoute().push(context);
+        },
+      ),
 
       _SettingsItem(
         icon: Icons.feedback_outlined,

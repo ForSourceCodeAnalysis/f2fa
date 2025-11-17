@@ -12,6 +12,8 @@ part 'settings_route.g.dart';
     TypedGoRoute<LanguageRoute>(path: 'language'),
     TypedGoRoute<ImportExportRoute>(path: 'import-export'),
     TypedGoRoute<RecycleBinRoute>(path: 'recycle-bin'),
+    TypedGoRoute<LogRoute>(path: 'log'),
+
     TypedGoRoute<FeedbackRoute>(path: 'feedback'),
     TypedGoRoute<AboutRoute>(path: 'about'),
   ],
@@ -73,6 +75,16 @@ class RecycleBinRoute extends GoRouteData with $RecycleBinRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const RecycleBinPage();
+  }
+}
+
+@immutable
+class LogRoute extends GoRouteData with $LogRoute {
+  const LogRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LogPage();
   }
 }
 

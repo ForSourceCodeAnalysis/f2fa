@@ -58,6 +58,7 @@ class _FormViewState extends State<_FormView> {
       },
       builder: (context, state) {
         final webdavErr = state.webdavErr;
+        final colorScheme = Theme.of(context).colorScheme;
 
         return Scaffold(
           appBar: AppBar(title: Text(al.wpAppbarTitle)),
@@ -87,7 +88,10 @@ class _FormViewState extends State<_FormView> {
                                 initialValue: _webdavConfig?.url,
                                 decoration: InputDecoration(
                                   labelText: '* ${al.wpFormUrlLabel}',
-                                  prefixIcon: const Icon(Icons.link),
+                                  prefixIcon: Icon(
+                                    Icons.link,
+                                    color: colorScheme.primary,
+                                  ),
                                   hintText: _webdavConfig?.url == null
                                       ? 'https://webdav.example.com/dav/f2fa/'
                                       : null,
@@ -108,6 +112,10 @@ class _FormViewState extends State<_FormView> {
                                 initialValue: _webdavConfig?.username,
                                 decoration: InputDecoration(
                                   labelText: '* ${al.wpFormUsernameLabel}',
+                                  prefixIcon: Icon(
+                                    Icons.person,
+                                    color: colorScheme.primary,
+                                  ),
                                 ),
                                 validator: FormBuilderValidators.required(),
                               ),
@@ -118,7 +126,10 @@ class _FormViewState extends State<_FormView> {
                                 initialValue: _webdavConfig?.password,
                                 decoration: InputDecoration(
                                   labelText: '* ${al.wpFormPasswordLabel}',
-                                  prefixIcon: const Icon(Icons.password),
+                                  prefixIcon: Icon(
+                                    Icons.password,
+                                    color: colorScheme.primary,
+                                  ),
                                   suffixIcon: _webdavConfig == null
                                       ? IconButton(
                                           icon: Icon(
@@ -135,7 +146,7 @@ class _FormViewState extends State<_FormView> {
                                       : null,
                                 ),
                                 obscureText: _webdavConfig == null
-                                    ? _isPwdVisible
+                                    ? !_isPwdVisible
                                     : true,
                               ),
 
@@ -146,7 +157,10 @@ class _FormViewState extends State<_FormView> {
                                 initialValue: _webdavConfig?.encryptKey,
                                 decoration: InputDecoration(
                                   labelText: '* ${al.wpFormEncryptLabel}',
-                                  prefixIcon: const Icon(Icons.password),
+                                  prefixIcon: Icon(
+                                    Icons.password,
+                                    color: colorScheme.primary,
+                                  ),
                                   suffixIcon:
                                       //  widget.initialWebdav == null?
                                       IconButton(
@@ -164,7 +178,7 @@ class _FormViewState extends State<_FormView> {
                                       ),
                                   // : null,
                                 ),
-                                obscureText: _isEncryptKeyVisible,
+                                obscureText: !_isEncryptKeyVisible,
                               ),
                             ],
                           ),
@@ -210,7 +224,10 @@ class _FormViewState extends State<_FormView> {
                                         );
                                       },
 
-                                icon: const Icon(Icons.sync),
+                                icon: Icon(
+                                  Icons.sync,
+                                  color: colorScheme.primary,
+                                ),
                                 label: Text(al.wpForceSyncBtnText),
                               ),
                             ),
@@ -226,7 +243,10 @@ class _FormViewState extends State<_FormView> {
                                           WebdavExitSync(),
                                         );
                                       },
-                                icon: const Icon(Icons.cancel),
+                                icon: Icon(
+                                  Icons.cancel,
+                                  color: colorScheme.primary,
+                                ),
                                 label: Text(al.wpExitSyncBtnText),
                               ),
                             ),
@@ -295,7 +315,7 @@ class _FormViewState extends State<_FormView> {
                 if (value['url'] == _webdavConfig?.url &&
                     value['username'] == _webdavConfig?.username &&
                     value['password'] == _webdavConfig?.password &&
-                    value['encryptkey'] == _webdavConfig?.encryptKey) {
+                    value['encryptKey'] == _webdavConfig?.encryptKey) {
                   Navigator.of(context).pop();
                 } else {
                   context.read<WebdavBloc>().add(
@@ -303,7 +323,7 @@ class _FormViewState extends State<_FormView> {
                       url: value['url'],
                       username: value['username'],
                       password: value['password'],
-                      encryptKey: value['encryptkey'],
+                      encryptKey: value['encryptKey'],
                     ),
                   );
                 }

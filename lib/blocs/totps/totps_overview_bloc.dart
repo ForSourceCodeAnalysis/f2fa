@@ -55,9 +55,6 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
         const Duration(seconds: 1),
       ).listen((_) => _totpRepository.refreshCode());
     } else {
-      if (_subscription == null) {
-        return;
-      }
       await _subscription?.cancel();
       _subscription = null;
     }
@@ -73,6 +70,7 @@ class TotpsOverviewBloc extends Bloc<TotpsOverviewEvent, TotpsOverviewState> {
         return state.copyWith(
           webdavErr: webdavErr,
           fakeStatus: state.fakeStatus + 1,
+          clearWebdavErr: true,
         );
       },
       onError: null,

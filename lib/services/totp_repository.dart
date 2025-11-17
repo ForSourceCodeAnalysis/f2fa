@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:f2fa/models/models.dart';
 import 'package:f2fa/services/services.dart';
-import 'package:f2fa/utils/util.dart';
+import 'package:f2fa/utils/utils.dart';
 import 'package:get_it/get_it.dart';
 import 'package:otp/otp.dart';
 import 'package:rxdart/rxdart.dart';
@@ -34,6 +34,7 @@ class TotpRepository {
 
   Future<void> _init() async {
     _localTotps = _ls.getTotpList() ?? [];
+    getLogger().info('totps length: ${_localTotps.length}');
     _streamController.add(_filterDeleted());
     final wc = _ls.getWebdavConfig();
     if (wc == null ||
@@ -44,23 +45,8 @@ class TotpRepository {
       return;
     }
     _webdav = Webdav(wc, _ls);
-
-    _webdav!.checkResType().then(
-      (value) {
-        if (value) {
-          //设置的是目录，同步数据
-          _sync(false);
-        } else {
-          //设置的是文件
-          _setWebdavError(
-            WebdavException(errMsg: getLocaleInstance().webdavNotDir),
-          );
-        }
-      },
-      onError: (e) {
-        _setWebdavError(e);
-      },
-    );
+    //异步同步数据
+    _sync(false);
   }
 
   //设置同步错误
@@ -72,18 +58,15 @@ class TotpRepository {
     _webdavSyncController.add(
       e is WebdavException
           ? e
-          : WebdavException(
-              httpcode: -1,
-              errMsg: getLocaleInstance().webdavUnknownErr,
-            ),
+          : WebdavException(httpcode: -1, errMsg: e.toString()),
     );
   }
 
-  Future<void> _mergeData(List<Totp> rtotps) async {
+  Future<bool> _mergeData(List<Totp> rtotps) async {
     if (_localTotps.isEmpty) {
       _localTotps = rtotps;
       _ls.saveTotpList(_localTotps);
-      return;
+      return false;
     }
 
     final Map<String, Totp> mergedMap = {};
@@ -105,6 +88,8 @@ class TotpRepository {
       } else {
         // 如果两边都有该项目, 比较更新时间，保留更新的版本
         final remoteTotp = mergedMap[localTotp.id]!;
+
+        //本地较新，如果不是彻底删除状态，就以本地为准
         if (localTotp.updatedAt > remoteTotp.updatedAt) {
           if (localTotp.isDirty && localTotp.deleteStatus == 2) {
             mergedMap.remove(localTotp.id);
@@ -113,6 +98,7 @@ class TotpRepository {
           }
           diffFlag = true;
         } else if (remoteTotp.deleteStatus == 2) {
+          //如果是彻底删除状态，移除
           mergedMap.remove(localTotp.id);
           diffFlag = true;
         }
@@ -121,12 +107,9 @@ class TotpRepository {
 
     _localTotps = mergedMap.values.toList();
 
+    //这里保存的是脏数据，同步成功后会更新脏数据标志
     await _ls.saveTotpList(_localTotps);
-    if (diffFlag) {
-      await _webdav?.putData(_localTotps);
-      _setWebdavError(null);
-    }
-    _localTotps = _localTotps.map((e) => e.copyWith(isDirty: false)).toList();
+    return diffFlag;
   }
 
   List<Totp> _filterDeleted() {
@@ -137,46 +120,45 @@ class TotpRepository {
     if (_ongoingSync != null) {
       return;
     }
-    try {
-      _ongoingSync = _doSync(forceUpload);
-      await _ongoingSync;
-      final l = _localTotps.map((e) => e.copyWith(isDirty: false)).toList();
-      _localTotps = l.where((e) => e.deleteStatus != 2).toList();
-      await _ls.saveTotpList(_localTotps);
-    } catch (e) {
-      _setWebdavError(e);
-    } finally {
-      _ongoingSync = null;
-    }
+
+    _ongoingSync = _doSync(forceUpload);
+    await _ongoingSync;
+    _ongoingSync = null;
   }
 
   Future<void> _doSync(bool forceUpload) async {
-    final rdata = await _webdav?.getData();
-    if (rdata == null) {
-      return;
+    try {
+      final rdata = await _webdav?.getData();
+      if (rdata == null) {
+        return;
+      }
+      // 远程数据为空，本地有数据，则上传
+      // 远程数据没有变化，本地有变化，上传
+      // 远程数据有变化，合并后上传
+      if ((rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) ||
+          (rdata.status == GetDataStatus.notModified && forceUpload) ||
+          (rdata.status == GetDataStatus.modified &&
+              await _mergeData(rdata.data!))) {
+        await _doPutData();
+        _setWebdavError(null);
+      }
+    } catch (e) {
+      getLogger().error('sync error $e');
+      _setWebdavError(e);
     }
-    //数据为空，本地有数据，则上传
-    if (rdata.status == GetDataStatus.empty && _localTotps.isNotEmpty) {
-      await _webdav?.putData(
-        _localTotps.where((e) => e.deleteStatus != 2).toList(),
-      );
-      _setWebdavError(null);
-      return;
-    }
-    if (rdata.status == GetDataStatus.modified) {
-      await _mergeData(rdata.data!);
-      _setWebdavError(null);
-      return;
-    }
-    //远程数据没有变化，本地有变化
-    if (rdata.status == GetDataStatus.notModified && forceUpload) {
-      await _webdav?.putData(
-        _localTotps.where((e) => e.deleteStatus != 2).toList(),
-      );
-      _setWebdavError(null);
-      return;
-    }
-    _setWebdavError(null);
+  }
+
+  Future<void> _doPutData() async {
+    final cleanData = List<Totp>.from(_localTotps);
+    cleanData.removeWhere((element) => element.deleteStatus == 2); //移除删除状态为2的
+    await _webdav?.putData(
+      cleanData.map((e) => e.copyWith(isDirty: false)).toList(),
+    );
+    //同步成功后，刷新脏数据标志，并将彻底删除的移除
+    _localTotps.removeWhere((e) => e.deleteStatus == 2);
+    _localTotps = _localTotps.map((e) => e.copyWith(isDirty: false)).toList();
+    // 重新保存干净的数据
+    await _ls.saveTotpList(_localTotps);
   }
 
   Future<void> forceSync() async {
@@ -192,7 +174,10 @@ class TotpRepository {
   }
 
   Future<void> saveTotp(Totp totp, {Totp? oldTotp}) async {
-    totp = totp.copyWith(isDirty: true);
+    totp = totp.copyWith(
+      isDirty: true,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
     int index = -1;
     if (oldTotp != null) {
       index = _localTotps.indexWhere((i) => i.id == oldTotp.id);
@@ -218,6 +203,7 @@ class TotpRepository {
             oldTotp!.copyWith(
               deleteStatus: 1,
               updatedAt: DateTime.now().millisecondsSinceEpoch,
+              createdAt: DateTime.now().millisecondsSinceEpoch,
               isDirty: true,
             ),
           );
@@ -232,7 +218,9 @@ class TotpRepository {
         _localTotps[eindex] = totp;
       } else {
         //新增
-        _localTotps.add(totp);
+        _localTotps.add(
+          totp.copyWith(createdAt: DateTime.now().millisecondsSinceEpoch),
+        );
       }
     }
 
@@ -285,16 +273,20 @@ class TotpRepository {
     _streamController.add(_filterDeleted());
   }
 
-  Future<void> clearRecycleBin() async {
-    _localTotps = _localTotps.map((totp) {
-      if (totp.deleteStatus == 1) {
-        return totp.copyWith(deleteStatus: 2, isDirty: true);
-      }
-      return totp;
-    }).toList();
-    await _ls.saveTotpList(_localTotps);
-    _sync(true);
-  }
+  // Future<void> clearRecycleBin() async {
+  //   _localTotps = _localTotps.map((totp) {
+  //     if (totp.deleteStatus == 1) {
+  //       return totp.copyWith(
+  //         deleteStatus: 2,
+  //         isDirty: true,
+  //         updatedAt: DateTime.now().millisecondsSinceEpoch,
+  //       );
+  //     }
+  //     return totp;
+  //   }).toList();
+  //   await _ls.saveTotpList(_localTotps);
+  //   _sync(true);
+  // }
 
   List<Totp> getDeletedTotps() {
     return _localTotps.where((totp) => totp.deleteStatus == 1).toList();
@@ -338,13 +330,10 @@ class TotpRepository {
     _sync(true);
   }
 
-  /// Return all totps (including deleted ones) for export purposes.
   Future<List<Totp>> getAllTotps() async {
     return _localTotps;
   }
 
-  /// Export totps as plaintext JSON into a file under [dir].
-  /// Creates a file named totps_export_<timestamp>.json
   Future<String> exportTotpsPlain(String dir) async {
     final all = await getAllTotps();
     final jsonStr = jsonEncode(all.map((e) => e.toJson()).toList());
@@ -359,8 +348,6 @@ class TotpRepository {
     return file.path;
   }
 
-  /// Import totps from a plaintext JSON file at [filePath].
-  /// The file should contain a JSON array of totp objects.
   Future<void> importTotpsFromFile(String filePath) async {
     final f = File(filePath);
     if (!await f.exists()) {
@@ -375,10 +362,14 @@ class TotpRepository {
         .map((e) => Totp.fromJson(Map<String, dynamic>.from(e)))
         .toList();
 
-    await _mergeData(imported);
+    if (await _mergeData(imported)) {
+      _doPutData();
+    }
+    _streamController.add(_localTotps);
   }
 
   void dispose() {
     _streamController.close();
+    _webdavSyncController.close();
   }
 }

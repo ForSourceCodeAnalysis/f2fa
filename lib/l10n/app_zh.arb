@@ -2,61 +2,74 @@
     "@@locale": "zh",
 
     "readme": "文件结构说明",
-    "@readme": { 
-        "description": "这条是说明文本，没有实际使用。翻译以文件为单位，比如以homepage开头的，表示在home_page.dart中使用"
+    "@readme": {
+        "description": "这是说明文字，实际上不会使用。翻译按文件组织，例如以 homepage 开头的在 home_page.dart 中使用"
     },
 
-
-    "homePage": "首页",
+    "homePage": "主页",
     "@homePage": {
-        "description": "这条是分割符，以下是home_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 home_page.dart 中使用的翻译"
     },
     "hpInvalidQRCodeErrMsg": "二维码无效",
     "@hpInvalidQRCodeErrMsg": {
-        "description": "二维码无效错误信息"
+        "description": "无效二维码错误信息"
     },
-    "hpSearchHintTxt": "搜索TOTP条目",
+    "hpSearchHintTxt": "搜索 TOTP 条目",
     "@hpSearchHintTxt": {
-        "description": "搜索框提示文本"
+        "description": "搜索框提示文字"
     },
-    "hpPopMenuScanAdd":"扫码添加",
+    "hpPopMenuScanAdd": "扫码添加",
     "@hpPopMenuScanAdd": {
-        "description": "二维码无效错误信息"
+        "description": "扫描二维码添加条目"
     },
-    "hpPopMenuManAdd":"手动添加",
+    "hpPopMenuManAdd": "手动添加",
     "@hpPopMenuManAdd": {
         "description": "手动添加条目"
     },
-    "hpEmptyListTips":"点击下面的“+”添加新条目",
+    "hpEmptyListTips": "点击下方的'+'添加新条目",
     "@hpEmptyListTips": {
-        "description": "没有匹配的条目提示文本"
+        "description": "空列表提示文字"
     },
-    "hpNoMatchItemsTips":"没有匹配的条目",
+    "hpNoMatchItemsTips": "无匹配条目",
     "@hpNoMatchItemsTips": {
-        "description": "没有匹配的条目提示文本"
+        "description": "无匹配条目提示文字"
+    },
+    "hpScanCompleteInfoDialogTitle": "补全信息",
+    "@hpScanCompleteInfoDialogTitle": {
+        "description": "补全缺失的TOTP信息对话框标题"
+    },
+    "hpScanCompleteInfoDialogContent": "扫码解析出的账号或发行商缺失，是否手动补全",
+    "@hpScanCompleteInfoDialogContent": {
+        "description": "当扫描的二维码缺少账号或发行方信息时的对话框消息"
+    },
+    "hpScanCompleteInfoDialogCancelBtn": "取消",
+    "@hpScanCompleteInfoDialogCancelBtn": {
+        "description": "取消按钮文字"
+    },
+    "hpScanCompleteInfoDialogConfirmBtn": "确定",
+    "@hpScanCompleteInfoDialogConfirmBtn": {
+        "description": "确定按钮文字"
     },
 
-
-
-    "totpMenu":"组件totp菜单",
+    "totpMenu": "组件 totp 菜单",
     "@totpMenu": {
-        "description": "这条是分隔符，以下是totp_menu.dart中的翻译"
+        "description": "这是分隔符，以下是在 totp_menu.dart 中使用的翻译"
     },
-    "tmCopy":"复制",
+    "tmCopy": "复制",
     "@tmCopy": {
         "description": "复制菜单"
     },
-    "tmEdit":"编辑",
+    "tmEdit": "编辑",
     "@tmEdit": {
         "description": "编辑菜单"
     },
-    "tmDelete":"删除",
+    "tmDelete": "删除",
     "@tmDelete": {
         "description": "删除菜单"
     },
     "tmCopiedTips": "已复制到剪贴板",
     "@tmCopiedTips": {
-        "description": "复制操作成功提示文本"
+        "description": "复制操作成功提示文字"
     },
     "tmDeleteDialogTitle": "删除条目",
     "@tmDeleteDialogTitle": {
@@ -66,23 +79,22 @@
     "@tmDeleteDialogContent": {
         "description": "删除条目确认对话框内容"
     },
-    "tmDeleteDialogCancelBtn":"取消",
+    "tmDeleteDialogCancelBtn": "取消",
     "@tmDeleteDialogCancelBtn": {
         "description": "删除条目确认对话框取消按钮文本"
     },
-    "tmDeleteDialogConfirmBtn":"确定",
+    "tmDeleteDialogConfirmBtn": "确定",
     "@tmDeleteDialogConfirmBtn": {
         "description": "删除条目确认对话框确认按钮文本"
     },
 
-
     "webdavPage": "WebDAV 配置页",
     "@webdavPage": {
-        "description": "这条是分隔符，以下是Webdav_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 Webdav_page.dart 中使用的翻译"
     },
-    "wpOperationSuccess":"操作成功",
+    "wpOperationSuccess": "操作成功",
     "@wpOperationSuccess": {
-        "description": "操作成功提示文本"
+        "description": "操作成功提示文字"
     },
     "wpAppbarTitle": "WebDAV 配置",
     "@wpAppbarTitle": {
@@ -110,32 +122,32 @@
     },
     "wpForceSyncBtnText": "强制同步",
     "@wpForceSyncBtnText": {
-        "description": "强制同步按钮文本"
+        "description": "强制同步按钮文字"
     },
     "wpExitSyncBtnText": "退出同步",
     "@wpExitSyncBtnText": {
-        "description": "退出同步按钮文本"
+        "description": "退出同步按钮文字"
     },
     "wpLastSyncError": "上次同步错误：",
     "@wpLastSyncError": {
         "description": "上次同步错误提示"
     },
 
-    "addeditTotpPage": "添加/编辑TOTP条目页",
+    "addeditTotpPage": "添加/编辑 TOTP 条目页",
     "@addeditTotpPage": {
-        "description": "这条是分隔符，以下是addedit_totp_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 addedit_totp_page.dart 中使用的翻译"
     },
-    "atpOperationFailedErrMsg":"操作失败",
+    "atpOperationFailedErrMsg": "操作失败",
     "@atpOperationFailedErrMsg": {
-        "description": "操作失败提示文本"
+        "description": "操作失败提示文字"
     },
-    "atpAddAppbarTitle": "添加TOTP条目",
+    "atpAddAppbarTitle": "添加 TOTP 条目",
     "@atpAddAppbarTitle": {
-        "description": "添加TOTP条目页标题"
+        "description": "添加 TOTP 条目页标题"
     },
-    "atpEditAppbarTitle": "编辑TOTP条目",
+    "atpEditAppbarTitle": "编辑 TOTP 条目",
     "@atpEditAppbarTitle": {
-        "description": "编辑TOTP条目页标题"
+        "description": "编辑 TOTP 条目页标题"
     },
     "atpDupDialogTitle": "已存在同名条目",
     "@atpDupDialogTitle": {
@@ -145,56 +157,54 @@
     "@atpDupDialogContent": {
         "description": "已存在同名条目确认对话框内容"
     },
-    "atpDupDialogCancelBtn":"取消",
+    "atpDupDialogCancelBtn": "取消",
     "@atpDupDialogCancelBtn": {
-        "description": "已存在同名条目确认对话框取消按钮文本"
+        "description": "已存在同名条目确认对话框取消按钮文字"
     },
-    "atpDupDialogConfirmBtn":"确定",
+    "atpDupDialogConfirmBtn": "确定",
     "@atpDupDialogConfirmBtn": {
-        "description": "已存在同名条目确认对话框确认按钮文本"
+        "description": "已存在同名条目确认对话框确认按钮文字"
     },
-    "atpFormOtpTypeLabel":"OTP类型",
+    "atpFormOtpTypeLabel": "OTP 类型",
     "@atpFormOtpTypeLabel": {
-        "description": "OTP类型选择框标签"
+        "description": "OTP 类型选择框标签"
     },
-    "atpFormOtpIssuerLabel":"Issuer",
+    "atpFormOtpIssuerLabel": "Issuer",
     "@atpFormOtpIssuerLabel": {
-        "description": "Issuer输入框标签"
+        "description": "Issuer 输入框标签"
     },
-    "atpFormOtpAccountLabel":"账号",
+    "atpFormOtpAccountLabel": "账号",
     "@atpFormOtpAccountLabel": {
         "description": "账号输入框标签"
     },
-    "atpFormOtpSecretLabel":"密钥",
+    "atpFormOtpSecretLabel": "密钥",
     "@atpFormOtpSecretLabel": {
         "description": "密钥输入框标签"
     },
-    "atpFormOtpPeriodLabel":"周期",
+    "atpFormOtpPeriodLabel": "周期",
     "@atpFormOtpPeriodLabel": {
-        "description": "TOTP周期输入框标签"
+        "description": "TOTP 周期输入框标签"
     },
-    "atpFormOtpDigitsLabel":"位数",
+    "atpFormOtpDigitsLabel": "位数",
     "@atpFormOtpDigitsLabel": {
-        "description": "TOTP位数选择框标签"
+        "description": "TOTP 位数选择框标签"
     },
-    "atpFormOtpAlgorithmLabel":"算法",
+    "atpFormOtpAlgorithmLabel": "算法",
     "@atpFormOtpAlgorithmLabel": {
-        "description": "TOTP算法选择框标签"
+        "description": "TOTP 算法选择框标签"
     },
-    "atpFormOtpRemarkLabel":"备注",
+    "atpFormOtpRemarkLabel": "备注",
     "@atpFormOtpRemarkLabel": {
-        "description": "TOTP备注输入框标签"
+        "description": "TOTP 备注输入框标签"
     },
-    "atpFormOtpIconLabel":"图标",
+    "atpFormOtpIconLabel": "图标",
     "@atpFormOtpIconLabel": {
-        "description": "TOTP图标选择框标签"
+        "description": "TOTP 图标选择框标签"
     },
 
-
-    
     "settingsPage": "设置页",
     "@settingsPage": {
-        "description": "这条是分隔符，以下是settings_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 settings_page.dart 中使用的翻译"
     },
     "spAppbarTitle": "设置",
     "@spAppbarTitle": {
@@ -228,11 +238,15 @@
     "@spSyncLabel": {
         "description": "设置页同步选项卡标题"
     },
+    "spLogLabel": "日志",
+    "@spLogLabel": {
+        "description": "设置页日志选项卡标题"
+    },
 
 
     "settingsThemePage": "主题设置页",
     "@settingsThemePage": {
-        "description": "这是分隔符，以下是theme_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 theme_page.dart 中使用的翻译"
     },
     "stpAppbarTitle": "主题设置",
     "@stpAppbarTitle": {
@@ -244,15 +258,15 @@
     },
     "stpThemeModeLight": "浅色",
     "@stpThemeModeLight": {
-        "description": "主题设置页主题模式浅色选项文本"
+        "description": "主题设置页主题模式浅色选项文字"
     },
     "stpThemeModeDark": "深色",
     "@stpThemeModeDark": {
-        "description": "主题设置页主题模式深色选项文本"
+        "description": "主题设置页主题模式深色选项文字"
     },
     "stpThemeModeSystem": "跟随系统",
     "@stpThemeModeSystem": {
-        "description": "主题设置页主题模式跟随系统选项文本"
+        "description": "主题设置页主题模式跟随系统选项文字"
     },
     "stpThemeColorLabel": "主题颜色",
     "@stpThemeColorLabel": {
@@ -260,7 +274,7 @@
     },
     "stpThemeRandomLabel": "随机颜色",
     "@stpThemeRandomLabel": {
-        "description": "主题设置页主题颜色随机选项文本"
+        "description": "主题设置页主题颜色随机选项文字"
     },
     "stpThemeRandomDesc": "每次启动应用时，随机选择一个主题颜色",
     "@stpThemeRandomDesc": {
@@ -269,7 +283,7 @@
 
     "settingsLanguagePage": "语言设置",
     "@settingsLanguagePage": {
-        "description": "这是分隔符，以下是language_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 language_page.dart 中使用的翻译"
     },
     "slpAppBarTitle": "语言设置",
     "@slpAppBarTitle": {
@@ -282,11 +296,15 @@
 
     "importExportPage": "导入/导出页",
     "@importExportPage": {
-        "description": "这是分隔符，以下是import_export_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 import_export_page.dart 中使用的翻译"
     },
     "iepAppbarTitle": "导入/导出",
     "@iepAppbarTitle": {
         "description": "导入/导出设置页标题"
+    },
+    "iepDesc": "通过导入导出功能，您可以备份和恢复您的 TOTP 数据。支持 JSON 格式的文件操作。",
+    "@iepDesc": {
+        "description": "导入/导出设置页描述"
     },
     "iepImportTitle": "导入",
     "@iepImportTitle": {
@@ -302,36 +320,36 @@
     },
     "iepExportSuccessDialogPath": "导出路径",
     "@iepExportSuccessDialogPath": {
-        "description": "导入/导出设置页导出成功弹窗导出路径文本"
+        "description": "导入/导出设置页导出成功弹窗导出路径文字"
     },
     "iepExportPathCopiedTips": "导出路径已复制",
     "@iepExportPathCopiedTips": {
-        "description": "导入/导出设置页导出成功弹窗导出路径已复制文本"
+        "description": "导入/导出设置页导出成功弹窗导出路径已复制文字"
     },
     "iepExportSuccessDialogCopyPathBtn": "复制路径",
     "@iepExportSuccessDialogCopyPathBtn": {
-        "description": "导入/导出设置页导出成功弹窗复制路径按钮文本"
+        "description": "导入/导出设置页导出成功弹窗复制路径按钮文字"
     },
     "iepExportSuccessDialogConfirmBtn": "确认",
     "@iepExportSuccessDialogConfirmBtn": {
-        "description": "导入/导出设置页导出成功弹窗确认按钮文本"
+        "description": "导入/导出设置页导出成功弹窗确认按钮文字"
     },
     "iepExportFailedTips": "导出失败",
     "@iepExportFailedTips": {
-        "description": "导入/导出设置页导出失败弹窗文本"
+        "description": "导入/导出设置页导出失败弹窗文字"
     },
     "iepImportSuccessTips": "导入成功",
     "@iepImportSuccessTips": {
-        "description": "导入/导出设置页导入成功弹窗文本"
+        "description": "导入/导出设置页导入成功弹窗文字"
     },
     "iepImportFailedTips": "导入失败",
     "@iepImportFailedTips": {
-        "description": "导入/导出设置页导入失败弹窗文本"
+        "description": "导入/导出设置页导入失败弹窗文字"
     },
 
     "recycleBinPage": "回收站",
-    "@recycleBinPage": { 
-        "description": "这个是分隔符，以下是recycle_bin_page.dart中的翻译"
+    "@recycleBinPage": {
+        "description": "这是分隔符，以下是在 recycle_bin_page.dart 中使用的翻译"
     },
     "rbpAppbarTitle": "回收站",
     "@rbpAppbarTitle": {
@@ -343,7 +361,7 @@
     },
     "rbpClearAllDialogContent": "确定要清空所有已删除项吗，清空后将无法恢复",
     "@rbpClearAllDialogContent": {
-        "description": "回收站页清空所有已删除项弹窗确认文本"
+        "description": "回收站页清空所有已删除项弹窗确认文字"
     },
     "rbpClearAllDialogCancelBtn": "取消",
     "@rbpClearAllDialogCancelBtn": {
@@ -365,37 +383,48 @@
     "@rbpDelPermanentlyBtn": {
         "description": "回收站页彻底删除按钮"
     },
+    "rbpDelDialogTitle": "彻底删除确认",
+    "@rbpDelDialogTitle": {
+        "description": "回收站页彻底删除确认标题"
+    },
+    "rbpDelDialogContent": "确定要彻底删除所选项吗？",
+    "@rbpDelDialogContent": {
+        "description": "回收站页彻底删除确认内容"
+    },
+    "rbpDelDialogConfirmBtn": "确定",
+    "@rbpDelDialogConfirmBtn": {
+        "description": "回收站页彻底删除确认按钮"
+    },
+    "rbpDelDialogCancelBtn": "取消",
+    "@rbpDelDialogCancelBtn": {
+        "description": "回收站页彻底删除取消按钮"
+    },
+    
 
     "feedbackPage": "反馈",
     "@feedbackPage": {
-        "description": "这是分隔符，以下是feedback_page.dart中的翻译"
+        "description": "这是分隔符，以下是在 feedback_page.dart 中使用的翻译"
     },
     "fpAppbarTitle": "反馈交流",
     "@fpAppbarTitle": {
-        "description": "feedback_page.dart中的appbar标题"
+        "description": "标题"
     },
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
+    "fpDesc": "如果您有什么问题或建议，可以通过下面的方式反馈给我们，我们会尽快回复您。",
+    "@fpDesc": {
+        "description": "描述文字"
+    },
+    "fpEmail": "邮箱",
+    "@fpEmail": {
+        "description": "邮箱文字"
+    },
+    "fpQQ": "QQ",
+    "@fpQQ": {
+        "description": "QQ文字"
+    },
+    "fpCopiedTips": "已复制到剪贴板",
+    "@fpCopiedTips": {
+        "description": "feedback_page.dart 中的已复制到剪贴板提示"
+    },
 
     "webdavUnsupportedAuthMethod": "不支持的 WebDAV 认证方式",
     "@webdavUnsupportedAuthMethod": {
@@ -409,33 +438,24 @@
     "@webdavResourceNotFound": {
         "description": "WebDAV 资源未找到，错误提示"
     },
-    "webdavRequestFailed": "WebDAV 客户端请求失败，请根据返回的http状态码进行排查",
+    "webdavRequestFailed": "WebDAV 客户端请求失败，请根据返回的 http 状态码进行排查",
     "@webdavRequestFailed": {
         "description": "WebDAV 客户端请求失败，错误提示"
     },
-    "webdavConnectErr":"连接异常，请检查您的网络或URL是否正确",
-    "@webdavConnectErr":{
+    "webdavConnectErr": "连接异常，请检查您的网络或 URL 是否正确",
+    "@webdavConnectErr": {
         "description": "连接异常，错误提示"
     },
-    "webdavNotDir":"设置的webdav路径不是目录，请设置到目录一级，程序会自动管理其中的文件",
-    "@webdavNotDir":{
-        "description": "设置的webdav路径不是目录，请设置到目录一级，错误提示"
+    "webdavNotDir": "设置的 webdav 路径不是目录，请设置到目录一级，程序会自动管理其中的文件",
+    "@webdavNotDir": {
+        "description": "设置的 webdav 路径不是目录，请设置到目录一级，错误提示"
     },
-    "webdavCreateFileFailed":"创建WebDAV文件失败，请检查权限或路径是否正确",
-    "@webdavCreateFileFailed":{ 
-        "description": "创建WebDAV文件失败，请检查权限或路径是否正确，错误提示"
+    "webdavCreateFileFailed": "创建 WebDAV 文件失败，请检查权限或路径是否正确",
+    "@webdavCreateFileFailed": {
+        "description": "创建 WebDAV 文件失败，请检查权限或路径是否正确，错误提示"
     },
-    "webdavUnknownErr":"未知错误，请检查权限或路径是否正确",
-    "@webdavUnknownErr":{
+    "webdavUnknownErr": "未知错误",
+    "@webdavUnknownErr": {
         "description": "未知错误，请检查权限或路径是否正确，错误提示"
     }
-    
-   
-
-
-
-
-
-
-
 }

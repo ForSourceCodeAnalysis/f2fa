@@ -7,17 +7,25 @@ void showSnackBar({
   Duration duration = const Duration(seconds: 2),
 }) {
   final themeColor = Theme.of(context).colorScheme;
+  final screenSize = MediaQuery.of(context).size;
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(message, style: TextStyle(color: themeColor.onSurface)),
+      content: Text(
+        message,
+        style: TextStyle(color: themeColor.onSurfaceVariant),
+        textAlign: TextAlign.center,
+      ),
+
       behavior: behavior,
       duration: duration,
-      backgroundColor: themeColor.surface,
+      backgroundColor: themeColor.surfaceContainerHighest,
+
       margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height / 2,
-        left: MediaQuery.of(context).size.width / 4,
-        right: MediaQuery.of(context).size.width / 4,
+        bottom: screenSize.height * 2 / 3,
+        left: screenSize.width / 4,
+        right: screenSize.width / 4,
       ),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
     ),
   );
 }

@@ -39,11 +39,37 @@ class _ImportExportPageState extends State<ImportExportPage> {
                   const SizedBox(height: 32),
 
                   // 导入功能区域
-                  _buildImportSection(context, theme),
+                  _buildActionSection(
+                    context,
+                    icon: Icons.file_download,
+                    label: al.iepImportTitle,
+                    onTap: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await _importFromFile(context);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 24),
 
                   // 导出功能区域
-                  _buildExportSection(context, theme),
+                  _buildActionSection(
+                    context,
+                    icon: Icons.file_upload,
+                    label: al.iepExportTitle,
+                    onTap: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await _exportPlainToDir(context);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -51,6 +77,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
   }
 
   Widget _buildInfoSection(BuildContext context, ThemeData theme) {
+    final al = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
@@ -62,42 +89,23 @@ class _ImportExportPageState extends State<ImportExportPage> {
           width: 1.0,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.info_outline,
-                color: theme.colorScheme.primary,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '功能介绍',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '通过导入导出功能，您可以备份和恢复您的TOTP数据。支持JSON格式的文件操作。',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              height: 1.5,
-            ),
-          ),
-        ],
+      child: Text(
+        al.iepDesc,
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+          height: 1.5,
+        ),
       ),
     );
   }
 
-  Widget _buildImportSection(BuildContext context, ThemeData theme) {
-    final al = AppLocalizations.of(context)!;
-
+  Widget _buildActionSection(
+    BuildContext context, {
+    required VoidCallback onTap,
+    required IconData icon,
+    required String label,
+  }) {
+    final theme = Theme.of(context);
     return Card(
       elevation: 0,
       color: theme.colorScheme.surface,
@@ -109,15 +117,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
         ),
       ),
       child: InkWell(
-        onTap: () async {
-          setState(() {
-            _isLoading = true;
-          });
-          await _importFromFile(context);
-          setState(() {
-            _isLoading = false;
-          });
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -126,75 +126,15 @@ class _ImportExportPageState extends State<ImportExportPage> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primaryContainer,
+                  color: theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Icon(
-                  Icons.file_download,
-                  color: theme.colorScheme.onPrimaryContainer,
-                  size: 20,
-                ),
+                child: Icon(icon, color: theme.colorScheme.primary, size: 20),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  al.iepImportTitle,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildExportSection(BuildContext context, ThemeData theme) {
-    final al = AppLocalizations.of(context)!;
-
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-        side: BorderSide(
-          color: theme.colorScheme.outline.withValues(alpha: 0.2),
-          width: 1.0,
-        ),
-      ),
-      child: InkWell(
-        onTap: () async {
-          setState(() {
-            _isLoading = true;
-          });
-          await _exportPlainToDir(context);
-          setState(() {
-            _isLoading = false;
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(
-                  Icons.file_upload,
-                  color: theme.colorScheme.onSecondaryContainer,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  al.iepExportTitle,
+                  label,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),

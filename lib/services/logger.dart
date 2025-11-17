@@ -16,14 +16,14 @@ class CustomLoggerFormatter extends LoggerFormatter {
     final msg = details.message?.toString() ?? '';
     var msgBorderedLines = msg.split('\n').map((e) => '│ $e');
 
-    if (details.level == LogLevel.debug) {
-      final callerInfo = _getCallerInfo(StackTrace.current);
-      final linesList = msgBorderedLines.toList();
-      if (linesList.isNotEmpty) {
-        linesList[0] = '│ $callerInfo ${linesList[0].substring(2)}';
-      }
-      msgBorderedLines = linesList;
+    // if (details.level == LogLevel.debug) {
+    final callerInfo = _getCallerInfo(StackTrace.current);
+    final linesList = msgBorderedLines.toList();
+    if (linesList.isNotEmpty) {
+      linesList[0] = '│ $callerInfo ${linesList[0].substring(2)}';
     }
+    msgBorderedLines = linesList;
+    // }
     if (!settings.enableColors) {
       return '$topline\n${msgBorderedLines.join('\n')}\n$underline';
     }

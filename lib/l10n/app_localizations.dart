@@ -98,31 +98,31 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
-  /// 这条是说明文本，没有实际使用。翻译以文件为单位，比如以homepage开头的，表示在home_page.dart中使用
+  /// 这是说明文字，实际上不会使用。翻译按文件组织，例如以 homepage 开头的在 home_page.dart 中使用
   ///
   /// In zh, this message translates to:
   /// **'文件结构说明'**
   String get readme;
 
-  /// 这条是分割符，以下是home_page.dart中的翻译
+  /// 这是分隔符，以下是在 home_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
-  /// **'首页'**
+  /// **'主页'**
   String get homePage;
 
-  /// 二维码无效错误信息
+  /// 无效二维码错误信息
   ///
   /// In zh, this message translates to:
   /// **'二维码无效'**
   String get hpInvalidQRCodeErrMsg;
 
-  /// 搜索框提示文本
+  /// 搜索框提示文字
   ///
   /// In zh, this message translates to:
-  /// **'搜索TOTP条目'**
+  /// **'搜索 TOTP 条目'**
   String get hpSearchHintTxt;
 
-  /// 二维码无效错误信息
+  /// 扫描二维码添加条目
   ///
   /// In zh, this message translates to:
   /// **'扫码添加'**
@@ -134,22 +134,46 @@ abstract class AppLocalizations {
   /// **'手动添加'**
   String get hpPopMenuManAdd;
 
-  /// 没有匹配的条目提示文本
+  /// 空列表提示文字
   ///
   /// In zh, this message translates to:
-  /// **'点击下面的“+”添加新条目'**
+  /// **'点击下方的\'+\'添加新条目'**
   String get hpEmptyListTips;
 
-  /// 没有匹配的条目提示文本
+  /// 无匹配条目提示文字
   ///
   /// In zh, this message translates to:
-  /// **'没有匹配的条目'**
+  /// **'无匹配条目'**
   String get hpNoMatchItemsTips;
 
-  /// 这条是分隔符，以下是totp_menu.dart中的翻译
+  /// 补全缺失的TOTP信息对话框标题
   ///
   /// In zh, this message translates to:
-  /// **'组件totp菜单'**
+  /// **'补全信息'**
+  String get hpScanCompleteInfoDialogTitle;
+
+  /// 当扫描的二维码缺少账号或发行方信息时的对话框消息
+  ///
+  /// In zh, this message translates to:
+  /// **'扫码解析出的账号或发行商缺失，是否手动补全'**
+  String get hpScanCompleteInfoDialogContent;
+
+  /// 取消按钮文字
+  ///
+  /// In zh, this message translates to:
+  /// **'取消'**
+  String get hpScanCompleteInfoDialogCancelBtn;
+
+  /// 确定按钮文字
+  ///
+  /// In zh, this message translates to:
+  /// **'确定'**
+  String get hpScanCompleteInfoDialogConfirmBtn;
+
+  /// 这是分隔符，以下是在 totp_menu.dart 中使用的翻译
+  ///
+  /// In zh, this message translates to:
+  /// **'组件 totp 菜单'**
   String get totpMenu;
 
   /// 复制菜单
@@ -170,7 +194,7 @@ abstract class AppLocalizations {
   /// **'删除'**
   String get tmDelete;
 
-  /// 复制操作成功提示文本
+  /// 复制操作成功提示文字
   ///
   /// In zh, this message translates to:
   /// **'已复制到剪贴板'**
@@ -200,13 +224,13 @@ abstract class AppLocalizations {
   /// **'确定'**
   String get tmDeleteDialogConfirmBtn;
 
-  /// 这条是分隔符，以下是Webdav_page.dart中的翻译
+  /// 这是分隔符，以下是在 Webdav_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'WebDAV 配置页'**
   String get webdavPage;
 
-  /// 操作成功提示文本
+  /// 操作成功提示文字
   ///
   /// In zh, this message translates to:
   /// **'操作成功'**
@@ -248,13 +272,13 @@ abstract class AppLocalizations {
   /// **'同步操作'**
   String get wpSyncOperationCardTitle;
 
-  /// 强制同步按钮文本
+  /// 强制同步按钮文字
   ///
   /// In zh, this message translates to:
   /// **'强制同步'**
   String get wpForceSyncBtnText;
 
-  /// 退出同步按钮文本
+  /// 退出同步按钮文字
   ///
   /// In zh, this message translates to:
   /// **'退出同步'**
@@ -266,28 +290,28 @@ abstract class AppLocalizations {
   /// **'上次同步错误：'**
   String get wpLastSyncError;
 
-  /// 这条是分隔符，以下是addedit_totp_page.dart中的翻译
+  /// 这是分隔符，以下是在 addedit_totp_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
-  /// **'添加/编辑TOTP条目页'**
+  /// **'添加/编辑 TOTP 条目页'**
   String get addeditTotpPage;
 
-  /// 操作失败提示文本
+  /// 操作失败提示文字
   ///
   /// In zh, this message translates to:
   /// **'操作失败'**
   String get atpOperationFailedErrMsg;
 
-  /// 添加TOTP条目页标题
+  /// 添加 TOTP 条目页标题
   ///
   /// In zh, this message translates to:
-  /// **'添加TOTP条目'**
+  /// **'添加 TOTP 条目'**
   String get atpAddAppbarTitle;
 
-  /// 编辑TOTP条目页标题
+  /// 编辑 TOTP 条目页标题
   ///
   /// In zh, this message translates to:
-  /// **'编辑TOTP条目'**
+  /// **'编辑 TOTP 条目'**
   String get atpEditAppbarTitle;
 
   /// 已存在同名条目确认对话框标题
@@ -302,25 +326,25 @@ abstract class AppLocalizations {
   /// **'已存在同名条目，是否覆盖？'**
   String get atpDupDialogContent;
 
-  /// 已存在同名条目确认对话框取消按钮文本
+  /// 已存在同名条目确认对话框取消按钮文字
   ///
   /// In zh, this message translates to:
   /// **'取消'**
   String get atpDupDialogCancelBtn;
 
-  /// 已存在同名条目确认对话框确认按钮文本
+  /// 已存在同名条目确认对话框确认按钮文字
   ///
   /// In zh, this message translates to:
   /// **'确定'**
   String get atpDupDialogConfirmBtn;
 
-  /// OTP类型选择框标签
+  /// OTP 类型选择框标签
   ///
   /// In zh, this message translates to:
-  /// **'OTP类型'**
+  /// **'OTP 类型'**
   String get atpFormOtpTypeLabel;
 
-  /// Issuer输入框标签
+  /// Issuer 输入框标签
   ///
   /// In zh, this message translates to:
   /// **'Issuer'**
@@ -338,37 +362,37 @@ abstract class AppLocalizations {
   /// **'密钥'**
   String get atpFormOtpSecretLabel;
 
-  /// TOTP周期输入框标签
+  /// TOTP 周期输入框标签
   ///
   /// In zh, this message translates to:
   /// **'周期'**
   String get atpFormOtpPeriodLabel;
 
-  /// TOTP位数选择框标签
+  /// TOTP 位数选择框标签
   ///
   /// In zh, this message translates to:
   /// **'位数'**
   String get atpFormOtpDigitsLabel;
 
-  /// TOTP算法选择框标签
+  /// TOTP 算法选择框标签
   ///
   /// In zh, this message translates to:
   /// **'算法'**
   String get atpFormOtpAlgorithmLabel;
 
-  /// TOTP备注输入框标签
+  /// TOTP 备注输入框标签
   ///
   /// In zh, this message translates to:
   /// **'备注'**
   String get atpFormOtpRemarkLabel;
 
-  /// TOTP图标选择框标签
+  /// TOTP 图标选择框标签
   ///
   /// In zh, this message translates to:
   /// **'图标'**
   String get atpFormOtpIconLabel;
 
-  /// 这条是分隔符，以下是settings_page.dart中的翻译
+  /// 这是分隔符，以下是在 settings_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'设置页'**
@@ -422,7 +446,13 @@ abstract class AppLocalizations {
   /// **'同步'**
   String get spSyncLabel;
 
-  /// 这是分隔符，以下是theme_page.dart中的翻译
+  /// 设置页日志选项卡标题
+  ///
+  /// In zh, this message translates to:
+  /// **'日志'**
+  String get spLogLabel;
+
+  /// 这是分隔符，以下是在 theme_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'主题设置页'**
@@ -440,19 +470,19 @@ abstract class AppLocalizations {
   /// **'主题模式'**
   String get stpThemeModeLabel;
 
-  /// 主题设置页主题模式浅色选项文本
+  /// 主题设置页主题模式浅色选项文字
   ///
   /// In zh, this message translates to:
   /// **'浅色'**
   String get stpThemeModeLight;
 
-  /// 主题设置页主题模式深色选项文本
+  /// 主题设置页主题模式深色选项文字
   ///
   /// In zh, this message translates to:
   /// **'深色'**
   String get stpThemeModeDark;
 
-  /// 主题设置页主题模式跟随系统选项文本
+  /// 主题设置页主题模式跟随系统选项文字
   ///
   /// In zh, this message translates to:
   /// **'跟随系统'**
@@ -464,7 +494,7 @@ abstract class AppLocalizations {
   /// **'主题颜色'**
   String get stpThemeColorLabel;
 
-  /// 主题设置页主题颜色随机选项文本
+  /// 主题设置页主题颜色随机选项文字
   ///
   /// In zh, this message translates to:
   /// **'随机颜色'**
@@ -476,7 +506,7 @@ abstract class AppLocalizations {
   /// **'每次启动应用时，随机选择一个主题颜色'**
   String get stpThemeRandomDesc;
 
-  /// 这是分隔符，以下是language_page.dart中的翻译
+  /// 这是分隔符，以下是在 language_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'语言设置'**
@@ -494,7 +524,7 @@ abstract class AppLocalizations {
   /// **'当前语言:'**
   String get slpCurrentLanguage;
 
-  /// 这是分隔符，以下是import_export_page.dart中的翻译
+  /// 这是分隔符，以下是在 import_export_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'导入/导出页'**
@@ -505,6 +535,12 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'导入/导出'**
   String get iepAppbarTitle;
+
+  /// 导入/导出设置页描述
+  ///
+  /// In zh, this message translates to:
+  /// **'通过导入导出功能，您可以备份和恢复您的 TOTP 数据。支持 JSON 格式的文件操作。'**
+  String get iepDesc;
 
   /// 导入/导出设置页导入标题
   ///
@@ -524,49 +560,49 @@ abstract class AppLocalizations {
   /// **'导出成功'**
   String get iepExportSuccessDialogTitle;
 
-  /// 导入/导出设置页导出成功弹窗导出路径文本
+  /// 导入/导出设置页导出成功弹窗导出路径文字
   ///
   /// In zh, this message translates to:
   /// **'导出路径'**
   String get iepExportSuccessDialogPath;
 
-  /// 导入/导出设置页导出成功弹窗导出路径已复制文本
+  /// 导入/导出设置页导出成功弹窗导出路径已复制文字
   ///
   /// In zh, this message translates to:
   /// **'导出路径已复制'**
   String get iepExportPathCopiedTips;
 
-  /// 导入/导出设置页导出成功弹窗复制路径按钮文本
+  /// 导入/导出设置页导出成功弹窗复制路径按钮文字
   ///
   /// In zh, this message translates to:
   /// **'复制路径'**
   String get iepExportSuccessDialogCopyPathBtn;
 
-  /// 导入/导出设置页导出成功弹窗确认按钮文本
+  /// 导入/导出设置页导出成功弹窗确认按钮文字
   ///
   /// In zh, this message translates to:
   /// **'确认'**
   String get iepExportSuccessDialogConfirmBtn;
 
-  /// 导入/导出设置页导出失败弹窗文本
+  /// 导入/导出设置页导出失败弹窗文字
   ///
   /// In zh, this message translates to:
   /// **'导出失败'**
   String get iepExportFailedTips;
 
-  /// 导入/导出设置页导入成功弹窗文本
+  /// 导入/导出设置页导入成功弹窗文字
   ///
   /// In zh, this message translates to:
   /// **'导入成功'**
   String get iepImportSuccessTips;
 
-  /// 导入/导出设置页导入失败弹窗文本
+  /// 导入/导出设置页导入失败弹窗文字
   ///
   /// In zh, this message translates to:
   /// **'导入失败'**
   String get iepImportFailedTips;
 
-  /// 这个是分隔符，以下是recycle_bin_page.dart中的翻译
+  /// 这是分隔符，以下是在 recycle_bin_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'回收站'**
@@ -584,7 +620,7 @@ abstract class AppLocalizations {
   /// **'清空所有已删除项'**
   String get rbpClearAllDialogTitle;
 
-  /// 回收站页清空所有已删除项弹窗确认文本
+  /// 回收站页清空所有已删除项弹窗确认文字
   ///
   /// In zh, this message translates to:
   /// **'确定要清空所有已删除项吗，清空后将无法恢复'**
@@ -620,17 +656,65 @@ abstract class AppLocalizations {
   /// **'彻底删除'**
   String get rbpDelPermanentlyBtn;
 
-  /// 这是分隔符，以下是feedback_page.dart中的翻译
+  /// 回收站页彻底删除确认标题
+  ///
+  /// In zh, this message translates to:
+  /// **'彻底删除确认'**
+  String get rbpDelDialogTitle;
+
+  /// 回收站页彻底删除确认内容
+  ///
+  /// In zh, this message translates to:
+  /// **'确定要彻底删除所选项吗？'**
+  String get rbpDelDialogContent;
+
+  /// 回收站页彻底删除确认按钮
+  ///
+  /// In zh, this message translates to:
+  /// **'确定'**
+  String get rbpDelDialogConfirmBtn;
+
+  /// 回收站页彻底删除取消按钮
+  ///
+  /// In zh, this message translates to:
+  /// **'取消'**
+  String get rbpDelDialogCancelBtn;
+
+  /// 这是分隔符，以下是在 feedback_page.dart 中使用的翻译
   ///
   /// In zh, this message translates to:
   /// **'反馈'**
   String get feedbackPage;
 
-  /// feedback_page.dart中的appbar标题
+  /// 标题
   ///
   /// In zh, this message translates to:
   /// **'反馈交流'**
   String get fpAppbarTitle;
+
+  /// 描述文字
+  ///
+  /// In zh, this message translates to:
+  /// **'如果您有什么问题或建议，可以通过下面的方式反馈给我们，我们会尽快回复您。'**
+  String get fpDesc;
+
+  /// 邮箱文字
+  ///
+  /// In zh, this message translates to:
+  /// **'邮箱'**
+  String get fpEmail;
+
+  /// QQ文字
+  ///
+  /// In zh, this message translates to:
+  /// **'QQ'**
+  String get fpQQ;
+
+  /// feedback_page.dart 中的已复制到剪贴板提示
+  ///
+  /// In zh, this message translates to:
+  /// **'已复制到剪贴板'**
+  String get fpCopiedTips;
 
   /// 不支持的 WebDAV 认证方式，错误提示
   ///
@@ -653,31 +737,31 @@ abstract class AppLocalizations {
   /// WebDAV 客户端请求失败，错误提示
   ///
   /// In zh, this message translates to:
-  /// **'WebDAV 客户端请求失败，请根据返回的http状态码进行排查'**
+  /// **'WebDAV 客户端请求失败，请根据返回的 http 状态码进行排查'**
   String get webdavRequestFailed;
 
   /// 连接异常，错误提示
   ///
   /// In zh, this message translates to:
-  /// **'连接异常，请检查您的网络或URL是否正确'**
+  /// **'连接异常，请检查您的网络或 URL 是否正确'**
   String get webdavConnectErr;
 
-  /// 设置的webdav路径不是目录，请设置到目录一级，错误提示
+  /// 设置的 webdav 路径不是目录，请设置到目录一级，错误提示
   ///
   /// In zh, this message translates to:
-  /// **'设置的webdav路径不是目录，请设置到目录一级，程序会自动管理其中的文件'**
+  /// **'设置的 webdav 路径不是目录，请设置到目录一级，程序会自动管理其中的文件'**
   String get webdavNotDir;
 
-  /// 创建WebDAV文件失败，请检查权限或路径是否正确，错误提示
+  /// 创建 WebDAV 文件失败，请检查权限或路径是否正确，错误提示
   ///
   /// In zh, this message translates to:
-  /// **'创建WebDAV文件失败，请检查权限或路径是否正确'**
+  /// **'创建 WebDAV 文件失败，请检查权限或路径是否正确'**
   String get webdavCreateFileFailed;
 
   /// 未知错误，请检查权限或路径是否正确，错误提示
   ///
   /// In zh, this message translates to:
-  /// **'未知错误，请检查权限或路径是否正确'**
+  /// **'未知错误'**
   String get webdavUnknownErr;
 }
 

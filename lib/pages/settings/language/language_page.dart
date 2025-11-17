@@ -22,8 +22,16 @@ class _LanguagePageState extends State<LanguagePage> {
 
   // 支持的语言列表
   final List<LanguageOption> _languages = [
-    LanguageOption(code: 'en', name: "English", flag: '🇺🇸'),
-    LanguageOption(code: 'zh', name: "中文", flag: '🇨🇳'),
+    LanguageOption.withFlagCodePoints(
+      code: 'zh',
+      name: "中文",
+      flagCodePoints: [0x1F1E8, 0x1F1F3], //emoji 🇨🇳
+    ),
+    LanguageOption.withFlagCodePoints(
+      code: 'en',
+      name: "English",
+      flagCodePoints: [0x1F1FA, 0x1F1F8], //emoji 🇺🇸
+    ),
   ];
 
   @override
@@ -119,6 +127,18 @@ class LanguageOption {
   final String flag;
 
   LanguageOption({required this.code, required this.name, required this.flag});
+
+  factory LanguageOption.withFlagCodePoints({
+    required String code,
+    required String name,
+    required List<int> flagCodePoints,
+  }) {
+    return LanguageOption(
+      code: code,
+      name: name,
+      flag: String.fromCharCodes(flagCodePoints),
+    );
+  }
 }
 
 class _LanguageTile extends StatelessWidget {

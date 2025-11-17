@@ -6,3 +6,4 @@ export 'feedback/feedback_page.dart';
 export 'import_export/import_export_page.dart';
 export 'language/language_page.dart';
 export 'recycle_bin/recycle_bin_page.dart';
+export 'log/log_page.dart';

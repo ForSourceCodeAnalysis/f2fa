@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:f2fa/app.dart';
 import 'package:f2fa/services/services.dart';
 import 'package:flutter/foundation.dart';
@@ -13,7 +12,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  CachedNetworkImage.logLevel = CacheManagerLogLevel.debug;
 
   _initTalkerLogger();
   final ls = await LocalStorage.instance();

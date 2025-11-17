@@ -33,6 +33,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hpNoMatchItemsTips => 'No matching entries';
 
   @override
+  String get hpScanCompleteInfoDialogTitle => 'Complete Information';
+
+  @override
+  String get hpScanCompleteInfoDialogContent =>
+      'The scanned QR code is missing account or issuer information. Would you like to complete it manually?';
+
+  @override
+  String get hpScanCompleteInfoDialogCancelBtn => 'Cancel';
+
+  @override
+  String get hpScanCompleteInfoDialogConfirmBtn => 'Confirm';
+
+  @override
   String get totpMenu => 'TOTP Menu Component';
 
   @override
@@ -173,6 +186,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spSyncLabel => 'Sync';
 
   @override
+  String get spLogLabel => 'Log';
+
+  @override
   String get settingsThemePage => 'Theme Settings Page';
 
   @override
@@ -214,6 +230,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iepAppbarTitle => 'Import/Export';
+
+  @override
+  String get iepDesc =>
+      'Through the import and export function, you can backup and restore your TOTP data. File operations in JSON format are supported.';
 
   @override
   String get iepImportTitle => 'Import';
@@ -274,10 +294,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rbpDelPermanentlyBtn => 'Delete Permanently';
 
   @override
+  String get rbpDelDialogTitle => 'Confirm Permanent Deletion';
+
+  @override
+  String get rbpDelDialogContent =>
+      'Are you sure you want to permanently delete the selected item?';
+
+  @override
+  String get rbpDelDialogConfirmBtn => 'Confirm';
+
+  @override
+  String get rbpDelDialogCancelBtn => 'Cancel';
+
+  @override
   String get feedbackPage => 'Feedback';
 
   @override
   String get fpAppbarTitle => 'Feedback & Communication';
+
+  @override
+  String get fpDesc =>
+      'If you have any questions or suggestions, you can feedback to us through the following methods, and we will reply to you as soon as possible.';
+
+  @override
+  String get fpEmail => 'Email';
+
+  @override
+  String get fpQQ => 'QQ';
+
+  @override
+  String get fpCopiedTips => 'Copied to clipboard';
 
   @override
   String get webdavUnsupportedAuthMethod =>
@@ -308,6 +354,5 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to create WebDAV file, please check permissions or path';
 
   @override
-  String get webdavUnknownErr =>
-      'Unknown error, please check permissions or path';
+  String get webdavUnknownErr => 'Unknown error';
 }

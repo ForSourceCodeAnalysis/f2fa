@@ -1,54 +1,36 @@
 import 'package:f2fa/l10n/l10n.dart';
+import 'package:f2fa/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class FeedbackPage extends StatefulWidget {
+class FeedbackPage extends StatelessWidget {
   const FeedbackPage({super.key});
 
-  @override
-  State<FeedbackPage> createState() => _FeedbackPageState();
-}
-
-class _FeedbackPageState extends State<FeedbackPage> {
   // 联系方式数据
-  final List<ContactMethod> _contactMethods = [
-    ContactMethod(
-      type: ContactType.email,
-      label: 'support@f2fa.com',
-      icon: Icons.email,
-      // color: Colors.blue,
-    ),
-    ContactMethod(
-      type: ContactType.qq,
-      label: '123456789',
-      icon: FontAwesomeIcons.qq,
-      // color: Colors.black,
-    ),
-    ContactMethod(
-      type: ContactType.youtube,
-      label: '@F2FA_Official',
-      icon: FontAwesomeIcons.youtube,
-      // color: Colors.red,
-    ),
-    ContactMethod(
-      type: ContactType.bilibili,
-      label: '@F2FA官方',
-      icon: FontAwesomeIcons.bilibili,
-      // color: Colors.blue,
-    ),
-    ContactMethod(
-      type: ContactType.wechat,
-      label: 'F2FA_Official',
-      icon: Icons.wechat,
-      // color: Colors.green,
-    ),
-  ];
+  List<ContactMethod> _getContactMethods(BuildContext context) {
+    final al = AppLocalizations.of(context)!;
+    return [
+      ContactMethod(
+        type: ContactType.email,
+        label: 'support@f2fa.com',
+        icon: Icons.email,
+        displayName: al.fpEmail,
+      ),
+      ContactMethod(
+        type: ContactType.qq,
+        label: '123456789',
+        icon: FontAwesomeIcons.qq,
+        displayName: al.fpQQ,
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     final al = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final contactMethods = _getContactMethods(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +43,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 页面标题和描述
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20.0),
@@ -77,15 +58,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '反馈交流',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '欢迎反馈问题、建议或改进建议，我们会尽快回复您。',
+                    al.fpDesc,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                       height: 1.5,
@@ -99,14 +72,14 @@ class _FeedbackPageState extends State<FeedbackPage> {
             // 联系方式列表
             Expanded(
               child: ListView.separated(
-                itemCount: _contactMethods.length,
+                itemCount: contactMethods.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  final contact = _contactMethods[index];
+                  final contact = contactMethods[index];
                   return _ContactCard(
                     contact: contact,
-                    onTap: () => _copyToClipboard(contact.label, context),
+                    onTap: () => _copyToClipboard(context, contact.label),
                   );
                 },
               ),
@@ -117,28 +90,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
     );
   }
 
-  Future<void> _copyToClipboard(String text, BuildContext context) async {
-    try {
-      await Clipboard.setData(ClipboardData(text: text));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('已复制: $text'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('复制失败'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      }
+  Future<void> _copyToClipboard(BuildContext context, String text) async {
+    final al = AppLocalizations.of(context)!;
+    await Clipboard.setData(ClipboardData(text: text));
+    if (context.mounted) {
+      showSnackBar(context: context, message: al.fpCopiedTips);
     }
   }
 }
@@ -149,29 +105,14 @@ class ContactMethod {
   final ContactType type;
   final String label;
   final IconData icon;
-  // final Color color;
+  final String displayName;
 
   ContactMethod({
     required this.type,
     required this.label,
     required this.icon,
-    // required this.color,
+    required this.displayName,
   });
-
-  String get displayName {
-    switch (type) {
-      case ContactType.email:
-        return 'Email';
-      case ContactType.qq:
-        return 'QQ';
-      case ContactType.youtube:
-        return 'YouTube';
-      case ContactType.bilibili:
-        return 'Bilibili';
-      case ContactType.wechat:
-        return 'WeChat';
-    }
-  }
 }
 
 class _ContactCard extends StatelessWidget {
@@ -182,23 +123,7 @@ class _ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final al = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-
-    String getLocalizedLabel() {
-      switch (contact.type) {
-        case ContactType.email:
-          return '邮箱';
-        case ContactType.qq:
-          return 'QQ';
-        case ContactType.youtube:
-          return 'YouTube';
-        case ContactType.bilibili:
-          return 'Bilibili';
-        case ContactType.wechat:
-          return 'WeChat';
-      }
-    }
 
     return Card(
       elevation: 2,
@@ -215,13 +140,13 @@ class _ContactCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withValues(alpha: .1),
+                  color: theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Center(
                   child: Icon(
                     contact.icon,
-                    color: theme.colorScheme.secondary,
+                    color: theme.colorScheme.primary,
                     size: 24,
                   ),
                 ),
@@ -234,7 +159,7 @@ class _ContactCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      getLocalizedLabel(),
+                      contact.displayName,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,

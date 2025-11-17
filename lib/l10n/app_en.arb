@@ -34,6 +34,22 @@
     "@hpNoMatchItemsTips": {
         "description": "No matching entries prompt text"
     },
+    "hpScanCompleteInfoDialogTitle": "Complete Information",
+    "@hpScanCompleteInfoDialogTitle": {
+        "description": "Dialog title for completing missing TOTP information"
+    },
+    "hpScanCompleteInfoDialogContent": "The scanned QR code is missing account or issuer information. Would you like to complete it manually?",
+    "@hpScanCompleteInfoDialogContent": {
+        "description": "Dialog message when account or issuer is missing from scanned QR code"
+    },
+    "hpScanCompleteInfoDialogCancelBtn": "Cancel",
+    "@hpScanCompleteInfoDialogCancelBtn": {
+        "description": "Cancel button text"
+    },
+    "hpScanCompleteInfoDialogConfirmBtn": "Confirm",
+    "@hpScanCompleteInfoDialogConfirmBtn": {
+        "description": "Confirm button text"
+    },
 
     "totpMenu": "TOTP Menu Component",
     "@totpMenu": {
@@ -222,6 +238,10 @@
     "@spSyncLabel": {
         "description": "Settings page sync tab title"
     },
+    "spLogLabel": "Log",
+    "@spLogLabel": {
+        "description": "Settings page log tab title"
+    },
 
     "settingsThemePage": "Theme Settings Page",
     "@settingsThemePage": {
@@ -280,6 +300,10 @@
     "iepAppbarTitle": "Import/Export",
     "@iepAppbarTitle": {
         "description": "Import/Export settings page title"
+    },
+    "iepDesc": "Through the import and export function, you can backup and restore your TOTP data. File operations in JSON format are supported.",
+    "@iepDesc": {
+        "description": "Import/Export settings page description"
     },
     "iepImportTitle": "Import",
     "@iepImportTitle": {
@@ -358,6 +382,22 @@
     "@rbpDelPermanentlyBtn": {
         "description": "Recycle bin page delete permanently button"
     },
+    "rbpDelDialogTitle": "Confirm Permanent Deletion",
+    "@rbpDelDialogTitle": {
+        "description": "Recycle bin page confirm permanent deletion title"
+    },
+    "rbpDelDialogContent": "Are you sure you want to permanently delete the selected item?",
+    "@rbpDelDialogContent": {
+        "description": "Recycle bin page confirm permanent deletion content"
+    },
+    "rbpDelDialogConfirmBtn": "Confirm",
+    "@rbpDelDialogConfirmBtn": {
+        "description": "Recycle bin page confirm permanent deletion button"
+    },
+    "rbpDelDialogCancelBtn": "Cancel",
+    "@rbpDelDialogCancelBtn": {
+        "description": "Recycle bin page cancel permanent deletion button"
+    },
 
     "feedbackPage": "Feedback",
     "@feedbackPage": {
@@ -366,6 +406,22 @@
     "fpAppbarTitle": "Feedback & Communication",
     "@fpAppbarTitle": {
         "description": "Feedback page appbar title"
+    },
+    "fpDesc": "If you have any questions or suggestions, you can feedback to us through the following methods, and we will reply to you as soon as possible.",
+    "@fpDesc": {
+        "description": "Description text"
+    },
+    "fpEmail": "Email",
+    "@fpEmail": {
+        "description": "Email text"
+    },
+    "fpQQ": "QQ",
+    "@fpQQ": {
+        "description": "QQ text"
+    },
+    "fpCopiedTips": "Copied to clipboard",
+    "@fpCopiedTips": {
+        "description": "Copied to clipboard prompt in feedback_page.dart"
     },
 
     "webdavUnsupportedAuthMethod": "Unsupported WebDAV authentication method",
@@ -396,10 +452,8 @@
     "@webdavCreateFileFailed": { 
         "description": "Failed to create WebDAV file, please check permissions or path, error prompt"
     },
-    "webdavUnknownErr": "Unknown error, please check permissions or path",
+    "webdavUnknownErr": "Unknown error",
     "@webdavUnknownErr": {
-        "description": "Unknown error, please check permissions or path, error prompt"
+        "description": "Unknown error, error prompt"
     }
-
-
 }

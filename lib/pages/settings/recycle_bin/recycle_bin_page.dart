@@ -25,14 +25,22 @@ class RecycleBinPage extends StatelessWidget {
               appBar: AppBar(
                 title: Text(al.rbpAppbarTitle),
                 actions: [
-                  IconButton(
-                    onPressed: () => _showClearAllConfirmation(context),
-                    icon: const Icon(Icons.delete_forever),
-                  ),
+                  if (state.totps.isNotEmpty)
+                    IconButton(
+                      onPressed: () => _showClearAllConfirmation(context),
+                      icon: const Icon(Icons.delete_forever),
+                    ),
                 ],
               ),
               body: state.totps.isEmpty
-                  ? Center(child: Text(al.rbpEmptyItemsTips))
+                  ? Center(
+                      child: Text(
+                        al.rbpEmptyItemsTips,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                      ),
+                    )
                   : _buildDeletedList(context),
             ),
           );
@@ -43,6 +51,7 @@ class RecycleBinPage extends StatelessWidget {
 
   Widget _buildDeletedList(BuildContext context) {
     final state = context.read<DeletedRestoreBloc>().state;
+    final al = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView.separated(
@@ -55,9 +64,33 @@ class RecycleBinPage extends StatelessWidget {
             onRestore: () => context.read<DeletedRestoreBloc>().add(
               DeletedRestoreRestore(totp.id),
             ),
-            onDeletePermanently: () => context.read<DeletedRestoreBloc>().add(
-              DeletedRestoreDeletePermanently(totp.id),
-            ),
+            onDeletePermanently: () async {
+              final bool? result = await showDialog<bool>(
+                context: context,
+                builder: (dctx) => AlertDialog(
+                  title: Text(al.rbpDelDialogTitle, textAlign: TextAlign.start),
+                  content: Text(
+                    al.rbpDelDialogContent,
+                    textAlign: TextAlign.center,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text(al.rbpDelDialogCancelBtn),
+                    ),
+                    FilledButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: Text(al.rbpDelDialogConfirmBtn),
+                    ),
+                  ],
+                ),
+              );
+              if (context.mounted && result != null && result) {
+                context.read<DeletedRestoreBloc>().add(
+                  DeletedRestoreDeletePermanently(totp.id),
+                );
+              }
+            },
           );
         },
       ),
@@ -79,7 +112,9 @@ class RecycleBinPage extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () {
-              // TODO: clear all
+              context.read<DeletedRestoreBloc>().add(
+                const DeletedRestoreClearAll(),
+              );
             },
             child: Text(al.rbpClearAllDialogConfirmBtn),
           ),
