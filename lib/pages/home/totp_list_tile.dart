@@ -39,11 +39,11 @@ class TotpListTile extends StatelessWidget {
     if (totp.icon.isEmpty) {
       return _defaultIcon(context);
     }
-
+    final cacheKey = 'icon_${Uri.encodeComponent(totp.icon)}';
     if (totp.icon.endsWith('.svg')) {
       final file = await CacheManager(
         Config(
-          'svg_cached_key',
+          cacheKey,
           stalePeriod: const Duration(days: 365),
           maxNrOfCacheObjects: 100,
         ),
@@ -56,7 +56,7 @@ class TotpListTile extends StatelessWidget {
         errorWidget: (context, url, error) => _defaultIcon(context),
         cacheManager: CacheManager(
           Config(
-            'images_cached_key',
+            cacheKey,
             stalePeriod: const Duration(days: 365),
             maxNrOfCacheObjects: 100,
           ),

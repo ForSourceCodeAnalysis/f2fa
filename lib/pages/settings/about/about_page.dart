@@ -1,4 +1,5 @@
 import 'package:f2fa/l10n/l10n.dart';
+import 'package:f2fa/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -100,20 +101,19 @@ class _AboutPageState extends State<AboutPage> {
                   const SizedBox(height: 5),
                   Text(al.apOpenSourceTips),
                   const SizedBox(height: 5),
-                  GestureDetector(
+                  SelectableText(
+                    _url,
+                    style: const TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.blue,
+                    ),
                     onTap: () async {
+                      getLogger().info('open url $_url');
                       final Uri url = Uri.parse(_url);
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url);
                       }
                     },
-                    child: const SelectableText(
-                      _url,
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.blue,
-                      ),
-                    ),
                   ),
                 ],
               ),

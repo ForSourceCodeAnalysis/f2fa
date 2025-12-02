@@ -65,9 +65,6 @@ class _HomeViewState extends State<_HomeView> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final route = ModalRoute.of(context);
     final routeIsCurrent = route?.isCurrent ?? true;
-    getLogger().debug(
-      'routeIsCurrent: $routeIsCurrent, _isVisible: $_isVisible',
-    );
 
     if (routeIsCurrent != _isVisible) {
       _isVisible = routeIsCurrent;

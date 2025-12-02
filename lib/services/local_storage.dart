@@ -21,12 +21,9 @@ class LocalStorage {
   static const String _localEncryptionKeyKey = "localencryptkey";
   static const String _totpsKey = "totps";
   static const String _webdavConfigKey = "webdavconfig";
-  // static const String _webdavLastModifiedKey = "webdavlastmodified";
-  // static const String _webdavEtagKey = "webdavetag";
-  // static const String _webdavAuthMethodKey = "webdavauthmethod";
 
   static const String _settingsBoxname = 'settings';
-  static const String themeLanguageKey = 'themelanguage';
+  static const String _themeLanguageKey = 'themelanguage';
 
   late final Box _box;
   late final Box _settingsBox;
@@ -65,7 +62,7 @@ class LocalStorage {
   }
 
   ThemeLanguage get themeLanguage {
-    final tl = _settingsBox.get(themeLanguageKey);
+    final tl = _settingsBox.get(_themeLanguageKey);
     if (tl != null) {
       if (_currentThemeName.isNotEmpty) {
         return tl;
@@ -94,7 +91,7 @@ class LocalStorage {
     if (tl.themeName != 'random') {
       _currentThemeName = tl.themeName;
     }
-    await _settingsBox.put(themeLanguageKey, tl);
+    await _settingsBox.put(_themeLanguageKey, tl);
   }
 
   WebdavConfig? getWebdavConfig() {
@@ -109,43 +106,6 @@ class LocalStorage {
     }
     await _box.put(_webdavConfigKey, webdavConfig);
   }
-
-  // DateTime? getWebdavLastModified() {
-  //   final DateTime? dt = _box.get(_webdavLastModifiedKey);
-  //   return dt;
-  // }
-
-  // Future<void> saveWebdavLastModified(DateTime? lastModified) async {
-  //   if (lastModified == null) {
-  //     await _box.delete(_webdavLastModifiedKey);
-  //     return;
-  //   }
-  //   await _box.put(_webdavLastModifiedKey, lastModified);
-  // }
-
-  // String? getWebdavEtag() {
-  //   return _box.get(_webdavEtagKey);
-  // }
-
-  // Future<void> saveWebdavEtag(String? etag) async {
-  //   if (etag == null) {
-  //     await _box.delete(_webdavEtagKey);
-  //     return;
-  //   }
-  //   await _box.put(_webdavEtagKey, etag);
-  // }
-
-  // AuthMethod? getAuthMethod() {
-  //   return _box.get(_webdavAuthMethodKey);
-  // }
-
-  // Future<void> saveAuthMethod(AuthMethod? authMethod) async {
-  //   if (authMethod == null) {
-  //     await _box.delete(_webdavAuthMethodKey);
-  //     return;
-  //   }
-  //   await _box.put(_webdavAuthMethodKey, authMethod);
-  // }
 
   List<Totp>? getTotpList() {
     final List<dynamic>? totps = _box.get(_totpsKey);
