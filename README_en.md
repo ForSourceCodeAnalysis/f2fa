@@ -1,44 +1,21 @@
-# f2fa
+<div align="center">
+<img src="assets/icons/f2fa-pure.png" width="120"  alt="f2fa logo"/>
+</div>
 
-A two-step authentication `App` developed using `flutter`, with a clean and concise interface.Currently, only the Android platform is supported.
+`F2FA` is a two-step authentication `App` developed using `flutter`.
 
 
 [中文](README.md)
 
-## Features
+# Features
 - Support `TOTP`, `HOTP`
 - Compatible with `Google Authenticator`，`Microsoft Authenticator`
 - Support `WebDAV` for multi-device synchronization
 - Support end-to-end encryption
+- Support offline mode
 
 
-## Build Guide
-Before building, make sure you have the `flutter` development environment installed locally
-1. First, clone the project locally
 
-Github
-```
-git clone https://github.com/jenken827/f2fa.git
-cd f2fa
-```
-Gitee
-```
-git clone https://gitee.com/jenken827/f2fa.git
-cd f2fa
-```
-2. Run script to resolve dependencies
-- `windows` enviroment
-```
-./generate.bat
-```
-- `linux` enviroment
-```
-bash ./generate.sh
-```
-3. Run in development mode
-```
-flutter run
-```
 
-## Open Source Agreement
+# Open Source Agreement
 MIT License. [LICENSE](./LICENSE).
