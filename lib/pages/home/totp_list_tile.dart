@@ -1,14 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:f2fa/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'totp_menu.dart';
 
 class TotpListTile extends StatelessWidget {
-  const TotpListTile({required this.totp, super.key});
+  const TotpListTile({required this.totp, required this.totpicon, super.key});
 
   final Totp totp;
+  final Widget totpicon;
 
   Color _getProgressColor(int remaining, int period, ThemeData theme) {
     final ratio = remaining / period;
@@ -21,49 +19,51 @@ class TotpListTile extends StatelessWidget {
     }
   }
 
-  Widget _defaultIcon(BuildContext context) {
-    final theme = Theme.of(context);
-    final issuerInitial = totp.issuer[0].toUpperCase();
-    return Center(
-      child: Text(
-        issuerInitial,
-        style: theme.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: theme.colorScheme.onPrimaryContainer,
-        ),
-      ),
-    );
-  }
+  // Widget _defaultIcon(BuildContext context) {
+  //   final theme = Theme.of(context);
+  //   final issuerInitial = totp.issuer[0].toUpperCase();
+  //   return Center(
+  //     child: Text(
+  //       issuerInitial,
+  //       style: theme.textTheme.titleLarge?.copyWith(
+  //         fontWeight: FontWeight.bold,
+  //         color: theme.colorScheme.onPrimaryContainer,
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Future<Widget> _buildIcon(BuildContext context) async {
-    if (totp.icon.isEmpty) {
-      return _defaultIcon(context);
-    }
-    final cacheKey = 'icon_${Uri.encodeComponent(totp.icon)}';
-    if (totp.icon.endsWith('.svg')) {
-      final file = await CacheManager(
-        Config(
-          cacheKey,
-          stalePeriod: const Duration(days: 365),
-          maxNrOfCacheObjects: 100,
-        ),
-      ).getSingleFile(totp.icon);
-      return SvgPicture.file(file);
-    } else {
-      return CachedNetworkImage(
-        imageUrl: totp.icon,
-        placeholder: (context, url) => _defaultIcon(context),
-        errorWidget: (context, url, error) => _defaultIcon(context),
-        cacheManager: CacheManager(
-          Config(
-            cacheKey,
-            stalePeriod: const Duration(days: 365),
-            maxNrOfCacheObjects: 100,
-          ),
-        ),
-      );
-    }
-  }
+  // Future<Widget> _buildIcon(BuildContext context) async {
+  //   static Map<String,Widget> iconCache = {};
+  //   if (totp.icon.isEmpty) {
+  //     return _defaultIcon(context);
+  //   }
+  //   getLogger().debug('loading icon: ${totp.icon}');
+  //   final cacheKey = 'icon_${Uri.encodeComponent(totp.icon)}';
+  //   if (totp.icon.endsWith('.svg')) {
+  //     final file = await CacheManager(
+  //       Config(
+  //         cacheKey,
+  //         stalePeriod: const Duration(days: 365),
+  //         maxNrOfCacheObjects: 100,
+  //       ),
+  //     ).getSingleFile(totp.icon);
+  //     return SvgPicture.file(file);
+  //   } else {
+  //     return CachedNetworkImage(
+  //       imageUrl: totp.icon,
+  //       placeholder: (context, url) => _defaultIcon(context),
+  //       errorWidget: (context, url, error) => _defaultIcon(context),
+  //       cacheManager: CacheManager(
+  //         Config(
+  //           cacheKey,
+  //           stalePeriod: const Duration(days: 365),
+  //           maxNrOfCacheObjects: 100,
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +90,7 @@ class TotpListTile extends StatelessWidget {
                         : theme.colorScheme.primaryContainer,
                     shape: BoxShape.circle,
                   ),
-                  child: FutureBuilder(
-                    future: _buildIcon(context),
-                    builder: (context, snapshot) =>
-                        snapshot.data ?? _defaultIcon(context),
-                  ),
+                  child: totpicon,
                 ),
 
                 Expanded(

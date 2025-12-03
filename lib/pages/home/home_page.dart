@@ -10,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,6 +39,56 @@ class _HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<_HomeView> with WidgetsBindingObserver {
   bool _isVisible = true;
+  final totpicons = <String, Widget>{};
+  bool _iconsLoading = false;
+
+  Widget _defaultIcon(BuildContext context, Totp totp) {
+    final theme = Theme.of(context);
+    final issuerInitial = totp.issuer[0].toUpperCase();
+    return Center(
+      child: Text(
+        issuerInitial,
+        style: theme.textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onPrimaryContainer,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _buildIcon(BuildContext context, List<Totp> totps) async {
+    if (_iconsLoading) {
+      return;
+    }
+    _iconsLoading = true;
+
+    for (final totp in totps) {
+      if (totp.icon.isEmpty) {
+        continue;
+      }
+      if (!totpicons.containsKey(totp.icon)) {
+        getLogger().debug('loading icon ${totp.icon}');
+        try {
+          final file = await CacheManager(
+            Config(
+              "totp_icons",
+              stalePeriod: const Duration(days: 365),
+              maxNrOfCacheObjects: 100,
+            ),
+          ).getSingleFile(totp.icon);
+          totpicons[totp.icon] = totp.icon.endsWith('.svg')
+              ? SvgPicture.file(file)
+              : Image.file(file);
+        } catch (e) {
+          getLogger().error(e);
+          if (context.mounted) {
+            totpicons[totp.icon] = _defaultIcon(context, totp);
+          }
+        }
+      }
+    }
+    _iconsLoading = false;
+  }
 
   @override
   void initState() {
@@ -91,6 +143,7 @@ class _HomeViewState extends State<_HomeView> with WidgetsBindingObserver {
 
     return BlocBuilder<TotpsOverviewBloc, TotpsOverviewState>(
       builder: (context, state) {
+        _buildIcon(context, state.totps);
         return Scaffold(
           appBar: AppBar(
             title: Container(
@@ -154,7 +207,62 @@ class _HomeViewState extends State<_HomeView> with WidgetsBindingObserver {
               ),
             ],
           ),
-          body: _Totps(state),
+          body: Builder(
+            builder: (context) {
+              // 添加搜索过滤
+              final filteredTotps = state.searchQuery.isEmpty
+                  ? state.totps
+                  : state.totps.where((totp) {
+                      final query = state.searchQuery.toLowerCase();
+                      return totp.issuer.toLowerCase().contains(query) ||
+                          totp.account.toLowerCase().contains(query);
+                    }).toList();
+
+              if (filteredTotps.isEmpty) {
+                if (state.status == TotpsOverviewStatus.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state.status == TotpsOverviewStatus.failure) {
+                  return const SizedBox();
+                }
+                return Center(
+                  child: Text(
+                    state.searchQuery.isEmpty
+                        ? al.hpEmptyListTips
+                        : al.hpNoMatchItemsTips,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                );
+              }
+
+              return CupertinoScrollbar(
+                child: ReorderableListView.builder(
+                  padding: const EdgeInsets.only(bottom: 96, top: 8),
+                  itemCount: filteredTotps.length,
+                  itemBuilder: (context, index) {
+                    final totp = filteredTotps[index];
+                    final icon =
+                        totpicons[totp.icon] ?? _defaultIcon(context, totp);
+                    return TotpListTile(
+                      key: ValueKey(totp.id),
+                      totp: totp,
+                      totpicon: icon,
+                    );
+                  },
+                  onReorder: (oldIndex, newIndex) {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    context.read<TotpsOverviewBloc>().add(
+                      TotpsOverviewReordered(
+                        oldIndex: oldIndex,
+                        newIndex: newIndex,
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
           floatingActionButton: PopupMenuButton<String>(
             onSelected: (String result) {
               if (result == 'scan') {
@@ -260,58 +368,5 @@ class _HomeViewState extends State<_HomeView> with WidgetsBindingObserver {
     }
 
     return Icon(Icons.cloud_sync, color: color);
-  }
-}
-
-class _Totps extends StatelessWidget {
-  const _Totps(this.state);
-  final TotpsOverviewState state;
-
-  @override
-  Widget build(BuildContext context) {
-    final al = AppLocalizations.of(context)!;
-    // 添加搜索过滤
-    final filteredTotps = state.searchQuery.isEmpty
-        ? state.totps
-        : state.totps.where((totp) {
-            final query = state.searchQuery.toLowerCase();
-            return totp.issuer.toLowerCase().contains(query) ||
-                totp.account.toLowerCase().contains(query);
-          }).toList();
-
-    if (filteredTotps.isEmpty) {
-      if (state.status == TotpsOverviewStatus.loading) {
-        return const Center(child: CircularProgressIndicator());
-      } else if (state.status == TotpsOverviewStatus.failure) {
-        return const SizedBox();
-      }
-      return Center(
-        child: Text(
-          state.searchQuery.isEmpty
-              ? al.hpEmptyListTips
-              : al.hpNoMatchItemsTips,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      );
-    }
-
-    return CupertinoScrollbar(
-      child: ReorderableListView.builder(
-        padding: const EdgeInsets.only(bottom: 96, top: 8),
-        itemCount: filteredTotps.length,
-        itemBuilder: (context, index) {
-          final totp = filteredTotps[index];
-          return TotpListTile(key: ValueKey(totp.id), totp: totp);
-        },
-        onReorder: (oldIndex, newIndex) {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          context.read<TotpsOverviewBloc>().add(
-            TotpsOverviewReordered(oldIndex: oldIndex, newIndex: newIndex),
-          );
-        },
-      ),
-    );
   }
 }
